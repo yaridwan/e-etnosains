@@ -58,6 +58,7 @@ class EModulController extends Controller
     public function edit(EModul $eModul): View
     {
         $this->pastikanPemilik($eModul);
+        $eModul->load(['lkpd', 'observasi', 'video', 'poster']);
 
         return view('guru.e-modul.form', [
             'eModul' => $eModul,

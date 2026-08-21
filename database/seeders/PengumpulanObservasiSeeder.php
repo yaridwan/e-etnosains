@@ -7,6 +7,7 @@ use App\Models\JawabanObservasi;
 use App\Models\Observasi;
 use App\Models\PengumpulanObservasi;
 use App\Models\Peran;
+use App\Support\PembuatPosterDemo;
 use Illuminate\Database\Seeder;
 
 class PengumpulanObservasiSeeder extends Seeder
@@ -38,7 +39,7 @@ class PengumpulanObservasiSeeder extends Seeder
 
                 DokumentasiObservasi::create([
                     'id_pengumpulan_observasi' => $pengumpulan->id,
-                    'berkas' => 'observasi/dokumentasi-contoh.jpg',
+                    'berkas' => PembuatPosterDemo::buat('Dokumentasi: '.$observasi->judul, 'observasi/dokumentasi'),
                     'keterangan' => 'Dokumentasi kegiatan observasi lapangan.',
                 ]);
             }

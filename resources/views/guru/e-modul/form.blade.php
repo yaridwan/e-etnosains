@@ -83,4 +83,71 @@
             <x-tombol type="submit" varian="utama">Ajukan untuk Ditinjau Administrator</x-tombol>
         </form>
     @endif
+
+    @if($sedangUbah)
+        <x-kartu class="mt-6">
+            <div class="flex items-center justify-between">
+                <h2 class="font-semibold text-slate-800">Konten Terkait</h2>
+                <p class="text-sm text-slate-400">LKPD, observasi, video, dan poster yang terhubung ke E-Modul ini</p>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-semibold uppercase text-slate-500">LKPD</p>
+                        <x-tombol :href="route('guru.lkpd.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
+                    </div>
+                    <ul class="mt-2 space-y-1">
+                        @forelse($eModul->lkpd as $lkpd)
+                            <li><a href="{{ route('guru.lkpd.edit', $lkpd) }}" class="text-sm text-teal-700 hover:underline">{{ $lkpd->judul }}</a></li>
+                        @empty
+                            <li class="text-sm text-slate-400">Belum ada.</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-semibold uppercase text-slate-500">Observasi</p>
+                        <x-tombol :href="route('guru.observasi.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
+                    </div>
+                    <ul class="mt-2 space-y-1">
+                        @forelse($eModul->observasi as $observasi)
+                            <li><a href="{{ route('guru.observasi.edit', $observasi) }}" class="text-sm text-teal-700 hover:underline">{{ $observasi->judul }}</a></li>
+                        @empty
+                            <li class="text-sm text-slate-400">Belum ada.</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-semibold uppercase text-slate-500">Video</p>
+                        <x-tombol :href="route('guru.video.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
+                    </div>
+                    <ul class="mt-2 space-y-1">
+                        @forelse($eModul->video as $video)
+                            <li><a href="{{ route('guru.video.edit', $video) }}" class="text-sm text-teal-700 hover:underline">{{ $video->judul }}</a></li>
+                        @empty
+                            <li class="text-sm text-slate-400">Belum ada.</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-semibold uppercase text-slate-500">Poster</p>
+                        <x-tombol :href="route('guru.poster.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
+                    </div>
+                    <ul class="mt-2 space-y-1">
+                        @forelse($eModul->poster as $poster)
+                            <li><a href="{{ route('guru.poster.edit', $poster) }}" class="text-sm text-teal-700 hover:underline">{{ $poster->judul }}</a></li>
+                        @empty
+                            <li class="text-sm text-slate-400">Belum ada.</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </x-kartu>
+    @endif
 </x-layout-dashboard>

@@ -44,18 +44,44 @@
                     </div>
                 </div>
 
-                @if($eModul->lkpd->isNotEmpty() || $eModul->video->isNotEmpty() || $eModul->observasi->isNotEmpty())
+                @if($eModul->lkpd->isNotEmpty() || $eModul->video->isNotEmpty() || $eModul->observasi->isNotEmpty() || $eModul->poster->isNotEmpty())
                     <div class="mt-8">
                         <h2 class="text-lg font-bold text-slate-900">Konten Pendukung</h2>
+                        <p class="mt-1 text-sm text-slate-500">LKPD, observasi, video, dan poster yang menyertai E-Modul ini.</p>
+
                         <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                             @foreach($eModul->lkpd as $lkpd)
-                                <a href="{{ route('lkpd.show', $lkpd) }}" class="rounded-xl border border-slate-200 p-4 hover:border-teal-600"><x-badge warna="sky">LKPD</x-badge><p class="mt-2 font-medium text-slate-800">{{ $lkpd->judul }}</p></a>
+                                <a href="{{ route('lkpd.show', $lkpd) }}" class="rounded-xl border border-slate-200 p-4 transition hover:border-teal-600 hover:shadow-sm">
+                                    <x-badge warna="sky">LKPD</x-badge>
+                                    <p class="mt-2 font-medium text-slate-800">{{ $lkpd->judul }}</p>
+                                </a>
                             @endforeach
-                            @foreach($eModul->video as $video)
-                                <a href="{{ route('video.show', $video) }}" class="rounded-xl border border-slate-200 p-4 hover:border-teal-600"><x-badge warna="rose">Video</x-badge><p class="mt-2 font-medium text-slate-800">{{ $video->judul }}</p></a>
-                            @endforeach
+
                             @foreach($eModul->observasi as $observasi)
-                                <a href="{{ route('observasi.show', $observasi) }}" class="rounded-xl border border-slate-200 p-4 hover:border-teal-600"><x-badge warna="emerald">Observasi</x-badge><p class="mt-2 font-medium text-slate-800">{{ $observasi->judul }}</p></a>
+                                <a href="{{ route('observasi.show', $observasi) }}" class="rounded-xl border border-slate-200 p-4 transition hover:border-teal-600 hover:shadow-sm">
+                                    <x-badge warna="emerald">Observasi</x-badge>
+                                    <p class="mt-2 font-medium text-slate-800">{{ $observasi->judul }}</p>
+                                </a>
+                            @endforeach
+
+                            @foreach($eModul->video as $video)
+                                <a href="{{ route('video.show', $video) }}" class="flex gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-teal-600 hover:shadow-sm">
+                                    <img src="{{ $video->tautanThumbnail() }}" class="h-16 w-24 shrink-0 rounded-lg object-cover" alt="{{ $video->judul }}" loading="lazy">
+                                    <div>
+                                        <x-badge warna="rose">Video</x-badge>
+                                        <p class="mt-2 font-medium text-slate-800">{{ $video->judul }}</p>
+                                    </div>
+                                </a>
+                            @endforeach
+
+                            @foreach($eModul->poster as $poster)
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($poster->gambar) }}" target="_blank" rel="noopener" class="flex gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-teal-600 hover:shadow-sm">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($poster->gambar) }}" class="h-16 w-16 shrink-0 rounded-lg object-cover" alt="{{ $poster->judul }}" loading="lazy">
+                                    <div>
+                                        <x-badge warna="amber">Poster</x-badge>
+                                        <p class="mt-2 font-medium text-slate-800">{{ $poster->judul }}</p>
+                                    </div>
+                                </a>
                             @endforeach
                         </div>
                     </div>

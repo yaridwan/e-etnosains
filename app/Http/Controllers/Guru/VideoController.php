@@ -23,7 +23,7 @@ class VideoController extends Controller
     public function create(Request $request): View
     {
         return view('guru.video.form', [
-            'video' => new VideoPembelajaran,
+            'video' => new VideoPembelajaran(['id_e_modul' => $request->integer('e_modul') ?: null]),
             'mataPelajaran' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
             'topik' => TopikEtnosains::orderBy('nama_topik')->get(),
             'eModulSaya' => $request->user()->eModul()->get(),

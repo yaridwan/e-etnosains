@@ -6,6 +6,9 @@
         <h2 class="font-semibold text-slate-800">Petunjuk</h2>
         <p class="mt-2 text-sm text-slate-600">{{ $tugas->petunjuk }}</p>
         <p class="mt-2 text-xs text-slate-400">Batas waktu: {{ $tugas->batas_waktu?->translatedFormat('d M Y, H:i') ?? '-' }}</p>
+        @if($tugas->berkas)
+            <a href="{{ \Illuminate\Support\Facades\Storage::url($tugas->berkas) }}" target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-teal-700 hover:underline">Unduh Berkas Pendukung dari Guru</a>
+        @endif
     </x-kartu>
 
     @if($pengumpulan?->nilai)
@@ -20,6 +23,9 @@
 
         @if($pengumpulan)
             <p class="mt-2 text-sm text-slate-500">Dikirim pada {{ $pengumpulan->dikirim_pada?->translatedFormat('d M Y, H:i') }}</p>
+            @if($pengumpulan->berkas)
+                <a href="{{ \Illuminate\Support\Facades\Storage::url($pengumpulan->berkas) }}" target="_blank" rel="noopener" class="mt-1 inline-block text-sm font-medium text-teal-700 hover:underline">Lihat Berkas yang Dikumpulkan</a>
+            @endif
         @endif
 
         @unless($pengumpulan?->nilai)

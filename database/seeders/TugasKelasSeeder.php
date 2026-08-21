@@ -6,6 +6,7 @@ use App\Models\KelasBelajar;
 use App\Models\NilaiTugas;
 use App\Models\PengumpulanTugas;
 use App\Models\TugasKelas;
+use App\Support\PembuatPdfDemo;
 use Illuminate\Database\Seeder;
 
 class TugasKelasSeeder extends Seeder
@@ -25,10 +26,16 @@ class TugasKelasSeeder extends Seeder
             ]);
 
             foreach ($kelas->anggota->take(3) as $siswa) {
+                [$berkasLaporan] = PembuatPdfDemo::buat(
+                    'Laporan Observasi Etnosains - '.$siswa->nama_lengkap,
+                    ['Laporan' => 'Laporan hasil observasi etnosains yang dikerjakan sesuai petunjuk yang diberikan guru.'],
+                    'tugas'
+                );
+
                 $pengumpulan = PengumpulanTugas::create([
                     'id_tugas_kelas' => $tugas->id,
                     'id_pengguna' => $siswa->id,
-                    'berkas' => 'tugas/contoh-laporan.pdf',
+                    'berkas' => $berkasLaporan,
                     'catatan_siswa' => 'Laporan observasi telah saya kerjakan sesuai petunjuk.',
                     'status' => 'dikirim',
                     'dikirim_pada' => now()->subDays(fake()->numberBetween(1, 5)),

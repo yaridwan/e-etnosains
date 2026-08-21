@@ -25,7 +25,7 @@ class LkpdController extends Controller
     public function create(Request $request): View
     {
         return view('guru.lkpd.form', [
-            'lkpd' => new Lkpd,
+            'lkpd' => new Lkpd(['id_e_modul' => $request->integer('e_modul') ?: null]),
             'mataPelajaran' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
             'jenjang' => JenjangPendidikan::orderBy('urutan')->get(),
             'eModulSaya' => $request->user()->eModul()->get(),

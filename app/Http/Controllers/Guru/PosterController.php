@@ -21,7 +21,10 @@ class PosterController extends Controller
 
     public function create(Request $request): View
     {
-        return view('guru.poster.form', ['poster' => new Poster, 'eModulSaya' => $request->user()->eModul()->get()]);
+        return view('guru.poster.form', [
+            'poster' => new Poster(['id_e_modul' => $request->integer('e_modul') ?: null]),
+            'eModulSaya' => $request->user()->eModul()->get(),
+        ]);
     }
 
     public function store(Request $request, UploadService $upload): RedirectResponse
