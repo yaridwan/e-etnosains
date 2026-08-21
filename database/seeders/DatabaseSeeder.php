@@ -2,24 +2,58 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            // Sistem & RBAC
+            PeranSeeder::class,
+            IzinSeeder::class,
+            PeranIzinSeeder::class,
+            PengaturanAplikasiSeeder::class,
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            // Master data
+            InstansiPendidikanSeeder::class,
+            JenjangPendidikanSeeder::class,
+            MataPelajaranSeeder::class,
+            KategoriKontenSeeder::class,
+            TopikEtnosainsSeeder::class,
+            DaerahEtnosainsSeeder::class,
+            TagSeeder::class,
+
+            // Pengguna
+            PenggunaSeeder::class,
+
+            // Konten pembelajaran
+            EModulSeeder::class,
+            LkpdSeeder::class,
+            BahanAjarSeeder::class,
+            VideoPembelajaranSeeder::class,
+            PosterSeeder::class,
+            ObservasiSeeder::class,
+            KontenTagSeeder::class,
+
+            // Kelas & pembelajaran
+            KelasBelajarSeeder::class,
+            TugasKelasSeeder::class,
+            PengumpulanObservasiSeeder::class,
+
+            // Aktivitas & interaksi
+            KemajuanBelajarSeeder::class,
+            FavoritSeeder::class,
+            UlasanSeeder::class,
+            AktivitasLogSeeder::class,
+
+            // Website publik
+            FaqSeeder::class,
+            TestimoniSeeder::class,
+            HalamanStatisSeeder::class,
+            MenuNavigasiSeeder::class,
+            BannerSeeder::class,
+            PengumumanSeeder::class,
         ]);
     }
 }

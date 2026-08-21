@@ -84,8 +84,7 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
 
     public function peran(): BelongsToMany
     {
-        return $this->belongsToMany(Peran::class, 'pengguna_peran', 'id_pengguna', 'id_peran')
-            ->withTimestamps();
+        return $this->belongsToMany(Peran::class, 'pengguna_peran', 'id_pengguna', 'id_peran');
     }
 
     public function memilikiPeran(string ...$namaPeran): bool
