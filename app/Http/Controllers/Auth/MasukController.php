@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\MasukRequest;
+use App\Support\CaptchaPenjumlahan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,9 @@ class MasukController extends Controller
 {
     public function create(): View
     {
-        return view('autentikasi.masuk');
+        return view('autentikasi.masuk', [
+            'captcha' => CaptchaPenjumlahan::soal(),
+        ]);
     }
 
     public function store(MasukRequest $request): RedirectResponse

@@ -1,21 +1,21 @@
 <x-layout-dashboard judul-seo="Jenjang Pendidikan" :menu="\App\Support\MenuDashboard::administrator()">
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900">Jenjang Pendidikan</h1>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Jenjang Pendidikan</h1>
         <x-tombol @click="$dispatch('buka-modal', 'tambah')" x-data>Tambah Jenjang</x-tombol>
     </div>
 
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
-            <thead class="text-xs uppercase text-slate-400">
+            <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Nama Jenjang</th><th class="pb-2">Urutan</th><th class="pb-2 text-right">Aksi</th></tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                 @forelse($data as $item)
                     <tr>
-                        <td class="py-3 font-medium text-slate-700">{{ $item->nama_jenjang }}</td>
-                        <td class="py-3 text-slate-500">{{ $item->urutan }}</td>
+                        <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->nama_jenjang }}</td>
+                        <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->urutan }}</td>
                         <td class="py-3 text-right">
-                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 hover:underline">Ubah</button>
+                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</button>
                             <x-form-hapus :aksi="route('admin.jenjang-pendidikan.destroy', $item)" class="inline" />
                         </td>
                     </tr>

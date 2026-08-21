@@ -1,6 +1,6 @@
 <x-layout-auth judul-seo="Daftar sebagai Siswa">
-    <h1 class="text-xl font-bold text-slate-900">Daftar sebagai Siswa</h1>
-    <p class="mt-1 text-sm text-slate-500">Mulai belajar sains lewat kearifan lokal Indonesia.</p>
+    <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Siswa</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Mulai belajar sains lewat kearifan lokal Indonesia.</p>
 
     <form method="POST" action="{{ route('daftar.siswa.proses') }}" class="mt-6 space-y-4">
         @csrf
@@ -19,8 +19,8 @@
         <x-tombol type="submit" varian="utama" class="w-full">Daftar</x-tombol>
     </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500">
+    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
         Sudah punya akun?
-        <a href="{{ route('masuk') }}" class="font-medium text-teal-700 hover:underline">Masuk</a>
+        <a href="{{ route('masuk') }}" class="font-medium text-teal-700 dark:text-teal-400 hover:underline">Masuk</a>
     </p>
 </x-layout-auth>

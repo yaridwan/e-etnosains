@@ -1,8 +1,8 @@
 @php($sedangUbah = $poster->exists)
 
 <x-layout-dashboard :judul-seo="$sedangUbah ? 'Ubah Poster' : 'Tambah Poster'" :menu="\App\Support\MenuDashboard::guru()">
-    <a href="{{ route('guru.poster.index') }}" class="text-sm text-teal-700 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $sedangUbah ? 'Ubah Poster' : 'Tambah Poster' }}</h1>
+    <a href="{{ route('guru.poster.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah Poster' : 'Tambah Poster' }}</h1>
 
     <form method="POST" action="{{ $sedangUbah ? route('guru.poster.update', $poster) : route('guru.poster.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf

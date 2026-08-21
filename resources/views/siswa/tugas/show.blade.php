@@ -1,13 +1,13 @@
 <x-layout-dashboard judul-seo="Detail Tugas" :menu="\App\Support\MenuDashboard::siswa()">
-    <a href="{{ route('siswa.tugas.index') }}" class="text-sm text-teal-700 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $tugas->judul }}</h1>
+    <a href="{{ route('siswa.tugas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $tugas->judul }}</h1>
 
     <x-kartu class="mt-6">
-        <h2 class="font-semibold text-slate-800">Petunjuk</h2>
-        <p class="mt-2 text-sm text-slate-600">{{ $tugas->petunjuk }}</p>
-        <p class="mt-2 text-xs text-slate-400">Batas waktu: {{ $tugas->batas_waktu?->translatedFormat('d M Y, H:i') ?? '-' }}</p>
+        <h2 class="font-semibold text-slate-800 dark:text-slate-100">Petunjuk</h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">{{ $tugas->petunjuk }}</p>
+        <p class="mt-2 text-xs text-slate-400 dark:text-slate-500">Batas waktu: {{ $tugas->batas_waktu?->translatedFormat('d M Y, H:i') ?? '-' }}</p>
         @if($tugas->berkas)
-            <a href="{{ \Illuminate\Support\Facades\Storage::url($tugas->berkas) }}" target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-teal-700 hover:underline">Unduh Berkas Pendukung dari Guru</a>
+            <a href="{{ \Illuminate\Support\Facades\Storage::url($tugas->berkas) }}" target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Unduh Berkas Pendukung dari Guru</a>
         @endif
     </x-kartu>
 
@@ -19,12 +19,12 @@
     @endif
 
     <x-kartu class="mt-6">
-        <h2 class="font-semibold text-slate-800">{{ $pengumpulan ? 'Kumpulan Anda' : 'Kumpulkan Tugas' }}</h2>
+        <h2 class="font-semibold text-slate-800 dark:text-slate-100">{{ $pengumpulan ? 'Kumpulan Anda' : 'Kumpulkan Tugas' }}</h2>
 
         @if($pengumpulan)
-            <p class="mt-2 text-sm text-slate-500">Dikirim pada {{ $pengumpulan->dikirim_pada?->translatedFormat('d M Y, H:i') }}</p>
+            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Dikirim pada {{ $pengumpulan->dikirim_pada?->translatedFormat('d M Y, H:i') }}</p>
             @if($pengumpulan->berkas)
-                <a href="{{ \Illuminate\Support\Facades\Storage::url($pengumpulan->berkas) }}" target="_blank" rel="noopener" class="mt-1 inline-block text-sm font-medium text-teal-700 hover:underline">Lihat Berkas yang Dikumpulkan</a>
+                <a href="{{ \Illuminate\Support\Facades\Storage::url($pengumpulan->berkas) }}" target="_blank" rel="noopener" class="mt-1 inline-block text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Lihat Berkas yang Dikumpulkan</a>
             @endif
         @endif
 

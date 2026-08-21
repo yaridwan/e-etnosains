@@ -1,22 +1,22 @@
 <x-layout-dashboard judul-seo="Daerah Etnosains" :menu="\App\Support\MenuDashboard::administrator()">
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900">Daerah Etnosains</h1>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Daerah Etnosains</h1>
         <x-tombol x-data @click="$dispatch('buka-modal', 'tambah')">Tambah Daerah</x-tombol>
     </div>
 
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
-            <thead class="text-xs uppercase text-slate-400">
+            <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Provinsi</th><th class="pb-2">Kab/Kota</th><th class="pb-2">Kearifan Lokal</th><th class="pb-2 text-right">Aksi</th></tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                 @forelse($data as $item)
                     <tr>
-                        <td class="py-3 font-medium text-slate-700">{{ $item->provinsi }}</td>
-                        <td class="py-3 text-slate-500">{{ $item->kabupaten_kota }}</td>
-                        <td class="py-3 text-slate-500">{{ $item->nama_kearifan_lokal }}</td>
+                        <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->provinsi }}</td>
+                        <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->kabupaten_kota }}</td>
+                        <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->nama_kearifan_lokal }}</td>
                         <td class="py-3 text-right">
-                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 hover:underline">Ubah</button>
+                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</button>
                             <x-form-hapus :aksi="route('admin.daerah-etnosains.destroy', $item)" class="inline" />
                         </td>
                     </tr>

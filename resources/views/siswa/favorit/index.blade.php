@@ -1,15 +1,15 @@
 <x-layout-dashboard judul-seo="Favorit Saya" :menu="\App\Support\MenuDashboard::siswa()">
-    <h1 class="text-2xl font-bold text-slate-900">Favorit Saya</h1>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Favorit Saya</h1>
 
     <x-kartu class="mt-6">
         @if($favorit->isEmpty())
             <x-empty-state judul="Belum ada konten favorit." deskripsi="Tandai E-Modul favorit Anda saat menjelajahi konten." />
         @else
-            <div class="divide-y divide-slate-100">
+            <div class="divide-y divide-slate-100 dark:divide-slate-800">
                 @foreach($favorit as $item)
                     <div class="flex items-center justify-between py-3 text-sm">
                         <div>
-                            <span class="font-medium text-slate-700">{{ $item['model']->judul }}</span>
+                            <span class="font-medium text-slate-700 dark:text-slate-300">{{ $item['model']->judul }}</span>
                             <x-badge warna="slate" class="ml-2">{{ $item['jenis'] }}</x-badge>
                         </div>
                         <x-form-hapus :aksi="route('siswa.favorit.destroy', $item['favorit'])" pesan="Hapus dari favorit?" />

@@ -1,8 +1,8 @@
 @php($sedangUbah = $bahanAjar->exists)
 
 <x-layout-dashboard :judul-seo="$sedangUbah ? 'Ubah Bahan Ajar' : 'Tambah Bahan Ajar'" :menu="\App\Support\MenuDashboard::guru()">
-    <a href="{{ route('guru.bahan-ajar.index') }}" class="text-sm text-teal-700 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $sedangUbah ? 'Ubah Bahan Ajar' : 'Tambah Bahan Ajar' }}</h1>
+    <a href="{{ route('guru.bahan-ajar.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah Bahan Ajar' : 'Tambah Bahan Ajar' }}</h1>
 
     <form method="POST" action="{{ $sedangUbah ? route('guru.bahan-ajar.update', $bahanAjar) : route('guru.bahan-ajar.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf

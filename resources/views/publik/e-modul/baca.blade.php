@@ -16,7 +16,7 @@
         </div>
 
         <div class="flex min-h-[70vh] items-center justify-center px-4 pb-6">
-            <p id="fb-status" class="text-sm text-slate-300">Memuat E-Modul…</p>
+            <p id="fb-status" class="text-sm text-slate-300 dark:text-slate-600">Memuat E-Modul…</p>
             <div id="fb-container" class="mx-auto h-[75vh] max-h-[800px] w-full max-w-4xl"></div>
         </div>
 

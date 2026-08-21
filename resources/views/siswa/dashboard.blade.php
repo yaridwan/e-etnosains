@@ -1,6 +1,6 @@
 <x-layout-dashboard judul-seo="Dashboard Siswa" :menu="\App\Support\MenuDashboard::siswa()">
-    <h1 class="text-2xl font-bold text-slate-900">Halo, {{ auth()->user()->nama_lengkap }}!</h1>
-    <p class="mt-1 text-sm text-slate-500">Terus belajar sains dari kearifan lokal Indonesia.</p>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Halo, {{ auth()->user()->nama_lengkap }}!</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Terus belajar sains dari kearifan lokal Indonesia.</p>
 
     @foreach($pengumumanAktif as $pengumuman)
         <x-alert jenis="info" class="mt-4">{{ $pengumuman->judul }}: {{ $pengumuman->isi }}</x-alert>
@@ -15,8 +15,8 @@
             ['label' => 'Tugas Belum Selesai', 'nilai' => $statistik['tugas_belum']],
         ] as $kartu)
             <x-kartu padat>
-                <p class="text-xs font-medium uppercase tracking-wide text-slate-400">{{ $kartu['label'] }}</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900">{{ $kartu['nilai'] }}</p>
+                <p class="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">{{ $kartu['label'] }}</p>
+                <p class="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $kartu['nilai'] }}</p>
             </x-kartu>
         @endforeach
     </div>
@@ -24,44 +24,44 @@
     <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800">Kelas Saya</h2>
-                <a href="{{ route('siswa.kelas.index') }}" class="text-sm text-teal-700 hover:underline">Lihat semua</a>
+                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Kelas Saya</h2>
+                <a href="{{ route('siswa.kelas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">
                 @forelse($kelasSaya as $kelas)
-                    <a href="{{ route('siswa.kelas.show', $kelas) }}" class="block border-b border-slate-100 pb-3 text-sm last:border-0">
-                        <p class="font-medium text-slate-800">{{ $kelas->nama_kelas }}</p>
+                    <a href="{{ route('siswa.kelas.show', $kelas) }}" class="block border-b border-slate-100 dark:border-slate-800 pb-3 text-sm last:border-0">
+                        <p class="font-medium text-slate-800 dark:text-slate-100">{{ $kelas->nama_kelas }}</p>
                     </a>
                 @empty
-                    <p class="text-sm text-slate-400">Anda belum bergabung ke kelas manapun.</p>
+                    <p class="text-sm text-slate-400 dark:text-slate-500">Anda belum bergabung ke kelas manapun.</p>
                 @endforelse
             </div>
         </x-kartu>
 
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800">Kemajuan Belajar Terbaru</h2>
-                <a href="{{ route('siswa.riwayat.index') }}" class="text-sm text-teal-700 hover:underline">Lihat semua</a>
+                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Kemajuan Belajar Terbaru</h2>
+                <a href="{{ route('siswa.riwayat.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">
                 @forelse($kemajuanTerbaru as $item)
-                    <div class="border-b border-slate-100 pb-3 last:border-0">
+                    <div class="border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0">
                         <div class="flex items-center justify-between gap-3 text-sm">
-                            <span class="min-w-0 flex-1 truncate font-medium text-slate-800">
+                            <span class="min-w-0 flex-1 truncate font-medium text-slate-800 dark:text-slate-100">
                                 @if($item->tautanKonten)
-                                    <a href="{{ $item->tautanKonten }}" class="hover:text-teal-700 hover:underline">{{ $item->judulKonten }}</a>
+                                    <a href="{{ $item->tautanKonten }}" class="hover:text-teal-700 dark:hover:text-teal-400 hover:underline">{{ $item->judulKonten }}</a>
                                 @else
                                     {{ $item->judulKonten ?? $item->labelJenis }}
                                 @endif
                             </span>
-                            <span class="shrink-0 text-slate-500">{{ $item->persentase_baca }}%</span>
+                            <span class="shrink-0 text-slate-500 dark:text-slate-400">{{ $item->persentase_baca }}%</span>
                         </div>
-                        <div class="mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
+                        <div class="mt-1.5 h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                             <div class="h-1.5 rounded-full bg-teal-600" style="width: {{ $item->persentase_baca }}%"></div>
                         </div>
                     </div>
                 @empty
-                    <p class="text-sm text-slate-400">Belum ada aktivitas belajar.</p>
+                    <p class="text-sm text-slate-400 dark:text-slate-500">Belum ada aktivitas belajar.</p>
                 @endforelse
             </div>
         </x-kartu>

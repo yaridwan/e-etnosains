@@ -12,9 +12,27 @@ use App\Models\Peran;
 use App\Models\ProfilGuru;
 use App\Models\ProfilSiswa;
 use App\Models\VerifikasiGuru;
+use App\Support\CaptchaPenjumlahan;
 
 trait MembuatDataDasar
 {
+    /**
+     * Menyiapkan soal captcha baru lalu menggabungkan jawabannya yang benar
+     * ke dalam data formulir masuk.
+     *
+     * @param  array<string, mixed>  $tambahan
+     * @return array<string, mixed>
+     */
+    protected function dataMasuk(array $tambahan = []): array
+    {
+        $soal = CaptchaPenjumlahan::segarkan();
+
+        return array_merge(
+            ['jawaban_captcha' => $soal['angka_pertama'] + $soal['angka_kedua']],
+            $tambahan
+        );
+    }
+
     protected function buatPeran(string $nama): Peran
     {
         return Peran::firstOrCreate(['nama_peran' => $nama]);

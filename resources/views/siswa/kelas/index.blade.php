@@ -1,6 +1,6 @@
 <x-layout-dashboard judul-seo="Kelas Saya" :menu="\App\Support\MenuDashboard::siswa()">
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900">Kelas Saya</h1>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Kelas Saya</h1>
         <x-tombol x-data @click="$dispatch('buka-modal', 'gabung-kelas')">Gabung Kelas</x-tombol>
     </div>
 
@@ -10,9 +10,9 @@
         @else
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach($kelas as $item)
-                    <a href="{{ route('siswa.kelas.show', $item) }}" class="block rounded-xl border border-slate-200 p-4 hover:border-teal-600">
-                        <p class="font-semibold text-slate-800">{{ $item->nama_kelas }}</p>
-                        <p class="mt-1 text-xs text-slate-400">Guru: {{ $item->pengguna->nama_lengkap }}</p>
+                    <a href="{{ route('siswa.kelas.show', $item) }}" class="block rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:border-teal-600 dark:hover:border-teal-500">
+                        <p class="font-semibold text-slate-800 dark:text-slate-100">{{ $item->nama_kelas }}</p>
+                        <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">Guru: {{ $item->pengguna->nama_lengkap }}</p>
                     </a>
                 @endforeach
             </div>

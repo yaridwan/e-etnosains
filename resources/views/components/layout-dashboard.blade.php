@@ -1,23 +1,30 @@
 @props(['judulSeo' => null, 'menu' => [], 'labelPeran' => ''])
 
+@php($belumDibaca = app(\App\Services\NotifikasiService::class)->jumlahBelumDibaca(auth()->user()))
+
 <x-layout-app :judul-seo="$judulSeo">
-    <div x-data="{ sidebarTerbuka: false }" class="flex min-h-screen bg-slate-50">
-        <!-- Sidebar desktop -->
-        <aside class="hidden w-64 flex-col border-r border-slate-200 bg-white lg:flex">
-            <a href="{{ route('beranda') }}" class="flex h-16 items-center gap-2 border-b border-slate-100 px-6 font-bold text-teal-800">
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-white">E</span>
-                {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
+    <div x-data="{ sidebarTerbuka: false }" class="flex min-h-screen bg-slate-50 dark:bg-slate-950">
+        {{-- Sidebar desktop --}}
+        <aside class="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-900">
+            <a href="{{ route('beranda') }}" class="flex h-16 items-center gap-2.5 whitespace-nowrap border-b border-slate-100 px-6 dark:border-slate-800">
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-sm font-bold text-white">E</span>
+                <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
             </a>
+
             <nav class="flex-1 space-y-6 overflow-y-auto px-4 py-6">
                 @foreach($menu as $kelompok => $item)
                     <div>
                         @if(is_string($kelompok))
-                            <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">{{ $kelompok }}</p>
+                            <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
                         @endif
                         <div class="space-y-1">
                             @foreach($item as $tautan)
                                 <a href="{{ $tautan['url'] }}"
-                                   class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium {{ $tautan['aktif'] ?? false ? 'bg-teal-50 text-teal-800' : 'text-slate-600 hover:bg-slate-50' }}">
+                                   @class([
+                                       'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                       'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                       'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100' => ! ($tautan['aktif'] ?? false),
+                                   ])>
                                     {{ $tautan['label'] }}
                                 </a>
                             @endforeach
@@ -27,23 +34,32 @@
             </nav>
         </aside>
 
-        <!-- Sidebar mobile -->
+        {{-- Sidebar mobile --}}
         <div x-show="sidebarTerbuka" x-cloak class="fixed inset-0 z-50 lg:hidden">
-            <div class="fixed inset-0 bg-slate-900/50" @click="sidebarTerbuka = false"></div>
-            <aside class="relative flex h-full w-72 flex-col bg-white">
-                <div class="flex h-16 items-center justify-between border-b border-slate-100 px-6 font-bold text-teal-800">
-                    {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
-                    <button @click="sidebarTerbuka = false" aria-label="Tutup menu">&times;</button>
+            <div x-show="sidebarTerbuka" x-transition.opacity class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" @click="sidebarTerbuka = false"></div>
+
+            <aside x-show="sidebarTerbuka" x-transition.origin.left class="relative flex h-full w-72 flex-col bg-white dark:bg-slate-900">
+                <div class="flex h-16 items-center justify-between border-b border-slate-100 px-6 dark:border-slate-800">
+                    <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
+                    <button @click="sidebarTerbuka = false" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Tutup menu">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                    </button>
                 </div>
+
                 <nav class="flex-1 space-y-6 overflow-y-auto px-4 py-6">
                     @foreach($menu as $kelompok => $item)
                         <div>
                             @if(is_string($kelompok))
-                                <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">{{ $kelompok }}</p>
+                                <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
                             @endif
                             <div class="space-y-1">
                                 @foreach($item as $tautan)
-                                    <a href="{{ $tautan['url'] }}" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium {{ $tautan['aktif'] ?? false ? 'bg-teal-50 text-teal-800' : 'text-slate-600 hover:bg-slate-50' }}">
+                                    <a href="{{ $tautan['url'] }}"
+                                       @class([
+                                           'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                           'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                           'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' => ! ($tautan['aktif'] ?? false),
+                                       ])>
                                         {{ $tautan['label'] }}
                                     </a>
                                 @endforeach
@@ -54,18 +70,21 @@
             </aside>
         </div>
 
-        <div class="flex flex-1 flex-col">
-            <header class="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6">
-                <button @click="sidebarTerbuka = true" class="lg:hidden" aria-label="Buka menu">
-                    <svg class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <header class="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur-md sm:px-6 dark:border-slate-800 dark:bg-slate-900/90">
+                <button @click="sidebarTerbuka = true" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 lg:hidden dark:border-slate-700 dark:text-slate-300" aria-label="Buka menu">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
 
-                <span class="hidden text-sm font-medium text-slate-500 lg:block">{{ $labelPeran }}</span>
+                <span class="hidden truncate text-sm font-medium text-slate-500 lg:block dark:text-slate-400">{{ $labelPeran }}</span>
 
-                <div class="flex items-center gap-4">
-                    @php($belumDibaca = app(\App\Services\NotifikasiService::class)->jumlahBelumDibaca(auth()->user()))
-                    <a href="{{ route('notifikasi.index') }}" class="relative text-slate-500 hover:text-teal-700" aria-label="Notifikasi">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                <div class="ml-auto flex items-center gap-2 sm:gap-3">
+                    <x-tema-toggle />
+
+                    <a href="{{ route('notifikasi.index') }}"
+                       class="relative flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-teal-600 hover:text-teal-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-teal-500 dark:hover:text-teal-400"
+                       aria-label="Notifikasi{{ $belumDibaca > 0 ? " ($belumDibaca belum dibaca)" : '' }}">
+                        <svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                         </svg>
                         @if($belumDibaca > 0)
@@ -75,14 +94,49 @@
                         @endif
                     </a>
 
-                    <span class="text-sm font-medium text-slate-700">{{ auth()->user()->nama_lengkap }}</span>
-                    <div class="flex h-9 w-9 items-center justify-center rounded-full bg-teal-100 text-sm font-semibold text-teal-800">
-                        {{ Str::of(auth()->user()->nama_lengkap)->substr(0, 1)->upper() }}
+                    {{-- Menu pengguna --}}
+                    <div x-data="{ buka: false }" class="relative">
+                        <button
+                            type="button"
+                            @click="buka = ! buka"
+                            @click.outside="buka = false"
+                            :aria-expanded="buka"
+                            class="flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 transition hover:bg-slate-100 dark:hover:bg-slate-800"
+                        >
+                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-sm font-semibold text-teal-800 dark:bg-teal-900 dark:text-teal-200">
+                                {{ Str::of(auth()->user()->nama_lengkap)->substr(0, 1)->upper() }}
+                            </span>
+                            <span class="hidden max-w-[10rem] truncate text-sm font-medium text-slate-700 sm:block dark:text-slate-200">
+                                {{ auth()->user()->nama_lengkap }}
+                            </span>
+                            <svg class="hidden h-3.5 w-3.5 text-slate-400 dark:text-slate-500 transition sm:block" :class="buka && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+
+                        <div
+                            x-show="buka"
+                            x-cloak
+                            x-transition.origin.top.right
+                            class="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-700 dark:bg-slate-900"
+                        >
+                            <div class="border-b border-slate-100 px-3 py-2 dark:border-slate-800">
+                                <p class="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{{ auth()->user()->nama_lengkap }}</p>
+                                <p class="truncate text-xs text-slate-400 dark:text-slate-500">{{ auth()->user()->email }}</p>
+                            </div>
+
+                            <a href="{{ route('beranda') }}" class="mt-1 block rounded-lg px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800">
+                                Lihat Situs Publik
+                            </a>
+
+                            <form method="POST" action="{{ route('keluar') }}">
+                                @csrf
+                                <button type="submit" class="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950">
+                                    Keluar
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <form method="POST" action="{{ route('keluar') }}">
-                        @csrf
-                        <button type="submit" class="text-sm font-medium text-slate-500 hover:text-rose-600">Keluar</button>
-                    </form>
                 </div>
             </header>
 

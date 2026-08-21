@@ -1,18 +1,18 @@
 <x-layout-publik judul-seo="Pencarian | E-ETNOSAINS">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <h1 class="text-2xl font-bold text-slate-900">Hasil Pencarian {{ $kataKunci ? 'untuk "'.$kataKunci.'"' : '' }}</h1>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Hasil Pencarian {{ $kataKunci ? 'untuk "'.$kataKunci.'"' : '' }}</h1>
 
         <form method="GET" class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-5">
-            <input type="search" name="q" value="{{ $kataKunci }}" placeholder="Kata kunci..." class="rounded-lg border border-slate-300 px-3.5 py-2 text-sm sm:col-span-2">
-            <select name="jenjang" class="rounded-lg border border-slate-300 px-3.5 py-2 text-sm">
+            <input type="search" name="q" value="{{ $kataKunci }}" placeholder="Kata kunci..." class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm sm:col-span-2">
+            <select name="jenjang" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
                 <option value="">Semua Jenjang</option>
                 @foreach($jenjang as $item)<option value="{{ $item->id }}" @selected(request('jenjang')==$item->id)>{{ $item->nama_jenjang }}</option>@endforeach
             </select>
-            <select name="mata_pelajaran" class="rounded-lg border border-slate-300 px-3.5 py-2 text-sm">
+            <select name="mata_pelajaran" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
                 <option value="">Semua Mata Pelajaran</option>
                 @foreach($mataPelajaran as $item)<option value="{{ $item->id }}" @selected(request('mata_pelajaran')==$item->id)>{{ $item->nama_mata_pelajaran }}</option>@endforeach
             </select>
-            <select name="urutkan" class="rounded-lg border border-slate-300 px-3.5 py-2 text-sm">
+            <select name="urutkan" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
                 <option value="terbaru" @selected(request('urutkan')!=='terpopuler')>Terbaru</option>
                 <option value="terpopuler" @selected(request('urutkan')==='terpopuler')>Terpopuler</option>
             </select>

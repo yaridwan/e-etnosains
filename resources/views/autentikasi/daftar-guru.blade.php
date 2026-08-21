@@ -1,6 +1,6 @@
 <x-layout-auth judul-seo="Daftar sebagai Guru">
-    <h1 class="text-xl font-bold text-slate-900">Daftar sebagai Guru</h1>
-    <p class="mt-1 text-sm text-slate-500">Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
+    <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Guru</h1>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
 
     <form method="POST" action="{{ route('daftar.guru.proses') }}" class="mt-6 space-y-4">
         @csrf
@@ -23,8 +23,8 @@
         <x-tombol type="submit" varian="utama" class="w-full">Daftar</x-tombol>
     </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500">
+    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
         Sudah punya akun?
-        <a href="{{ route('masuk') }}" class="font-medium text-teal-700 hover:underline">Masuk</a>
+        <a href="{{ route('masuk') }}" class="font-medium text-teal-700 dark:text-teal-400 hover:underline">Masuk</a>
     </p>
 </x-layout-auth>

@@ -1,7 +1,7 @@
 <x-layout-publik judul-seo="E-Modul | E-ETNOSAINS">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-slate-900">E-Modul Etnosains</h1>
-        <p class="mt-2 text-slate-500">Kumpulan e-modul pembelajaran berbasis kearifan lokal Indonesia.</p>
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">E-Modul Etnosains</h1>
+        <p class="mt-2 text-slate-500 dark:text-slate-400">Kumpulan e-modul pembelajaran berbasis kearifan lokal Indonesia.</p>
 
         @if($eModul->isEmpty())
             <div class="mt-8"><x-empty-state judul="Belum ada E-Modul yang dipublikasikan." /></div>

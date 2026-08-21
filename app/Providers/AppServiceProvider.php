@@ -62,7 +62,11 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['components.navbar-publik', 'components.footer-publik'], function ($view) {
             $view->with('menuNavigasi', Cache::remember('menu_navigasi_aktif', 3600, function () {
-                return MenuNavigasi::whereNull('induk_id')->where('aktif', true)->orderBy('urutan')->get();
+                return MenuNavigasi::with(['anak' => fn ($q) => $q->where('aktif', true)])
+                    ->whereNull('induk_id')
+                    ->where('aktif', true)
+                    ->orderBy('urutan')
+                    ->get();
             }));
         });
     }

@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\Pengguna;
+use App\Support\CaptchaPenjumlahan;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,12 +25,52 @@ class MasukRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'kata_sandi' => ['required', 'string'],
+            'jawaban_captcha' => ['required', 'numeric'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'jawaban_captcha.required' => 'Jawaban penjumlahan wajib diisi.',
+            'jawaban_captcha.numeric' => 'Jawaban penjumlahan harus berupa angka.',
         ];
     }
 
     public function attributes(): array
     {
-        return ['kata_sandi' => 'kata sandi'];
+        return [
+            'kata_sandi' => 'kata sandi',
+            'jawaban_captcha' => 'jawaban penjumlahan',
+        ];
+    }
+
+    /**
+     * Verifikasi captcha dijalankan setelah aturan dasar lolos, sehingga
+     * pengguna tidak menerima dua jenis galat sekaligus untuk kolom yang sama.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($validator->errors()->has('jawaban_captcha')) {
+                return;
+            }
+
+            if (! CaptchaPenjumlahan::benar($this->input('jawaban_captcha'))) {
+                $validator->errors()->add('jawaban_captcha', 'Jawaban penjumlahan tidak tepat. Silakan coba lagi.');
+            }
+        });
+    }
+
+    /**
+     * Soal captcha selalu diganti setelah percobaan gagal agar tidak dapat
+     * dijawab berulang kali dengan nilai yang sama.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        CaptchaPenjumlahan::segarkan();
+
+        parent::failedValidation($validator);
     }
 
     public function autentikasi(): Pengguna
@@ -42,6 +84,7 @@ class MasukRequest extends FormRequest
 
         if (! $pengguna || ! Hash::check($this->string('kata_sandi'), $pengguna->kata_sandi)) {
             RateLimiter::hit($this->kunciPembatas());
+            CaptchaPenjumlahan::segarkan();
 
             throw ValidationException::withMessages([
                 'email' => 'Email atau kata sandi yang Anda masukkan salah.',
@@ -49,6 +92,7 @@ class MasukRequest extends FormRequest
         }
 
         RateLimiter::clear($this->kunciPembatas());
+        CaptchaPenjumlahan::bersihkan();
 
         Auth::login($pengguna, $this->boolean('ingat_saya'));
 

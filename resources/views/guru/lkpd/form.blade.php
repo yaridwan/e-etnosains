@@ -1,8 +1,8 @@
 @php($sedangUbah = $lkpd->exists)
 
 <x-layout-dashboard :judul-seo="$sedangUbah ? 'Ubah LKPD' : 'Buat LKPD'" :menu="\App\Support\MenuDashboard::guru()">
-    <a href="{{ route('guru.lkpd.index') }}" class="text-sm text-teal-700 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $sedangUbah ? 'Ubah LKPD' : 'Buat LKPD Baru' }}</h1>
+    <a href="{{ route('guru.lkpd.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah LKPD' : 'Buat LKPD Baru' }}</h1>
 
     <form method="POST" action="{{ $sedangUbah ? route('guru.lkpd.update', $lkpd) : route('guru.lkpd.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
@@ -28,9 +28,9 @@
                 <x-input type="file" label="Gambar Sampul" name="gambar_sampul" />
             </div>
 
-            <label class="flex items-center gap-2 text-sm text-slate-600">
+            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                 <input type="hidden" name="izin_unduh" value="0">
-                <input type="checkbox" name="izin_unduh" value="1" @checked($lkpd->izin_unduh ?? true) class="rounded border-slate-300 text-teal-700">
+                <input type="checkbox" name="izin_unduh" value="1" @checked($lkpd->izin_unduh ?? true) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
                 Izinkan pengunjung mengunduh berkas
             </label>
         </x-kartu>

@@ -1,10 +1,16 @@
 @props(['judulSeo' => null])
 
 <x-layout-app :judul-seo="$judulSeo">
-    <div class="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-teal-50 via-white to-white px-4 py-12">
-        <a href="{{ route('beranda') }}" class="mb-8 flex items-center gap-2 font-bold text-teal-800">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-700 text-white">E</span>
-            <span class="text-xl">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
+    <div class="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-teal-50 via-white to-white px-4 py-12 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
+        <div class="absolute right-4 top-4 sm:right-6 sm:top-6">
+            <x-tema-toggle />
+        </div>
+
+        <a href="{{ route('beranda') }}" class="mb-8 flex items-center gap-2.5">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-700 text-base font-bold text-white shadow-sm">E</span>
+            <span class="text-xl font-bold tracking-tight text-teal-800 dark:text-teal-300">
+                {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
+            </span>
         </a>
 
         <div class="w-full max-w-md">
@@ -15,6 +21,10 @@
             <x-kartu>
                 {{ $slot }}
             </x-kartu>
+
+            <p class="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
+                &copy; {{ now()->year }} {{ pengaturan('nama_aplikasi', 'E-ETNOSAINS') }}
+            </p>
         </div>
     </div>
 </x-layout-app>

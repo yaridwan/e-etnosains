@@ -22,9 +22,19 @@
 
     <link rel="icon" href="data:image/svg+xml,{{ rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="%230f766e"/><text x="12" y="17" font-size="14" text-anchor="middle" fill="white" font-family="sans-serif">E</text></svg>') }}">
 
+    {{-- Dijalankan sebelum render agar tidak terjadi kedip putih saat mode gelap aktif. --}}
+    <script>
+        (() => {
+            const pilihan = localStorage.getItem('tema') || 'sistem';
+            const gelap = pilihan === 'gelap'
+                || (pilihan === 'sistem' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', gelap);
+        })();
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-white font-sans text-slate-800 antialiased">
+<body class="bg-white font-sans text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
     {{ $slot }}
 </body>
 </html>

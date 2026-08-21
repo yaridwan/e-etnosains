@@ -1,8 +1,8 @@
 @php($sedangUbah = $eModul->exists)
 
 <x-layout-dashboard :judul-seo="$sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul'" :menu="\App\Support\MenuDashboard::guru()">
-    <a href="{{ route('guru.e-modul.index') }}" class="text-sm text-teal-700 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul Baru' }}</h1>
+    <a href="{{ route('guru.e-modul.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul Baru' }}</h1>
 
     @if($sedangUbah && $eModul->catatan_reviewer)
         <x-alert jenis="peringatan" class="mt-4">Catatan reviewer: {{ $eModul->catatan_reviewer }}</x-alert>
@@ -13,7 +13,7 @@
         @if($sedangUbah) @method('PUT') @endif
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800">1. Informasi Dasar</h2>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">1. Informasi Dasar</h2>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div class="sm:col-span-2">
                     <x-input label="Judul E-Modul" name="judul" :value="$eModul->judul" wajib />
@@ -28,7 +28,7 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800">2. Informasi Pembelajaran</h2>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">2. Informasi Pembelajaran</h2>
             <div class="mt-4 space-y-4">
                 <x-textarea label="Ringkasan" name="ringkasan" wajib>{{ $eModul->ringkasan }}</x-textarea>
                 <x-textarea label="Deskripsi Lengkap" name="deskripsi" :baris="6" wajib>{{ $eModul->deskripsi }}</x-textarea>
@@ -38,8 +38,8 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800">3. Eksplorasi Etnosains</h2>
-            <p class="mt-1 text-sm text-slate-500">Hubungkan kearifan lokal dengan konsep sains yang dipelajari.</p>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">3. Eksplorasi Etnosains</h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Hubungkan kearifan lokal dengan konsep sains yang dipelajari.</p>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $eModul->id_topik_etnosains }}" />
                 <x-select label="Daerah Etnosains" name="id_daerah_etnosains" :opsi="$daerah->pluck('nama_kearifan_lokal', 'id')" selected="{{ $eModul->id_daerah_etnosains }}" />
@@ -52,7 +52,7 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800">4. Media dan Berkas PDF</h2>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">4. Media dan Berkas PDF</h2>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-input type="file" label="Gambar Sampul" name="gambar_sampul" />
                 <x-input type="file" label="Gambar Poster" name="gambar_poster" />
@@ -61,10 +61,10 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800">5. Pengaturan Publikasi</h2>
-            <label class="mt-4 flex items-center gap-2 text-sm text-slate-600">
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">5. Pengaturan Publikasi</h2>
+            <label class="mt-4 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                 <input type="hidden" name="izin_unduh" value="0">
-                <input type="checkbox" name="izin_unduh" value="1" @checked($eModul->izin_unduh) class="rounded border-slate-300 text-teal-700">
+                <input type="checkbox" name="izin_unduh" value="1" @checked($eModul->izin_unduh) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
                 Izinkan pengunjung mengunduh berkas PDF
             </label>
         </x-kartu>
@@ -87,63 +87,63 @@
     @if($sedangUbah)
         <x-kartu class="mt-6">
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800">Konten Terkait</h2>
-                <p class="text-sm text-slate-400">LKPD, observasi, video, dan poster yang terhubung ke E-Modul ini</p>
+                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Konten Terkait</h2>
+                <p class="text-sm text-slate-400 dark:text-slate-500">LKPD, observasi, video, dan poster yang terhubung ke E-Modul ini</p>
             </div>
 
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase text-slate-500">LKPD</p>
+                        <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">LKPD</p>
                         <x-tombol :href="route('guru.lkpd.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
                     </div>
                     <ul class="mt-2 space-y-1">
                         @forelse($eModul->lkpd as $lkpd)
-                            <li><a href="{{ route('guru.lkpd.edit', $lkpd) }}" class="text-sm text-teal-700 hover:underline">{{ $lkpd->judul }}</a></li>
+                            <li><a href="{{ route('guru.lkpd.edit', $lkpd) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $lkpd->judul }}</a></li>
                         @empty
-                            <li class="text-sm text-slate-400">Belum ada.</li>
+                            <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
                         @endforelse
                     </ul>
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase text-slate-500">Observasi</p>
+                        <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Observasi</p>
                         <x-tombol :href="route('guru.observasi.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
                     </div>
                     <ul class="mt-2 space-y-1">
                         @forelse($eModul->observasi as $observasi)
-                            <li><a href="{{ route('guru.observasi.edit', $observasi) }}" class="text-sm text-teal-700 hover:underline">{{ $observasi->judul }}</a></li>
+                            <li><a href="{{ route('guru.observasi.edit', $observasi) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $observasi->judul }}</a></li>
                         @empty
-                            <li class="text-sm text-slate-400">Belum ada.</li>
+                            <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
                         @endforelse
                     </ul>
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase text-slate-500">Video</p>
+                        <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Video</p>
                         <x-tombol :href="route('guru.video.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
                     </div>
                     <ul class="mt-2 space-y-1">
                         @forelse($eModul->video as $video)
-                            <li><a href="{{ route('guru.video.edit', $video) }}" class="text-sm text-teal-700 hover:underline">{{ $video->judul }}</a></li>
+                            <li><a href="{{ route('guru.video.edit', $video) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $video->judul }}</a></li>
                         @empty
-                            <li class="text-sm text-slate-400">Belum ada.</li>
+                            <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
                         @endforelse
                     </ul>
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase text-slate-500">Poster</p>
+                        <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Poster</p>
                         <x-tombol :href="route('guru.poster.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
                     </div>
                     <ul class="mt-2 space-y-1">
                         @forelse($eModul->poster as $poster)
-                            <li><a href="{{ route('guru.poster.edit', $poster) }}" class="text-sm text-teal-700 hover:underline">{{ $poster->judul }}</a></li>
+                            <li><a href="{{ route('guru.poster.edit', $poster) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $poster->judul }}</a></li>
                         @empty
-                            <li class="text-sm text-slate-400">Belum ada.</li>
+                            <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
                         @endforelse
                     </ul>
                 </div>
