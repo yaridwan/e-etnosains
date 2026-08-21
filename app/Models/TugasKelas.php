@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class TugasKelas extends ModelDasarHapusLunak
 {
-    
     protected $table = 'tugas_kelas';
 
     protected $fillable = [

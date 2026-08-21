@@ -10,11 +10,10 @@ use App\Models\EModul;
 use App\Models\JenjangPendidikan;
 use App\Models\MataPelajaran;
 use App\Models\Peran;
-use App\Models\Pengguna;
 use App\Models\RiwayatStatusEModul;
 use App\Models\TopikEtnosains;
+use App\Support\PembuatPdfDemo;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class EModulSeeder extends Seeder
 {
@@ -130,7 +129,7 @@ class EModulSeeder extends Seeder
                 'Nilai dan Karakter' => $data['nilai_karakter'],
                 'Evaluasi' => 'Jawablah pertanyaan refleksi mengenai hubungan antara '.$data['topik'].' dengan konsep sains yang telah dipelajari.',
             ];
-            [$berkasPdf, $jumlahHalaman] = \App\Support\PembuatPdfDemo::buat($data['judul'], $bagianPdf, 'e-modul/pdf');
+            [$berkasPdf, $jumlahHalaman] = PembuatPdfDemo::buat($data['judul'], $bagianPdf, 'e-modul/pdf');
             $eModul->update(['berkas_pdf' => $berkasPdf, 'jumlah_halaman' => $jumlahHalaman]);
 
             foreach (array_keys($bagianPdf) as $urutan => $judulBab) {
@@ -159,7 +158,7 @@ class EModulSeeder extends Seeder
         }
 
         // Contoh workflow: e-modul diajukan (menunggu review) & draf
-        [$berkasDiajukan, $halamanDiajukan] = \App\Support\PembuatPdfDemo::buat(
+        [$berkasDiajukan, $halamanDiajukan] = PembuatPdfDemo::buat(
             'Sains di Balik Kerajinan Anyaman Bambu',
             ['Pendahuluan' => 'Kerajinan anyaman bambu merupakan salah satu warisan budaya yang sarat akan prinsip sains sederhana.'],
             'e-modul/pdf'

@@ -143,7 +143,7 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(KelasBelajar::class, 'id_pengguna');
     }
 
-    public function kelasDiikuti(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function kelasDiikuti(): BelongsToMany
     {
         return $this->belongsToMany(KelasBelajar::class, 'anggota_kelas', 'id_pengguna', 'id_kelas_belajar')
             ->withPivot('bergabung_pada');

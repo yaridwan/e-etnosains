@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class KategoriKonten extends ModelDasar
 {
     protected $table = 'kategori_konten';

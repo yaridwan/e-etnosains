@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Guru;
 use App\Enums\StatusPublikasi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Guru\SimpanLkpdRequest;
-use App\Models\EModul;
 use App\Models\JenjangPendidikan;
 use App\Models\Lkpd;
 use App\Models\MataPelajaran;
@@ -26,7 +25,7 @@ class LkpdController extends Controller
     public function create(Request $request): View
     {
         return view('guru.lkpd.form', [
-            'lkpd' => new Lkpd(),
+            'lkpd' => new Lkpd,
             'mataPelajaran' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
             'jenjang' => JenjangPendidikan::orderBy('urutan')->get(),
             'eModulSaya' => $request->user()->eModul()->get(),

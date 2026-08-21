@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publik;
 
+use App\Enums\StatusPublikasi;
 use App\Http\Controllers\Controller;
 use App\Models\BahanAjar;
 use App\Services\AktivitasKontenService;
@@ -19,7 +20,7 @@ class BahanAjarController extends Controller
 
     public function show(BahanAjar $bahanAjar, AktivitasKontenService $aktivitas, Request $request): View
     {
-        abort_unless($bahanAjar->status_publikasi === \App\Enums\StatusPublikasi::Dipublikasikan, 404);
+        abort_unless($bahanAjar->status_publikasi === StatusPublikasi::Dipublikasikan, 404);
 
         $aktivitas->catatDilihat($bahanAjar, 'bahan_ajar', $request);
         $bahanAjar->load(['pengguna', 'mataPelajaran', 'jenjangPendidikan', 'topikEtnosains']);

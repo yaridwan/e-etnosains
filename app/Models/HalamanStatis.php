@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class HalamanStatis extends ModelDasar
 {
     protected $table = 'halaman_statis';

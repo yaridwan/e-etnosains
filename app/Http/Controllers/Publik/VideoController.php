@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publik;
 
+use App\Enums\StatusPublikasi;
 use App\Http\Controllers\Controller;
 use App\Models\VideoPembelajaran;
 use App\Services\AktivitasKontenService;
@@ -19,7 +20,7 @@ class VideoController extends Controller
 
     public function show(VideoPembelajaran $video, AktivitasKontenService $aktivitas, Request $request): View
     {
-        abort_unless($video->status_publikasi === \App\Enums\StatusPublikasi::Dipublikasikan, 404);
+        abort_unless($video->status_publikasi === StatusPublikasi::Dipublikasikan, 404);
 
         $aktivitas->catatDilihat($video, 'video_pembelajaran', $request);
         $video->load(['pengguna', 'mataPelajaran', 'topikEtnosains', 'eModul']);

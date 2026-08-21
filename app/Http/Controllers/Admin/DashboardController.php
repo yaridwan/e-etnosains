@@ -20,10 +20,6 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
-        $publikasiPerBulan = EModul::dipublikasikan()
-            ->selectRaw("DATE_FORMAT(dipublikasikan_pada, '%Y-%m') as bulan, COUNT(*) as jumlah")
-            ->groupBy('bulan')->orderBy('bulan')->take(6)->pluck('jumlah', 'bulan');
-
         return view('admin.dashboard', [
             'statistik' => [
                 'total_pengguna' => Pengguna::count(),
@@ -39,7 +35,6 @@ class DashboardController extends Controller
                 'total_kunjungan' => StatistikKunjungan::count(),
                 'total_unduhan' => RiwayatUnduhan::count(),
             ],
-            'publikasiPerBulan' => $publikasiPerBulan,
             'eModulPopuler' => EModul::dipublikasikan()->orderByDesc('jumlah_dilihat')->take(5)->get(),
             'eModulMenunggu' => EModul::where('status_publikasi', StatusPublikasi::Diajukan)->with('pengguna')->latest()->take(5)->get(),
             'guruMenunggu' => VerifikasiGuru::where('status', StatusVerifikasiGuru::Menunggu)->with('pengguna')->latest()->take(5)->get(),

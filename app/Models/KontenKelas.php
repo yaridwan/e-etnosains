@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\JenisKonten;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class KontenKelas extends ModelDasar
@@ -16,7 +17,7 @@ class KontenKelas extends ModelDasar
         return $this->belongsTo(KelasBelajar::class, 'id_kelas_belajar');
     }
 
-    public function konten(): ?\Illuminate\Database\Eloquent\Model
+    public function konten(): ?Model
     {
         $jenis = JenisKonten::tryFrom($this->jenis_konten);
 

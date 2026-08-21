@@ -25,7 +25,7 @@ class BahanAjarController extends Controller
     public function create(): View
     {
         return view('guru.bahan-ajar.form', [
-            'bahanAjar' => new BahanAjar(),
+            'bahanAjar' => new BahanAjar,
             'mataPelajaran' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
             'jenjang' => JenjangPendidikan::orderBy('urutan')->get(),
             'topik' => TopikEtnosains::orderBy('nama_topik')->get(),

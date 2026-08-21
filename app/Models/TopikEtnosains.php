@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class TopikEtnosains extends ModelDasar
 {
     protected $table = 'topik_etnosains';

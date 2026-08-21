@@ -28,7 +28,7 @@ class EModulController extends Controller
     public function create(): View
     {
         return view('guru.e-modul.form', [
-            'eModul' => new EModul(),
+            'eModul' => new EModul,
             'jenjang' => JenjangPendidikan::orderBy('urutan')->get(),
             'mataPelajaran' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
             'topik' => TopikEtnosains::orderBy('nama_topik')->get(),

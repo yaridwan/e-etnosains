@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class DaerahEtnosains extends ModelDasar
 {
     protected $table = 'daerah_etnosains';

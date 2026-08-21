@@ -15,7 +15,7 @@ class PembuatPdfDemo
      */
     public static function buat(string $judul, array $bagian, string $direktori): array
     {
-        $opsi = new Options();
+        $opsi = new Options;
         $opsi->set('isRemoteEnabled', false);
         $opsi->set('defaultFont', 'DejaVu Sans');
 

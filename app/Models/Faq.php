@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class Faq extends ModelDasar
 {
     protected $table = 'faq';

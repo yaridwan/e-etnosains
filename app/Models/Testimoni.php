@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class Testimoni extends ModelDasar
 {
     protected $table = 'testimoni';

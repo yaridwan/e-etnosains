@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class Banner extends ModelDasar
 {
     protected $table = 'banner';

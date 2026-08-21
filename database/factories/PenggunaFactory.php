@@ -21,6 +21,7 @@ class PenggunaFactory extends Factory
             'nomor_telepon' => '08'.fake()->numerify('##########'),
             'kata_sandi' => 'password',
             'status_akun' => StatusAkun::Aktif,
+            'ingat_saya' => null,
         ];
     }
 

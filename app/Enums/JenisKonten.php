@@ -2,6 +2,13 @@
 
 namespace App\Enums;
 
+use App\Models\BahanAjar;
+use App\Models\EModul;
+use App\Models\Lkpd;
+use App\Models\Observasi;
+use App\Models\Poster;
+use App\Models\VideoPembelajaran;
+
 enum JenisKonten: string
 {
     case EModul = 'e_modul';
@@ -26,12 +33,12 @@ enum JenisKonten: string
     public function modelClass(): string
     {
         return match ($this) {
-            self::EModul => \App\Models\EModul::class,
-            self::Lkpd => \App\Models\Lkpd::class,
-            self::BahanAjar => \App\Models\BahanAjar::class,
-            self::VideoPembelajaran => \App\Models\VideoPembelajaran::class,
-            self::Poster => \App\Models\Poster::class,
-            self::Observasi => \App\Models\Observasi::class,
+            self::EModul => EModul::class,
+            self::Lkpd => Lkpd::class,
+            self::BahanAjar => BahanAjar::class,
+            self::VideoPembelajaran => VideoPembelajaran::class,
+            self::Poster => Poster::class,
+            self::Observasi => Observasi::class,
         };
     }
 }

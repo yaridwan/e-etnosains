@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class Pengumuman extends ModelDasar
 {
     protected $table = 'pengumuman';

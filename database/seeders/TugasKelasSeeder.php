@@ -7,7 +7,6 @@ use App\Models\NilaiTugas;
 use App\Models\PengumpulanTugas;
 use App\Models\TugasKelas;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class TugasKelasSeeder extends Seeder
 {

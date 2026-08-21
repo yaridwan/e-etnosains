@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class Tag extends ModelDasar
 {
     protected $table = 'tag';

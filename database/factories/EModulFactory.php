@@ -9,7 +9,6 @@ use App\Models\MataPelajaran;
 use App\Models\Pengguna;
 use App\Models\TopikEtnosains;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class EModulFactory extends Factory
 {

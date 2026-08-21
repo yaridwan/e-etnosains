@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pengumuman;
+use App\Models\TugasKelas;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,7 +15,7 @@ class DashboardController extends Controller
         $siswa = $request->user();
 
         $idKelasSiswa = $siswa->kelasDiikuti()->pluck('kelas_belajar.id');
-        $jumlahTugas = \App\Models\TugasKelas::whereIn('id_kelas_belajar', $idKelasSiswa)->count();
+        $jumlahTugas = TugasKelas::whereIn('id_kelas_belajar', $idKelasSiswa)->count();
 
         return view('siswa.dashboard', [
             'statistik' => [
@@ -25,7 +27,7 @@ class DashboardController extends Controller
             ],
             'kelasSaya' => $siswa->kelasDiikuti()->take(5)->get(),
             'kemajuanTerbaru' => $siswa->kemajuanBelajar()->latest('terakhir_diakses_pada')->take(5)->get(),
-            'pengumumanAktif' => \App\Models\Pengumuman::aktif()->untukPeran('siswa')->latest()->take(3)->get(),
+            'pengumumanAktif' => Pengumuman::aktif()->untukPeran('siswa')->latest()->take(3)->get(),
         ]);
     }
 }

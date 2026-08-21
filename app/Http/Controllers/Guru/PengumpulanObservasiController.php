@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
-use App\Models\Observasi;
 use App\Models\PengumpulanObservasi;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

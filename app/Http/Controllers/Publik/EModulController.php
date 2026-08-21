@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Publik;
 
+use App\Enums\StatusPublikasi;
 use App\Http\Controllers\Controller;
 use App\Models\EModul;
 use App\Services\AktivitasKontenService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EModulController extends Controller
 {
@@ -33,7 +35,7 @@ class EModulController extends Controller
 
     public function show(EModul $eModul, AktivitasKontenService $aktivitas, Request $request): View
     {
-        abort_unless($eModul->status_publikasi === \App\Enums\StatusPublikasi::Dipublikasikan, 404);
+        abort_unless($eModul->status_publikasi === StatusPublikasi::Dipublikasikan, 404);
 
         $aktivitas->catatDilihat($eModul, 'e_modul', $request);
 
@@ -57,13 +59,13 @@ class EModulController extends Controller
 
     public function baca(EModul $eModul): View
     {
-        abort_unless($eModul->status_publikasi === \App\Enums\StatusPublikasi::Dipublikasikan, 404);
+        abort_unless($eModul->status_publikasi === StatusPublikasi::Dipublikasikan, 404);
         abort_if(blank($eModul->berkas_pdf), 404, 'Berkas PDF belum tersedia.');
 
         return view('publik.e-modul.baca', ['eModul' => $eModul]);
     }
 
-    public function unduh(EModul $eModul, AktivitasKontenService $aktivitas, Request $request): RedirectResponse|\Symfony\Component\HttpFoundation\StreamedResponse
+    public function unduh(EModul $eModul, AktivitasKontenService $aktivitas, Request $request): RedirectResponse|StreamedResponse
     {
         abort_unless($eModul->izin_unduh, 403, 'Unduhan tidak diizinkan untuk E-Modul ini.');
         abort_if(blank($eModul->berkas_pdf), 404);
