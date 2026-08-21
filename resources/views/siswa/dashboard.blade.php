@@ -46,9 +46,15 @@
             <div class="mt-4 space-y-3">
                 @forelse($kemajuanTerbaru as $item)
                     <div class="border-b border-slate-100 pb-3 last:border-0">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="font-medium text-slate-800">{{ ucfirst(str_replace('_',' ',$item->jenis_konten)) }} #{{ $item->id_referensi }}</span>
-                            <span class="text-slate-500">{{ $item->persentase_baca }}%</span>
+                        <div class="flex items-center justify-between gap-3 text-sm">
+                            <span class="min-w-0 flex-1 truncate font-medium text-slate-800">
+                                @if($item->tautanKonten)
+                                    <a href="{{ $item->tautanKonten }}" class="hover:text-teal-700 hover:underline">{{ $item->judulKonten }}</a>
+                                @else
+                                    {{ $item->judulKonten ?? $item->labelJenis }}
+                                @endif
+                            </span>
+                            <span class="shrink-0 text-slate-500">{{ $item->persentase_baca }}%</span>
                         </div>
                         <div class="mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
                             <div class="h-1.5 rounded-full bg-teal-600" style="width: {{ $item->persentase_baca }}%"></div>

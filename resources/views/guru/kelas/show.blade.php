@@ -32,8 +32,11 @@
                 </div>
                 <div class="mt-3 divide-y divide-slate-100">
                     @forelse($kelas->kontenKelas as $konten)
-                        <div class="flex items-center justify-between py-2 text-sm">
-                            <span class="text-slate-700"><x-badge warna="slate">{{ $konten->jenis_konten }}</x-badge> #{{ $konten->id_referensi }}</span>
+                        <div class="flex items-center justify-between gap-3 py-2 text-sm">
+                            <span class="min-w-0 flex-1 text-slate-700">
+                                <x-badge warna="slate">{{ $konten->labelJenis }}</x-badge>
+                                <span class="ml-1">{{ $konten->judulKonten ?? '(konten telah dihapus)' }}</span>
+                            </span>
                             <form method="POST" action="{{ route('guru.kelas.hapus-konten', [$kelas, $konten->id]) }}">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-rose-600 hover:underline">Hapus</button>

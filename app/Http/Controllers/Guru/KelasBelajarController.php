@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Guru;
 
+use App\Enums\JenisKonten;
 use App\Http\Controllers\Controller;
 use App\Models\KelasBelajar;
+use App\Models\KontenKelas;
 use App\Models\MataPelajaran;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,6 +43,13 @@ class KelasBelajarController extends Controller
     {
         $this->pastikanPemilik($kelas);
         $kelas->load(['anggota', 'kontenKelas', 'tugasKelas']);
+
+        $kelas->kontenKelas->each(function (KontenKelas $item) {
+            $jenis = JenisKonten::tryFrom($item->jenis_konten);
+
+            $item->setAttribute('labelJenis', $jenis?->label() ?? $item->jenis_konten);
+            $item->setAttribute('judulKonten', $jenis?->modelClass()::find($item->id_referensi)?->judul);
+        });
 
         return view('guru.kelas.show', [
             'kelas' => $kelas,
