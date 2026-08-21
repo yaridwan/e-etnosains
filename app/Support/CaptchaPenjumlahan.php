@@ -17,14 +17,23 @@ class CaptchaPenjumlahan
     /**
      * Membuat soal baru dan menyimpan jawabannya ke sesi.
      *
+     * Jumlah hasil dijamin berbeda dari soal sebelumnya. Tanpa jaminan ini,
+     * soal acak berikutnya bisa kebetulan bernilai sama (mis. 3+8 lalu 5+6)
+     * sehingga jawaban dari percobaan yang gagal masih dapat dipakai ulang.
+     *
      * @return array{angka_pertama: int, angka_kedua: int, pertanyaan: string}
      */
     public static function buat(): array
     {
-        $pertama = random_int(1, 9);
-        $kedua = random_int(1, 9);
+        $sebelumnya = Session::get(self::KUNCI_SESI);
 
-        Session::put(self::KUNCI_SESI, $pertama + $kedua);
+        do {
+            $pertama = random_int(1, 9);
+            $kedua = random_int(1, 9);
+            $jumlah = $pertama + $kedua;
+        } while ($sebelumnya !== null && $jumlah === (int) $sebelumnya);
+
+        Session::put(self::KUNCI_SESI, $jumlah);
 
         return [
             'angka_pertama' => $pertama,

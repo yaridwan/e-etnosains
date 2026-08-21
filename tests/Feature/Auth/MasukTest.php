@@ -78,6 +78,23 @@ class MasukTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_soal_captcha_baru_selalu_berbeda_dari_soal_sebelumnya(): void
+    {
+        // Tanpa jaminan ini, soal pengganti bisa bernilai sama sehingga jawaban
+        // dari percobaan gagal masih dapat dipakai ulang.
+        $sebelumnya = CaptchaPenjumlahan::segarkan();
+        $jumlahSebelumnya = $sebelumnya['angka_pertama'] + $sebelumnya['angka_kedua'];
+
+        for ($i = 0; $i < 30; $i++) {
+            $berikutnya = CaptchaPenjumlahan::segarkan();
+            $jumlahBerikutnya = $berikutnya['angka_pertama'] + $berikutnya['angka_kedua'];
+
+            $this->assertNotSame($jumlahSebelumnya, $jumlahBerikutnya);
+
+            $jumlahSebelumnya = $jumlahBerikutnya;
+        }
+    }
+
     public function test_jawaban_captcha_yang_sama_tidak_dapat_dipakai_ulang(): void
     {
         $this->buatAdmin(['email' => 'admin@contoh.test', 'kata_sandi' => 'password123']);

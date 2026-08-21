@@ -855,7 +855,7 @@ php artisan event:cache
 
 ## Testing
 
-Suite berisi **60 test** (157 asertion) yang berjalan terhadap database MySQL terpisah:
+Suite berisi **61 test** (187 asertion) yang berjalan terhadap database MySQL terpisah:
 
 ```bash
 php artisan test
