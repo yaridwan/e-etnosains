@@ -32,7 +32,11 @@ class MenuDashboard
             'Pengguna' => [
                 self::item('Semua Pengguna', route('admin.pengguna.index'), request()->routeIs('admin.pengguna.*')),
             ],
+            'Moderasi' => [
+                self::item('Ulasan', route('admin.moderasi-ulasan.index'), request()->routeIs('admin.moderasi-ulasan.*')),
+            ],
             'Sistem' => [
+                self::item('Notifikasi', route('notifikasi.index'), request()->routeIs('notifikasi.*')),
                 self::item('Pengaturan Aplikasi', route('admin.pengaturan.index'), request()->routeIs('admin.pengaturan.*')),
                 self::item('Audit Aktivitas', route('admin.audit-aktivitas.index'), request()->routeIs('admin.audit-aktivitas.*')),
             ],
@@ -59,6 +63,7 @@ class MenuDashboard
                 self::item('Pengumpulan Observasi', route('guru.pengumpulan-observasi.index'), request()->routeIs('guru.pengumpulan-observasi.*')),
             ],
             'Akun' => [
+                self::item('Notifikasi', route('notifikasi.index'), request()->routeIs('notifikasi.*')),
                 self::item('Profil Saya', route('guru.profil.edit'), request()->routeIs('guru.profil.*')),
             ],
         ];
@@ -79,6 +84,7 @@ class MenuDashboard
             'Lainnya' => [
                 self::item('Favorit', route('siswa.favorit.index'), request()->routeIs('siswa.favorit.*')),
                 self::item('Riwayat Belajar', route('siswa.riwayat.index'), request()->routeIs('siswa.riwayat.*')),
+                self::item('Notifikasi', route('notifikasi.index'), request()->routeIs('notifikasi.*')),
                 self::item('Profil Saya', route('siswa.profil.edit'), request()->routeIs('siswa.profil.*')),
             ],
         ];

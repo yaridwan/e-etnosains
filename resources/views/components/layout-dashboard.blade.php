@@ -63,6 +63,18 @@
                 <span class="hidden text-sm font-medium text-slate-500 lg:block">{{ $labelPeran }}</span>
 
                 <div class="flex items-center gap-4">
+                    @php($belumDibaca = app(\App\Services\NotifikasiService::class)->jumlahBelumDibaca(auth()->user()))
+                    <a href="{{ route('notifikasi.index') }}" class="relative text-slate-500 hover:text-teal-700" aria-label="Notifikasi">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                        @if($belumDibaca > 0)
+                            <span class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">
+                                {{ $belumDibaca > 9 ? '9+' : $belumDibaca }}
+                            </span>
+                        @endif
+                    </a>
+
                     <span class="text-sm font-medium text-slate-700">{{ auth()->user()->nama_lengkap }}</span>
                     <div class="flex h-9 w-9 items-center justify-center rounded-full bg-teal-100 text-sm font-semibold text-teal-800">
                         {{ Str::of(auth()->user()->nama_lengkap)->substr(0, 1)->upper() }}

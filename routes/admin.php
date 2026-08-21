@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\MasterData\JenjangPendidikanController;
 use App\Http\Controllers\Admin\MasterData\MataPelajaranController;
 use App\Http\Controllers\Admin\MasterData\TagController;
 use App\Http\Controllers\Admin\MasterData\TopikEtnosainsController;
+use App\Http\Controllers\Admin\ModerasiUlasanController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\VerifikasiGuruController;
@@ -117,6 +118,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'peran:a
 
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
     Route::post('/pengaturan', [PengaturanController::class, 'simpan'])->name('pengaturan.simpan');
+
+    Route::get('/moderasi-ulasan', [ModerasiUlasanController::class, 'index'])->name('moderasi-ulasan.index');
+    Route::post('/moderasi-ulasan/{ulasan}/setujui', [ModerasiUlasanController::class, 'setujui'])->name('moderasi-ulasan.setujui');
+    Route::post('/moderasi-ulasan/{ulasan}/tolak', [ModerasiUlasanController::class, 'tolak'])->name('moderasi-ulasan.tolak');
+    Route::delete('/moderasi-ulasan/{ulasan}', [ModerasiUlasanController::class, 'destroy'])->name('moderasi-ulasan.destroy');
 
     Route::get('/audit-aktivitas', [AuditAktivitasController::class, 'index'])->name('audit-aktivitas.index');
 });

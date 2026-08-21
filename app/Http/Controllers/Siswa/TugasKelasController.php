@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Siswa;
 use App\Http\Controllers\Controller;
 use App\Models\PengumpulanTugas;
 use App\Models\TugasKelas;
+use App\Services\NotifikasiService;
 use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class TugasKelasController extends Controller
         return view('siswa.tugas.show', ['tugas' => $tugas, 'pengumpulan' => $pengumpulan]);
     }
 
-    public function kumpul(Request $request, TugasKelas $tugas, UploadService $upload): RedirectResponse
+    public function kumpul(Request $request, TugasKelas $tugas, UploadService $upload, NotifikasiService $notifikasi): RedirectResponse
     {
         $this->pastikanAnggota($tugas);
 
@@ -46,6 +47,14 @@ class TugasKelasController extends Controller
         PengumpulanTugas::updateOrCreate(
             ['id_tugas_kelas' => $tugas->id, 'id_pengguna' => $request->user()->id],
             $data + ['status' => 'dikirim', 'dikirim_pada' => now()]
+        );
+
+        $notifikasi->kirim(
+            $tugas->id_pengguna,
+            'tugas',
+            'Pengumpulan Tugas Baru',
+            $request->user()->nama_lengkap.' mengumpulkan tugas "'.$tugas->judul.'".',
+            ['id_tugas_kelas' => $tugas->id]
         );
 
         return redirect()->route('siswa.tugas.show', $tugas)->with('status', 'Tugas berhasil dikumpulkan.');

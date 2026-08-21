@@ -7,6 +7,7 @@ use App\Http\Controllers\Publik\LkpdController;
 use App\Http\Controllers\Publik\ObservasiController;
 use App\Http\Controllers\Publik\PosterController;
 use App\Http\Controllers\Publik\TopikEtnosainsController;
+use App\Http\Controllers\Publik\UlasanController;
 use App\Http\Controllers\Publik\VideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,3 +49,7 @@ Route::prefix('topik-etnosains')->name('topik-etnosains.')->group(function () {
 });
 
 Route::get('/guru/{guru}', [GuruProfilController::class, 'show'])->name('guru.profil');
+
+Route::post('/e-modul/{eModul:alamat_tautan}/ulasan', [UlasanController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('e-modul.ulasan.simpan');

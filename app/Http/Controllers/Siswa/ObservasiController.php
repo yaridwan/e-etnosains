@@ -7,6 +7,7 @@ use App\Models\DokumentasiObservasi;
 use App\Models\JawabanObservasi;
 use App\Models\Observasi;
 use App\Models\PengumpulanObservasi;
+use App\Services\NotifikasiService;
 use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class ObservasiController extends Controller
         return view('siswa.observasi.show', ['observasi' => $observasi, 'pengumpulan' => $pengumpulan]);
     }
 
-    public function kirim(Request $request, Observasi $observasi, UploadService $upload): RedirectResponse
+    public function kirim(Request $request, Observasi $observasi, UploadService $upload, NotifikasiService $notifikasi): RedirectResponse
     {
         $data = $request->validate([
             'jawaban' => ['nullable', 'array'],
@@ -83,6 +84,14 @@ class ObservasiController extends Controller
                 ]);
             }
         });
+
+        $notifikasi->kirim(
+            $observasi->id_pengguna,
+            'observasi',
+            'Pengumpulan Observasi Baru',
+            $request->user()->nama_lengkap.' mengirim hasil observasi "'.$observasi->judul.'".',
+            ['id_observasi' => $observasi->id]
+        );
 
         return redirect()->route('siswa.observasi.index')->with('status', 'Hasil observasi berhasil dikirim.');
     }

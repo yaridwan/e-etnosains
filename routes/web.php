@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\Publik\BerandaController;
 use App\Http\Controllers\Publik\HalamanStatisController;
 use App\Http\Controllers\Publik\PencarianController;
@@ -11,6 +12,12 @@ Route::get('/pencarian', PencarianController::class)->name('pencarian');
 Route::get('/halaman/{halaman:alamat_tautan}', HalamanStatisController::class)->name('halaman-statis');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', fn () => response()->view('publik.robots')->header('Content-Type', 'text/plain'))->name('robots');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+    Route::post('/notifikasi/{notifikasi}/dibaca', [NotifikasiController::class, 'tandaiDibaca'])->name('notifikasi.tandai-dibaca');
+    Route::post('/notifikasi/tandai-semua-dibaca', [NotifikasiController::class, 'tandaiSemuaDibaca'])->name('notifikasi.tandai-semua-dibaca');
+});
 
 require __DIR__.'/autentikasi.php';
 require __DIR__.'/admin.php';

@@ -7,6 +7,7 @@ use App\Enums\StatusVerifikasiGuru;
 use App\Http\Controllers\Controller;
 use App\Models\AuditAktivitas;
 use App\Models\VerifikasiGuru;
+use App\Services\NotifikasiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -29,7 +30,7 @@ class VerifikasiGuruController extends Controller
         return view('admin.verifikasi-guru.show', ['verifikasi' => $verifikasiGuru]);
     }
 
-    public function setujui(VerifikasiGuru $verifikasiGuru, Request $request): RedirectResponse
+    public function setujui(VerifikasiGuru $verifikasiGuru, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $verifikasiGuru->update([
             'status' => StatusVerifikasiGuru::Disetujui,
@@ -49,10 +50,17 @@ class VerifikasiGuruController extends Controller
             'agen_pengguna' => $request->userAgent(),
         ]);
 
+        $notifikasi->kirim(
+            $verifikasiGuru->id_pengguna,
+            'verifikasi_guru',
+            'Akun Anda Telah Disetujui',
+            'Selamat! Akun guru Anda telah diverifikasi Administrator dan kini dapat digunakan untuk mempublikasikan konten.'
+        );
+
         return back()->with('status', 'Guru berhasil diverifikasi dan akun telah aktif.');
     }
 
-    public function tolak(VerifikasiGuru $verifikasiGuru, Request $request): RedirectResponse
+    public function tolak(VerifikasiGuru $verifikasiGuru, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $request->validate(['catatan' => ['required', 'string']]);
 
@@ -65,10 +73,17 @@ class VerifikasiGuruController extends Controller
 
         $verifikasiGuru->pengguna->update(['status_akun' => StatusAkun::Ditolak]);
 
+        $notifikasi->kirim(
+            $verifikasiGuru->id_pengguna,
+            'verifikasi_guru',
+            'Pendaftaran Anda Ditolak',
+            'Alasan: '.$request->string('catatan')
+        );
+
         return back()->with('status', 'Pendaftaran guru ditolak.');
     }
 
-    public function mintaPerbaikan(VerifikasiGuru $verifikasiGuru, Request $request): RedirectResponse
+    public function mintaPerbaikan(VerifikasiGuru $verifikasiGuru, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $request->validate(['catatan' => ['required', 'string']]);
 
@@ -78,6 +93,13 @@ class VerifikasiGuruController extends Controller
             'diverifikasi_oleh' => $request->user()->id,
             'diverifikasi_pada' => now(),
         ]);
+
+        $notifikasi->kirim(
+            $verifikasiGuru->id_pengguna,
+            'verifikasi_guru',
+            'Perbaikan Data Diperlukan',
+            'Administrator meminta perbaikan data: '.$request->string('catatan')
+        );
 
         return back()->with('status', 'Permintaan perbaikan data telah dikirim ke guru.');
     }

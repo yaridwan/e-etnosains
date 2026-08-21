@@ -8,6 +8,7 @@ use App\Models\AuditAktivitas;
 use App\Models\CatatanPeninjauanEModul;
 use App\Models\EModul;
 use App\Models\RiwayatStatusEModul;
+use App\Services\NotifikasiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ class EModulReviewController extends Controller
         return view('admin.tinjau-e-modul.show', ['eModul' => $eModul]);
     }
 
-    public function setujui(EModul $eModul, Request $request): RedirectResponse
+    public function setujui(EModul $eModul, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $request->validate(['catatan' => ['nullable', 'string']]);
 
@@ -75,10 +76,18 @@ class EModulReviewController extends Controller
             ]);
         });
 
+        $notifikasi->kirim(
+            $eModul->id_pengguna,
+            'e_modul',
+            'E-Modul Anda Dipublikasikan',
+            'E-Modul "'.$eModul->judul.'" telah disetujui dan kini tampil di portal publik.',
+            ['id_e_modul' => $eModul->id]
+        );
+
         return redirect()->route('admin.tinjau-e-modul.index')->with('status', 'E-Modul berhasil disetujui dan dipublikasikan.');
     }
 
-    public function mintaPerbaikan(EModul $eModul, Request $request): RedirectResponse
+    public function mintaPerbaikan(EModul $eModul, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $request->validate(['catatan' => ['required', 'string']]);
 
@@ -106,10 +115,18 @@ class EModulReviewController extends Controller
             ]);
         });
 
+        $notifikasi->kirim(
+            $eModul->id_pengguna,
+            'e_modul',
+            'E-Modul Perlu Perbaikan',
+            'E-Modul "'.$eModul->judul.'" perlu diperbaiki. Catatan: '.$request->string('catatan'),
+            ['id_e_modul' => $eModul->id]
+        );
+
         return redirect()->route('admin.tinjau-e-modul.index')->with('status', 'Permintaan perbaikan telah dikirim ke guru.');
     }
 
-    public function tolak(EModul $eModul, Request $request): RedirectResponse
+    public function tolak(EModul $eModul, Request $request, NotifikasiService $notifikasi): RedirectResponse
     {
         $request->validate(['catatan' => ['required', 'string']]);
 
@@ -136,6 +153,14 @@ class EModulReviewController extends Controller
                 'keputusan' => 'ditolak',
             ]);
         });
+
+        $notifikasi->kirim(
+            $eModul->id_pengguna,
+            'e_modul',
+            'E-Modul Ditolak',
+            'E-Modul "'.$eModul->judul.'" ditolak. Alasan: '.$request->string('catatan'),
+            ['id_e_modul' => $eModul->id]
+        );
 
         return redirect()->route('admin.tinjau-e-modul.index')->with('status', 'E-Modul ditolak.');
     }

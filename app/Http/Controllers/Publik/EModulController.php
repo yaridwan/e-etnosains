@@ -47,8 +47,15 @@ class EModulController extends Controller
             'poster' => fn ($q) => $q->dipublikasikan(),
         ]);
 
+        $ulasan = $eModul->ulasan()->disetujui()->with('pengguna')->latest('dibuat_pada')->take(10)->get();
+
         return view('publik.e-modul.show', [
             'eModul' => $eModul,
+            'ulasan' => $ulasan,
+            'rataRata' => round($ulasan->avg('rating') ?? 0, 1),
+            'ulasanSaya' => $request->user()
+                ? $eModul->ulasan()->where('id_pengguna', $request->user()->id)->first()
+                : null,
             'serupa' => EModul::dipublikasikan()
                 ->where('id', '!=', $eModul->id)
                 ->where('id_mata_pelajaran', $eModul->id_mata_pelajaran)

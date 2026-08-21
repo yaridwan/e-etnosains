@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengumpulanObservasi;
+use App\Services\NotifikasiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -34,7 +35,7 @@ class PengumpulanObservasiController extends Controller
         return view('guru.pengumpulan-observasi.show', ['pengumpulan' => $pengumpulanObservasi]);
     }
 
-    public function nilai(Request $request, PengumpulanObservasi $pengumpulanObservasi): RedirectResponse
+    public function nilai(Request $request, PengumpulanObservasi $pengumpulanObservasi, NotifikasiService $notifikasi): RedirectResponse
     {
         $this->pastikanPemilik($pengumpulanObservasi);
 
@@ -49,11 +50,21 @@ class PengumpulanObservasiController extends Controller
             'dinilai_pada' => now(),
         ]);
 
+        $notifikasi->kirim(
+            $pengumpulanObservasi->id_pengguna,
+            'observasi',
+            'Observasi Anda Telah Dinilai',
+            'Observasi "'.$pengumpulanObservasi->observasi->judul.'" mendapat skor '.$data['skor'].'.',
+            ['id_observasi' => $pengumpulanObservasi->id_observasi]
+        );
+
         return back()->with('status', 'Observasi siswa berhasil dinilai.');
     }
 
     private function pastikanPemilik(PengumpulanObservasi $pengumpulan): void
     {
+        $pengumpulan->loadMissing('observasi');
+
         abort_unless($pengumpulan->observasi->id_pengguna === request()->user()->id, 403);
     }
 }

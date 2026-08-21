@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\KelasBelajar;
 use App\Models\NilaiTugas;
 use App\Models\TugasKelas;
+use App\Services\NotifikasiService;
 use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class TugasKelasController extends Controller
         return view('guru.tugas.show', ['tugas' => $tugas]);
     }
 
-    public function nilai(Request $request, TugasKelas $tugas, int $pengumpulan): RedirectResponse
+    public function nilai(Request $request, TugasKelas $tugas, int $pengumpulan, NotifikasiService $notifikasi): RedirectResponse
     {
         $this->pastikanPemilik($tugas);
 
@@ -76,7 +77,18 @@ class TugasKelasController extends Controller
             $data + ['dinilai_oleh' => $request->user()->id, 'dinilai_pada' => now()]
         );
 
-        $tugas->pengumpulan()->where('id', $pengumpulan)->update(['status' => 'dinilai']);
+        $entitasPengumpulan = $tugas->pengumpulan()->find($pengumpulan);
+        $entitasPengumpulan?->update(['status' => 'dinilai']);
+
+        if ($entitasPengumpulan) {
+            $notifikasi->kirim(
+                $entitasPengumpulan->id_pengguna,
+                'tugas',
+                'Tugas Anda Telah Dinilai',
+                'Tugas "'.$tugas->judul.'" mendapat nilai '.$data['nilai'].'.',
+                ['id_tugas_kelas' => $tugas->id]
+            );
+        }
 
         return back()->with('status', 'Nilai berhasil disimpan.');
     }

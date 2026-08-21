@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
             FavoritSeeder::class,
             UlasanSeeder::class,
             AktivitasLogSeeder::class,
+            NotifikasiSeeder::class,
 
             // Website publik
             FaqSeeder::class,
