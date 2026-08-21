@@ -6,6 +6,7 @@ use App\Enums\StatusPublikasi;
 use App\Models\MataPelajaran;
 use App\Models\Pengguna;
 use App\Models\VideoPembelajaran;
+use App\Support\JudulDemo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VideoPembelajaranFactory extends Factory
@@ -19,8 +20,8 @@ class VideoPembelajaranFactory extends Factory
         return [
             'id_pengguna' => fn () => Pengguna::whereHas('peran', fn ($q) => $q->where('nama_peran', 'guru'))->inRandomOrder()->value('id') ?? Pengguna::factory(),
             'id_mata_pelajaran' => fn () => MataPelajaran::inRandomOrder()->value('id') ?? MataPelajaran::factory(),
-            'judul' => rtrim(fake()->unique()->sentence(6), '.'),
-            'deskripsi' => fake()->paragraph(),
+            'judul' => JudulDemo::video(),
+            'deskripsi' => JudulDemo::keterangan(),
             'url_video' => "https://www.youtube.com/watch?v={$idYoutube}",
             'id_youtube' => $idYoutube,
             'status_publikasi' => StatusPublikasi::Dipublikasikan,

@@ -30,7 +30,12 @@ class PengumpulanObservasiSeeder extends Seeder
                         'id_pengumpulan_observasi' => $pengumpulan->id,
                         'id_butir_observasi' => $butir->id,
                         'jawaban_teks' => in_array($butir->tipe_pertanyaan->value, ['teks_pendek', 'teks_panjang', 'ya_tidak'])
-                            ? fake()->sentence()
+                            ? fake()->randomElement([
+                                'Berdasarkan pengamatan saya, prosesnya berlangsung bertahap dan memerlukan waktu cukup lama.',
+                                'Saya menemukan hubungan yang jelas antara praktik tradisional tersebut dengan konsep sains di kelas.',
+                                'Masyarakat sekitar masih rutin melakukannya dan mewariskannya kepada generasi berikutnya.',
+                                'Ya, kegiatan ini masih dipraktikkan hingga sekarang di lingkungan tempat tinggal saya.',
+                            ])
                             : null,
                         'jawaban_angka' => $butir->tipe_pertanyaan->value === 'angka' ? fake()->numberBetween(20, 100) : null,
                         'id_opsi_butir_observasi' => $butir->opsi->isNotEmpty() ? $butir->opsi->random()->id : null,

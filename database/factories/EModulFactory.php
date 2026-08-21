@@ -8,6 +8,8 @@ use App\Models\JenjangPendidikan;
 use App\Models\MataPelajaran;
 use App\Models\Pengguna;
 use App\Models\TopikEtnosains;
+use App\Support\JudulDemo;
+use App\Support\PembuatPosterDemo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EModulFactory extends Factory
@@ -16,28 +18,29 @@ class EModulFactory extends Factory
 
     public function definition(): array
     {
-        $judul = fake()->unique()->sentence(6);
+        $judul = JudulDemo::eModul();
 
         return [
             'id_pengguna' => fn () => Pengguna::whereHas('peran', fn ($q) => $q->where('nama_peran', 'guru'))->inRandomOrder()->value('id') ?? Pengguna::factory(),
             'id_jenjang_pendidikan' => fn () => JenjangPendidikan::inRandomOrder()->value('id') ?? JenjangPendidikan::factory(),
             'id_mata_pelajaran' => fn () => MataPelajaran::inRandomOrder()->value('id') ?? MataPelajaran::factory(),
             'id_topik_etnosains' => fn () => TopikEtnosains::inRandomOrder()->value('id'),
-            'judul' => rtrim($judul, '.'),
-            'ringkasan' => fake()->paragraph(),
-            'deskripsi' => fake()->paragraphs(3, true),
-            'capaian_pembelajaran' => fake()->paragraph(),
-            'tujuan_pembelajaran' => fake()->paragraph(),
+            'judul' => $judul,
+            'gambar_sampul' => PembuatPosterDemo::sampul($judul),
+            'ringkasan' => JudulDemo::keterangan(),
+            'deskripsi' => JudulDemo::keterangan().' '.JudulDemo::keterangan(),
+            'capaian_pembelajaran' => 'Peserta didik mampu menjelaskan konsep sains yang terkandung dalam praktik kearifan lokal setempat.',
+            'tujuan_pembelajaran' => 'Menghubungkan fenomena budaya dengan konsep sains serta menumbuhkan apresiasi terhadap kearifan lokal.',
             'kelas' => fake()->randomElement(['VII', 'VIII', 'IX', 'X', 'XI', 'XII']),
             'fase' => fake()->randomElement(['D', 'E', 'F']),
             'tahun' => now()->year,
-            'kata_kunci' => implode(', ', fake()->words(5)),
+            'kata_kunci' => 'etnosains, kearifan lokal, pembelajaran sains',
             'izin_unduh' => fake()->boolean(80),
-            'pengetahuan_lokal' => fake()->paragraph(),
-            'konsep_sains' => fake()->paragraph(),
+            'pengetahuan_lokal' => 'Praktik kearifan lokal yang diwariskan turun-temurun oleh masyarakat setempat.',
+            'konsep_sains' => 'Konsep sains yang relevan dengan praktik kearifan lokal yang dikaji pada materi ini.',
             'konteks_wilayah' => fake()->city(),
-            'aktivitas_saintifik' => fake()->paragraph(),
-            'nilai_karakter' => fake()->sentence(),
+            'aktivitas_saintifik' => 'Peserta didik melakukan pengamatan langsung lalu menghubungkannya dengan konsep sains.',
+            'nilai_karakter' => 'Ketekunan, gotong royong, dan kepedulian terhadap pelestarian budaya.',
             'status_publikasi' => StatusPublikasi::Dipublikasikan,
             'unggulan' => fake()->boolean(20),
             'jumlah_dilihat' => fake()->numberBetween(10, 2000),

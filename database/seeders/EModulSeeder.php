@@ -13,6 +13,7 @@ use App\Models\Peran;
 use App\Models\RiwayatStatusEModul;
 use App\Models\TopikEtnosains;
 use App\Support\PembuatPdfDemo;
+use App\Support\PembuatPosterDemo;
 use Illuminate\Database\Seeder;
 
 class EModulSeeder extends Seeder
@@ -130,7 +131,12 @@ class EModulSeeder extends Seeder
                 'Evaluasi' => 'Jawablah pertanyaan refleksi mengenai hubungan antara '.$data['topik'].' dengan konsep sains yang telah dipelajari.',
             ];
             [$berkasPdf, $jumlahHalaman] = PembuatPdfDemo::buat($data['judul'], $bagianPdf, 'e-modul/pdf');
-            $eModul->update(['berkas_pdf' => $berkasPdf, 'jumlah_halaman' => $jumlahHalaman]);
+            $eModul->update([
+                'berkas_pdf' => $berkasPdf,
+                'jumlah_halaman' => $jumlahHalaman,
+                'gambar_sampul' => PembuatPosterDemo::sampul($data['judul']),
+                'gambar_poster' => PembuatPosterDemo::buat($data['judul'], 'e-modul/poster'),
+            ]);
 
             foreach (array_keys($bagianPdf) as $urutan => $judulBab) {
                 BabEModul::create([

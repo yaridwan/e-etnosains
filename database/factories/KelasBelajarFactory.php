@@ -18,7 +18,7 @@ class KelasBelajarFactory extends Factory
             'id_mata_pelajaran' => fn () => MataPelajaran::inRandomOrder()->value('id') ?? MataPelajaran::factory(),
             'nama_kelas' => fake()->randomElement(['VII', 'VIII', 'IX', 'X', 'XI', 'XII']).' '.fake()->randomElement(['A', 'B', 'C']),
             'tahun_ajaran' => now()->year.'/'.(now()->year + 1),
-            'deskripsi' => fake()->sentence(),
+            'deskripsi' => 'Kelas belajar untuk pembelajaran sains berbasis etnosains dan kearifan lokal.',
             'aktif' => true,
         ];
     }
