@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
 class Pengguna extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
     const CREATED_AT = 'dibuat_pada';
 
@@ -140,6 +141,32 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
     public function kelasBelajar(): HasMany
     {
         return $this->hasMany(KelasBelajar::class, 'id_pengguna');
+    }
+
+    public function kelasDiikuti(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(KelasBelajar::class, 'anggota_kelas', 'id_pengguna', 'id_kelas_belajar')
+            ->withPivot('bergabung_pada');
+    }
+
+    public function kemajuanBelajar(): HasMany
+    {
+        return $this->hasMany(KemajuanBelajar::class, 'id_pengguna');
+    }
+
+    public function pengumpulanObservasi(): HasMany
+    {
+        return $this->hasMany(PengumpulanObservasi::class, 'id_pengguna');
+    }
+
+    public function pengumpulanTugas(): HasMany
+    {
+        return $this->hasMany(PengumpulanTugas::class, 'id_pengguna');
+    }
+
+    public function ulasan(): HasMany
+    {
+        return $this->hasMany(Ulasan::class, 'id_pengguna');
     }
 
     public function notifikasi(): HasMany

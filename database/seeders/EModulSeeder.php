@@ -122,12 +122,23 @@ class EModulSeeder extends Seeder
                 'dipublikasikan_pada' => now()->subDays(fake()->numberBetween(5, 180)),
             ]);
 
-            foreach (['Pendahuluan', 'Kajian Etnosains', 'Aktivitas Pembelajaran', 'Evaluasi'] as $urutan => $judulBab) {
+            $bagianPdf = [
+                'Pendahuluan' => $data['ringkasan'],
+                'Kajian Etnosains: '.$data['topik'] => $data['pengetahuan_lokal'],
+                'Konsep Sains Terkait' => $data['konsep_sains'],
+                'Aktivitas Pembelajaran' => $data['aktivitas_saintifik'],
+                'Nilai dan Karakter' => $data['nilai_karakter'],
+                'Evaluasi' => 'Jawablah pertanyaan refleksi mengenai hubungan antara '.$data['topik'].' dengan konsep sains yang telah dipelajari.',
+            ];
+            [$berkasPdf, $jumlahHalaman] = \App\Support\PembuatPdfDemo::buat($data['judul'], $bagianPdf, 'e-modul/pdf');
+            $eModul->update(['berkas_pdf' => $berkasPdf, 'jumlah_halaman' => $jumlahHalaman]);
+
+            foreach (array_keys($bagianPdf) as $urutan => $judulBab) {
                 BabEModul::create([
                     'id_e_modul' => $eModul->id,
                     'judul_bab' => $judulBab,
                     'nomor_urut' => $urutan + 1,
-                    'halaman_mulai' => ($urutan * 5) + 1,
+                    'halaman_mulai' => $urutan + 1,
                 ]);
             }
 
@@ -148,9 +159,17 @@ class EModulSeeder extends Seeder
         }
 
         // Contoh workflow: e-modul diajukan (menunggu review) & draf
+        [$berkasDiajukan, $halamanDiajukan] = \App\Support\PembuatPdfDemo::buat(
+            'Sains di Balik Kerajinan Anyaman Bambu',
+            ['Pendahuluan' => 'Kerajinan anyaman bambu merupakan salah satu warisan budaya yang sarat akan prinsip sains sederhana.'],
+            'e-modul/pdf'
+        );
+
         EModul::factory()->diajukan()->create([
             'id_pengguna' => $guru->first()->id,
             'judul' => 'Sains di Balik Kerajinan Anyaman Bambu',
+            'berkas_pdf' => $berkasDiajukan,
+            'jumlah_halaman' => $halamanDiajukan,
         ]);
 
         EModul::factory()->draf()->create([

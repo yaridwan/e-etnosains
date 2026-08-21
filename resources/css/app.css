@@ -8,4 +8,25 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-utama: var(--warna-utama);
+    --color-sekunder: var(--warna-sekunder);
+    --color-aksen: var(--warna-aksen);
+}
+
+:root {
+    --warna-utama: #0f766e;
+    --warna-sekunder: #155e75;
+    --warna-aksen: #ca8a04;
+}
+
+@layer utilities {
+    .prose-etnosains :where(p, ul, ol) {
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
 }

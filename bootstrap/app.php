@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'peran' => \App\Http\Middleware\PastikanPeran::class,
+            'guru.terverifikasi' => \App\Http\Middleware\PastikanGuruTerverifikasi::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

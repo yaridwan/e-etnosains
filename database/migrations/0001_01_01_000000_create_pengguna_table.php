@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('kata_sandi');
             $table->string('foto')->nullable();
             $table->string('status_akun')->default('aktif');
-            $table->rememberToken('ingat_saya');
+            $table->string('ingat_saya', 100)->nullable();
             $table->timestamp('terakhir_masuk_pada')->nullable();
             $table->string('alamat_ip_terakhir', 45)->nullable();
             $table->waktuStandar();
