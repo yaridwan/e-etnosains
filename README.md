@@ -98,6 +98,19 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 
 ## Fitur Utama
 
+### Tampilan dan Antarmuka
+
+- **Mode gelap dan terang** dengan tiga pilihan: Terang, Gelap, dan Ikuti Sistem.
+  Preferensi disimpan di `localStorage` dan diterapkan lewat skrip kecil di `<head>`
+  sebelum halaman dirender, sehingga tidak ada kedipan putih saat memuat halaman dalam
+  mode gelap. Tombol tema tersedia di navbar publik, halaman autentikasi, dan topbar
+  seluruh dashboard.
+- Navigasi publik bertingkat: menu tingkat atas dijaga ringkas dan katalog konten
+  dikelompokkan ke dalam submenu **Jelajahi**, memakai kolom `induk_id` pada tabel
+  `menu_navigasi` sehingga strukturnya tetap dapat diubah Administrator.
+- Komponen Blade seragam dengan status fokus yang terlihat, atribut ARIA, dan transisi
+  yang menghormati `prefers-reduced-motion`.
+
 ### Portal Publik (tanpa login)
 
 - Landing page dinamis: banner, statistik riil dari database, E-Modul pilihan dan terbaru,
@@ -204,7 +217,8 @@ Controller  ->  Form Request (validasi)  ->  Service (logika bisnis)  ->  Model
 Indonesia sehingga nilai tersimpan tetap konsisten sementara antarmuka tetap Indonesia.
 
 **Kelas pendukung** (`app/Support/`): `MenuDashboard` (definisi menu sidebar per peran),
-`PembuatPdfDemo`, `PembuatPosterDemo` (generator berkas demo untuk seeder), `PembuatQrCode`.
+`PembuatPdfDemo`, `PembuatPosterDemo`, `JudulDemo` (generator berkas dan teks demo untuk
+seeder), `PembuatQrCode`, serta `CaptchaPenjumlahan` (soal dan verifikasi captcha login).
 
 **Middleware kustom** (`app/Http/Middleware/`): `PastikanPeran` (alias `peran`) dan
 `PastikanGuruTerverifikasi` (alias `guru.terverifikasi`).
@@ -212,7 +226,19 @@ Indonesia sehingga nilai tersimpan tetap konsisten sementara antarmuka tetap Ind
 **Komponen Blade dapat dipakai ulang** (`resources/views/components/`): `tombol`, `input`,
 `select`, `textarea`, `modal`, `kartu`, `badge`, `alert`, `empty-state`,
 `dialog-konfirmasi`, `form-hapus`, `status-publikasi`, `navbar-publik`, `footer-publik`,
-serta empat layout (`layout-app`, `layout-publik`, `layout-auth`, `layout-dashboard`).
+`tema-toggle`, `errors/minimal`, serta empat layout (`layout-app`, `layout-publik`,
+`layout-auth`, `layout-dashboard`).
+
+### Cara kerja mode gelap
+
+1. `resources/css/app.css` mendaftarkan `@custom-variant dark (&:where(.dark, .dark *))`
+   sehingga varian `dark:` mengikuti kelas pada `<html>`, bukan preferensi sistem semata.
+2. Skrip singkat di `<head>` (`components/layout-app`) membaca `localStorage` dan memasang
+   kelas `dark` **sebelum** halaman dirender, sehingga tidak ada kedipan putih.
+3. Store Alpine `tema` (`resources/js/app.js`) menyimpan pilihan pengguna dan status
+   `gelap` sebagai state reaktif. Status ini sengaja tidak dibuat sebagai getter pembaca
+   `classList` — Alpine tidak dapat melacak perubahan kelas DOM, sehingga ikon tombol dan
+   penanda menu tidak akan ikut diperbarui.
 
 ## Level Pengguna
 
@@ -539,7 +565,7 @@ app/
 ├── Models/           # 52 berkas: 50 model + ModelDasar & ModelDasarHapusLunak
 ├── Providers/
 ├── Services/         # 6 service (lihat bagian Arsitektur)
-├── Support/          # MenuDashboard, PembuatPdfDemo, PembuatQrCode, dll.
+├── Support/          # 6 kelas: MenuDashboard, CaptchaPenjumlahan, PembuatQrCode, dll.
 └── helpers.php       # pengaturan() dan pengaturan_aktif()
 
 database/
@@ -829,7 +855,7 @@ php artisan event:cache
 
 ## Testing
 
-Suite berisi **56 test** (143 asertion) yang berjalan terhadap database MySQL terpisah:
+Suite berisi **60 test** (157 asertion) yang berjalan terhadap database MySQL terpisah:
 
 ```bash
 php artisan test
@@ -845,7 +871,7 @@ Cakupan pengujian:
 
 | Berkas                                  | Yang diuji                                                    |
 | --------------------------------------- | ------------------------------------------------------------- |
-| `Auth/MasukTest`                        | Login berhasil/gagal, pengalihan sesuai peran, logout          |
+| `Auth/MasukTest`                        | Login berhasil/gagal, pengalihan sesuai peran, logout, captcha (salah, kosong, tidak dapat dipakai ulang) |
 | `Auth/RegistrasiGuruTest`               | Registrasi guru, status menunggu verifikasi, email duplikat    |
 | `Auth/RegistrasiSiswaTest`              | Registrasi siswa aktif langsung beserta profil                 |
 | `Admin/VerifikasiGuruTest`              | Setujui/tolak guru, larangan akses non-admin                   |
@@ -1108,6 +1134,9 @@ Yang sudah diterapkan:
   statis yang dikelola Administrator.
 - Query melalui Eloquent/Query Builder sehingga terlindung dari SQL Injection.
 - Kata sandi di-*hash* (cast `hashed`), tidak pernah disimpan sebagai teks biasa.
+- **Captcha penjumlahan** pada halaman masuk. Jawaban benar disimpan di sesi sisi server
+  (bukan input tersembunyi yang dapat dibaca peramban), dan soal otomatis diganti setiap
+  percobaan gagal sehingga satu jawaban tidak dapat dipakai berulang oleh skrip otomatis.
 - Pembatasan laju login: 5 percobaan per kombinasi email + IP, disertai
   regenerasi sesi setelah login berhasil.
 - Otorisasi berlapis: middleware peran, gate guru terverifikasi, dan pemeriksaan
