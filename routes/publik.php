@@ -48,7 +48,9 @@ Route::prefix('topik-etnosains')->name('topik-etnosains.')->group(function () {
     Route::get('/{topik:alamat_tautan}', [TopikEtnosainsController::class, 'show'])->name('show');
 });
 
-Route::get('/guru/{guru}', [GuruProfilController::class, 'show'])->name('guru.profil');
+// Profil publik guru sengaja tidak berada di bawah /guru agar tidak bertabrakan dengan
+// area dashboard guru yang di-Disallow pada robots.txt dan diberi noindex.
+Route::get('/profil-guru/{guru}', [GuruProfilController::class, 'show'])->name('guru.profil');
 
 Route::post('/e-modul/{eModul:alamat_tautan}/ulasan', [UlasanController::class, 'store'])
     ->middleware(['auth', 'verified'])

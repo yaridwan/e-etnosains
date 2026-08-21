@@ -8,6 +8,7 @@ use App\Models\EModul;
 use App\Models\HalamanStatis;
 use App\Models\Lkpd;
 use App\Models\Observasi;
+use App\Models\Pengguna;
 use App\Models\TopikEtnosains;
 use App\Models\VideoPembelajaran;
 use Illuminate\Http\Response;
@@ -56,7 +57,14 @@ class SitemapController extends Controller
             ->concat(HalamanStatis::where('aktif', true)->get(['alamat_tautan', 'diperbarui_pada'])->map(fn ($item) => [
                 'loc' => route('halaman-statis', $item->alamat_tautan),
                 'lastmod' => $item->diperbarui_pada,
-            ]));
+            ]))
+            ->concat(Pengguna::whereHas('peran', fn ($q) => $q->where('nama_peran', 'guru'))
+                ->whereHas('eModul', fn ($q) => $q->dipublikasikan())
+                ->get(['id', 'diperbarui_pada'])
+                ->map(fn ($item) => [
+                    'loc' => route('guru.profil', $item->id),
+                    'lastmod' => $item->diperbarui_pada,
+                ]));
 
         $xml = view('publik.sitemap', ['tautan' => $tautan])->render();
 
