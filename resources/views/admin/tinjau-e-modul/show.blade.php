@@ -54,28 +54,80 @@
                     @endforelse
                 </div>
             </x-kartu>
+
+            <x-kartu>
+                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Riwayat Versi Terbit</h2>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Isi E-Modul dibekukan menjadi versi baru setiap kali terbit, sehingga versi lama tetap bisa ditelusuri.</p>
+                <div class="mt-4 space-y-3">
+                    @forelse($eModul->versi as $versi)
+                        <div class="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3 text-sm last:border-0">
+                            <div>
+                                <p class="font-medium text-slate-700 dark:text-slate-300">Versi {{ $versi->nomor_versi }} &middot; {{ $versi->judul }}</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">
+                                    Diterbitkan {{ $versi->dibuat_pada?->translatedFormat('d M Y, H:i') }}
+                                    @if($versi->penerbit) oleh {{ $versi->penerbit->nama_lengkap }} @endif
+                                </p>
+                            </div>
+                            <x-tombol :href="route('admin.tinjau-e-modul.versi', [$eModul, $versi])" varian="hantu">Lihat</x-tombol>
+                        </div>
+                    @empty
+                        <p class="text-sm text-slate-400 dark:text-slate-500">Belum pernah diterbitkan.</p>
+                    @endforelse
+                </div>
+            </x-kartu>
         </div>
 
-        <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Keputusan</h2>
+        <div class="space-y-6">
+            @if($eModul->status_publikasi === \App\Enums\StatusPublikasi::Dijadwalkan)
+                <x-kartu class="border-violet-200 bg-violet-50 dark:border-violet-900 dark:bg-violet-950/40">
+                    <h2 class="font-semibold text-violet-800 dark:text-violet-300">Dijadwalkan Terbit</h2>
+                    <p class="mt-1 text-sm text-violet-700 dark:text-violet-400">
+                        Akan tampil otomatis di portal publik pada
+                        <strong>{{ $eModul->dijadwalkan_pada?->translatedFormat('d F Y, H:i') }} WIB</strong>.
+                    </p>
+                    <form method="POST" action="{{ route('admin.tinjau-e-modul.batalkan-jadwal', $eModul) }}" class="mt-3">
+                        @csrf
+                        <x-tombol type="submit" varian="sekunder" class="w-full">Batalkan Penjadwalan</x-tombol>
+                    </form>
+                </x-kartu>
+            @else
+                <x-kartu x-data="{ jadwalkan: false }">
+                    <h2 class="font-semibold text-slate-800 dark:text-slate-100">Keputusan</h2>
 
-            <form method="POST" action="{{ route('admin.tinjau-e-modul.setujui', $eModul) }}" class="mt-4 space-y-2">
-                @csrf
-                <x-textarea name="catatan" placeholder="Catatan (opsional)..." :baris="2" />
-                <x-tombol type="submit" class="w-full">Setujui &amp; Publikasikan</x-tombol>
-            </form>
+                    <form method="POST" action="{{ route('admin.tinjau-e-modul.setujui', $eModul) }}" class="mt-4 space-y-2">
+                        @csrf
+                        <x-textarea name="catatan" placeholder="Catatan (opsional)..." :baris="2" />
 
-            <form method="POST" action="{{ route('admin.tinjau-e-modul.minta-perbaikan', $eModul) }}" class="mt-3 space-y-2">
-                @csrf
-                <x-textarea name="catatan" placeholder="Catatan perbaikan..." wajib :baris="2" />
-                <x-tombol type="submit" varian="sekunder" class="w-full">Minta Perbaikan</x-tombol>
-            </form>
+                        <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                            <input type="checkbox" x-model="jadwalkan" class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
+                            Jadwalkan terbit nanti, bukan sekarang
+                        </label>
 
-            <form method="POST" action="{{ route('admin.tinjau-e-modul.tolak', $eModul) }}" class="mt-3 space-y-2">
-                @csrf
-                <x-textarea name="catatan" placeholder="Alasan penolakan..." wajib :baris="2" />
-                <x-tombol type="submit" varian="bahaya" class="w-full">Tolak</x-tombol>
-            </form>
-        </x-kartu>
+                        <div x-show="jadwalkan" x-cloak>
+                            <x-input type="datetime-local" name="terbitkan_pada" petunjuk="E-Modul akan otomatis tampil di portal publik pada waktu ini." />
+                        </div>
+
+                        <x-tombol type="submit" class="w-full">
+                            <span x-show="! jadwalkan">Setujui &amp; Publikasikan</span>
+                            <span x-show="jadwalkan" x-cloak>Setujui &amp; Jadwalkan</span>
+                        </x-tombol>
+                    </form>
+                </x-kartu>
+
+                <x-kartu>
+                    <form method="POST" action="{{ route('admin.tinjau-e-modul.minta-perbaikan', $eModul) }}" class="space-y-2">
+                        @csrf
+                        <x-textarea name="catatan" placeholder="Catatan perbaikan..." wajib :baris="2" />
+                        <x-tombol type="submit" varian="sekunder" class="w-full">Minta Perbaikan</x-tombol>
+                    </form>
+
+                    <form method="POST" action="{{ route('admin.tinjau-e-modul.tolak', $eModul) }}" class="mt-3 space-y-2">
+                        @csrf
+                        <x-textarea name="catatan" placeholder="Alasan penolakan..." wajib :baris="2" />
+                        <x-tombol type="submit" varian="bahaya" class="w-full">Tolak</x-tombol>
+                    </form>
+                </x-kartu>
+            @endif
+        </div>
     </div>
 </x-layout-dashboard>

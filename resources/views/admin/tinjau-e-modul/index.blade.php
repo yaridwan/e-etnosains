@@ -1,6 +1,11 @@
 <x-layout-dashboard judul-seo="Tinjau E-Modul" :menu="\App\Support\MenuDashboard::administrator()">
-    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Tinjau E-Modul</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Daftar E-Modul yang diajukan guru untuk dipublikasikan.</p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Tinjau E-Modul</h1>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Daftar E-Modul yang diajukan guru untuk dipublikasikan.</p>
+        </div>
+        <x-tombol-ekspor rute="admin.tinjau-e-modul.ekspor" />
+    </div>
 
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">

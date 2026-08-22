@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\KelasBelajar;
 use App\Models\KontenKelas;
 use App\Models\MataPelajaran;
+use App\Services\EksporService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class KelasBelajarController extends Controller
 {
@@ -57,6 +61,38 @@ class KelasBelajarController extends Controller
             'lkpdSaya' => $request->user()->lkpd()->get(),
             'observasiSaya' => $request->user()->observasi()->get(),
         ]);
+    }
+
+    public function eksporAnggota(Request $request, KelasBelajar $kelas, EksporService $ekspor): StreamedResponse
+    {
+        $this->pastikanPemilik($kelas);
+        $kelas->load(['anggota', 'tugasKelas.pengumpulan.nilai']);
+
+        $format = $request->string('format', 'xlsx')->toString();
+
+        $baris = $kelas->anggota->map(function ($siswa) use ($kelas) {
+            $nilaiSiswa = $kelas->tugasKelas
+                ->flatMap->pengumpulan
+                ->where('id_pengguna', $siswa->id)
+                ->pluck('nilai.nilai')
+                ->filter(fn ($n) => $n !== null);
+
+            return [
+                $siswa->nama_lengkap,
+                $siswa->email,
+                $siswa->pivot->bergabung_pada ? Carbon::parse($siswa->pivot->bergabung_pada)->format('d-m-Y') : '-',
+                $nilaiSiswa->count().' dari '.$kelas->tugasKelas->count().' tugas',
+                $nilaiSiswa->isNotEmpty() ? round($nilaiSiswa->avg(), 1) : '-',
+            ];
+        });
+
+        return $ekspor->unduh(
+            'Laporan Anggota Kelas: '.$kelas->nama_kelas,
+            ['Nama Siswa', 'Email', 'Bergabung Pada', 'Tugas Dinilai', 'Rata-rata Nilai'],
+            $baris,
+            'laporan-kelas-'.Str::slug($kelas->nama_kelas),
+            $format
+        );
     }
 
     public function tambahKonten(Request $request, KelasBelajar $kelas): RedirectResponse

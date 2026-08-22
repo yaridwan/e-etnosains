@@ -1,9 +1,12 @@
 <x-layout-dashboard judul-seo="Detail Kelas" :menu="\App\Support\MenuDashboard::guru()">
     <a href="{{ route('guru.kelas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
 
-    <div class="mt-2 flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $kelas->nama_kelas }}</h1>
-        <x-badge warna="teal">Kode: {{ $kelas->kode_kelas }}</x-badge>
+    <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $kelas->nama_kelas }}</h1>
+            <x-badge warna="teal">Kode: {{ $kelas->kode_kelas }}</x-badge>
+        </div>
+        <x-tombol-ekspor rute="guru.kelas.ekspor-anggota" :parameter="['kelas' => $kelas]" />
     </div>
 
     <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">

@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\KelasBelajar;
 use App\Models\NilaiTugas;
 use App\Models\TugasKelas;
+use App\Services\EksporService;
 use App\Services\NotifikasiService;
 use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TugasKelasController extends Controller
 {
@@ -91,6 +94,30 @@ class TugasKelasController extends Controller
         }
 
         return back()->with('status', 'Nilai berhasil disimpan.');
+    }
+
+    public function eksporNilai(Request $request, TugasKelas $tugas, EksporService $ekspor): StreamedResponse
+    {
+        $this->pastikanPemilik($tugas);
+        $tugas->load(['pengumpulan.pengguna', 'pengumpulan.nilai']);
+
+        $format = $request->string('format', 'xlsx')->toString();
+
+        $baris = $tugas->pengumpulan->map(fn ($item) => [
+            $item->pengguna->nama_lengkap,
+            ucfirst(str_replace('_', ' ', $item->status)),
+            $item->dikirim_pada?->format('d-m-Y H:i') ?? '-',
+            $item->nilai->nilai ?? '-',
+            $item->nilai->catatan_guru ?? '-',
+        ]);
+
+        return $ekspor->unduh(
+            'Laporan Nilai Tugas: '.$tugas->judul,
+            ['Siswa', 'Status', 'Dikumpulkan Pada', 'Nilai', 'Catatan Guru'],
+            $baris,
+            'laporan-nilai-'.Str::slug($tugas->judul),
+            $format
+        );
     }
 
     private function pastikanPemilik(TugasKelas $tugas): void

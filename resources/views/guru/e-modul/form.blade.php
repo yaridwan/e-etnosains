@@ -2,15 +2,53 @@
 
 <x-layout-dashboard :judul-seo="$sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul'" :menu="\App\Support\MenuDashboard::guru()">
     <a href="{{ route('guru.e-modul.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul Baru' }}</h1>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $sedangUbah ? 'Ubah E-Modul' : 'Buat E-Modul Baru' }}</h1>
+        @if($sedangUbah)<x-status-publikasi :status="$eModul->status_publikasi" />@endif
+    </div>
+
+    @if($sedangUbah && $eModul->status_publikasi === \App\Enums\StatusPublikasi::Dijadwalkan)
+        <x-alert jenis="info" class="mt-4">Dijadwalkan tampil otomatis di portal publik pada {{ $eModul->dijadwalkan_pada?->translatedFormat('d F Y, H:i') }} WIB.</x-alert>
+    @endif
 
     @if($sedangUbah && $eModul->catatan_reviewer)
         <x-alert jenis="peringatan" class="mt-4">Catatan reviewer: {{ $eModul->catatan_reviewer }}</x-alert>
     @endif
 
-    <form method="POST" action="{{ $sedangUbah ? route('guru.e-modul.update', $eModul) : route('guru.e-modul.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
+    <form
+        method="POST"
+        action="{{ $sedangUbah ? route('guru.e-modul.update', $eModul) : route('guru.e-modul.store') }}"
+        enctype="multipart/form-data"
+        class="mt-6 space-y-6"
+        @if($sedangUbah)
+            x-data="{
+                status: null,
+                waktu: null,
+                simpanOtomatis() {
+                    const data = {};
+                    new FormData(this.$el).forEach((nilai, kunci) => {
+                        if (! (nilai instanceof File)) data[kunci] = nilai;
+                    });
+                    this.status = 'menyimpan';
+                    axios.patch('{{ route('guru.e-modul.simpan-otomatis', $eModul) }}', data)
+                        .then((res) => { this.status = 'tersimpan'; this.waktu = res.data.tersimpan_pada; })
+                        .catch(() => { this.status = 'gagal'; });
+                },
+            }"
+            @input.debounce.2500ms="simpanOtomatis()"
+        @endif
+    >
         @csrf
         @if($sedangUbah) @method('PUT') @endif
+
+        @if($sedangUbah)
+            <p class="-mt-3 text-xs text-slate-400 dark:text-slate-500">
+                <span x-show="status === 'menyimpan'" x-cloak>Menyimpan draf otomatis&hellip;</span>
+                <span x-show="status === 'tersimpan'" x-cloak>Draf tersimpan otomatis pukul <span x-text="waktu"></span>.</span>
+                <span x-show="status === 'gagal'" x-cloak class="text-rose-500 dark:text-rose-400">Gagal menyimpan otomatis. Perubahan Anda belum hilang — klik "Simpan Draf" untuk menyimpan manual.</span>
+                <span x-show="! status">Perubahan disimpan otomatis saat Anda berhenti mengetik.</span>
+            </p>
+        @endif
 
         <x-kartu>
             <h2 class="font-semibold text-slate-800 dark:text-slate-100">1. Informasi Dasar</h2>
@@ -149,5 +187,23 @@
                 </div>
             </div>
         </x-kartu>
+
+        @if($eModul->versi->isNotEmpty())
+            <x-kartu class="mt-6">
+                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Riwayat Versi Terbit</h2>
+                <p class="text-sm text-slate-400 dark:text-slate-500">Setiap kali disetujui dan terbit, isi E-Modul saat itu dibekukan sebagai satu versi.</p>
+                <div class="mt-4 space-y-3">
+                    @foreach($eModul->versi as $versi)
+                        <div class="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3 text-sm last:border-0">
+                            <div>
+                                <p class="font-medium text-slate-700 dark:text-slate-300">Versi {{ $versi->nomor_versi }}</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">{{ $versi->dibuat_pada?->translatedFormat('d M Y, H:i') }}</p>
+                            </div>
+                            <x-tombol :href="route('guru.e-modul.versi', [$eModul, $versi])" varian="hantu" class="px-2! py-1! text-xs">Lihat</x-tombol>
+                        </div>
+                    @endforeach
+                </div>
+            </x-kartu>
+        @endif
     @endif
 </x-layout-dashboard>

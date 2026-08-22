@@ -12,6 +12,7 @@ use App\Models\MataPelajaran;
 use App\Models\Peran;
 use App\Models\RiwayatStatusEModul;
 use App\Models\TopikEtnosains;
+use App\Services\PublikasiEModulService;
 use App\Support\PembuatPdfDemo;
 use App\Support\PembuatPosterDemo;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class EModulSeeder extends Seeder
 {
     public function run(): void
     {
+        $publikasi = app(PublikasiEModulService::class);
         $guru = Peran::where('nama_peran', 'guru')->firstOrFail()->pengguna;
         $admin = Peran::where('nama_peran', 'administrator')->firstOrFail()->pengguna->first();
         $jenjangSma = JenjangPendidikan::where('alamat_tautan', 'sma-ma')->first();
@@ -161,6 +163,16 @@ class EModulSeeder extends Seeder
                 'catatan' => 'Materi baik, hubungan etnosains dan konsep sains sudah jelas.',
                 'keputusan' => 'disetujui',
             ]);
+
+            // Bekukan versi pertama sesuai isi yang baru saja diterbitkan.
+            $publikasi->buatVersi($eModul, $admin);
+
+            // Contoh E-Modul yang pernah direvisi setelah terbit, sehingga
+            // memiliki lebih dari satu versi pada riwayatnya.
+            if ($i === 0) {
+                $eModul->update(['ringkasan' => $eModul->ringkasan.' (Direvisi: ditambah data pengukuran suhu pemasakan.)']);
+                $publikasi->buatVersi($eModul, $admin);
+            }
         }
 
         // Contoh workflow: e-modul diajukan (menunggu review) & draf
@@ -181,6 +193,21 @@ class EModulSeeder extends Seeder
             'id_pengguna' => $guru->last()->id,
             'judul' => 'Fermentasi Tradisional Tempe dan Konsep Bioteknologi',
         ]);
+
+        // Contoh workflow: sudah disetujui Administrator, tinggal menunggu
+        // jadwal terbit otomatis (fitur penjadwalan publikasi).
+        [$berkasDijadwalkan, $halamanDijadwalkan] = PembuatPdfDemo::buat(
+            'Prinsip Sains pada Teknik Pembuatan Garam Tradisional',
+            ['Pendahuluan' => 'Petani garam tradisional memanfaatkan penguapan air laut oleh panas matahari untuk menghasilkan kristal garam.'],
+            'e-modul/pdf'
+        );
+        $eModulDijadwalkan = EModul::factory()->diajukan()->create([
+            'id_pengguna' => $guru->first()->id,
+            'judul' => 'Prinsip Sains pada Teknik Pembuatan Garam Tradisional',
+            'berkas_pdf' => $berkasDijadwalkan,
+            'jumlah_halaman' => $halamanDijadwalkan,
+        ]);
+        $publikasi->jadwalkan($eModulDijadwalkan, $admin, now()->addDays(3), 'Konten sudah baik, dijadwalkan terbit setelah agenda peluncuran modul.');
 
         EModul::factory()->count(1)->create();
     }

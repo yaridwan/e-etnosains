@@ -79,4 +79,60 @@ class EModulTest extends TestCase
             ->get(route('guru.dashboard'))
             ->assertRedirect(route('guru.menunggu-verifikasi'));
     }
+
+    public function test_guru_dapat_menyimpan_draf_e_modul_secara_otomatis(): void
+    {
+        $guru = $this->buatGuru();
+        $eModul = EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Draf,
+            'judul' => 'Judul Lama',
+        ]);
+
+        $respons = $this->actingAs($guru)->patchJson(route('guru.e-modul.simpan-otomatis', $eModul), [
+            'judul' => 'Judul Baru Sedang Diketik',
+            'ringkasan' => 'Ringkasan yang sedang diketik guru.',
+        ]);
+
+        $respons->assertOk()->assertJsonStructure(['tersimpan_pada']);
+        $this->assertSame('Judul Baru Sedang Diketik', $eModul->fresh()->judul);
+        $this->assertSame('Ringkasan yang sedang diketik guru.', $eModul->fresh()->ringkasan);
+    }
+
+    public function test_autosave_tidak_mengubah_status_publikasi(): void
+    {
+        $guru = $this->buatGuru();
+        $eModul = EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Dipublikasikan,
+            'izin_unduh' => true,
+        ]);
+
+        $this->actingAs($guru)->patchJson(route('guru.e-modul.simpan-otomatis', $eModul), [
+            'judul' => 'Revisi Kecil',
+            'status_publikasi' => 'draf',
+            'izin_unduh' => false,
+        ])->assertOk();
+
+        $eModul->refresh();
+        $this->assertSame(StatusPublikasi::Dipublikasikan, $eModul->status_publikasi);
+        $this->assertTrue((bool) $eModul->izin_unduh);
+        $this->assertSame('Revisi Kecil', $eModul->judul);
+    }
+
+    public function test_guru_tidak_dapat_menyimpan_otomatis_e_modul_milik_guru_lain(): void
+    {
+        $guruA = $this->buatGuru();
+        $guruB = $this->buatGuru();
+        $eModul = EModul::factory()->for($guruA, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+        ]);
+
+        $this->actingAs($guruB)
+            ->patchJson(route('guru.e-modul.simpan-otomatis', $eModul), ['judul' => 'Coba Ubah'])
+            ->assertForbidden();
+    }
 }

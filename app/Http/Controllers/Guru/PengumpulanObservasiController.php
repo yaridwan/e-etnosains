@@ -4,14 +4,24 @@ namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengumpulanObservasi;
+use App\Services\EksporService;
 use App\Services\NotifikasiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PengumpulanObservasiController extends Controller
 {
     public function index(Request $request): View
+    {
+        return view('guru.pengumpulan-observasi.index', [
+            'pengumpulan' => $this->query($request)->latest()->paginate(15),
+            'observasiSaya' => $request->user()->observasi()->get(),
+        ]);
+    }
+
+    private function query(Request $request)
     {
         $idObservasi = $request->user()->observasi()->pluck('id');
 
@@ -21,10 +31,29 @@ class PengumpulanObservasiController extends Controller
             $query->where('id_observasi', $request->integer('observasi'));
         }
 
-        return view('guru.pengumpulan-observasi.index', [
-            'pengumpulan' => $query->latest()->paginate(15),
-            'observasiSaya' => $request->user()->observasi()->get(),
+        return $query;
+    }
+
+    public function ekspor(Request $request, EksporService $ekspor): StreamedResponse
+    {
+        $format = $request->string('format', 'xlsx')->toString();
+
+        $baris = $this->query($request)->latest()->get()->map(fn (PengumpulanObservasi $item) => [
+            $item->observasi->judul,
+            $item->pengguna->nama_lengkap,
+            ucfirst(str_replace('_', ' ', $item->status)),
+            $item->dikirim_pada?->format('d-m-Y H:i') ?? '-',
+            $item->skor ?? '-',
+            $item->catatan_guru ?? '-',
         ]);
+
+        return $ekspor->unduh(
+            'Laporan Pengumpulan Observasi',
+            ['Observasi', 'Siswa', 'Status', 'Dikirim Pada', 'Skor', 'Catatan Guru'],
+            $baris,
+            'laporan-observasi-'.now()->format('Y-m-d'),
+            $format
+        );
     }
 
     public function show(PengumpulanObservasi $pengumpulanObservasi): View

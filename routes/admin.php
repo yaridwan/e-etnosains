@@ -30,8 +30,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'peran:a
     Route::post('/verifikasi-guru/{verifikasiGuru}/minta-perbaikan', [VerifikasiGuruController::class, 'mintaPerbaikan'])->name('verifikasi-guru.minta-perbaikan');
 
     Route::get('/tinjau-e-modul', [EModulReviewController::class, 'index'])->name('tinjau-e-modul.index');
+    Route::get('/tinjau-e-modul/ekspor', [EModulReviewController::class, 'ekspor'])->name('tinjau-e-modul.ekspor');
     Route::get('/tinjau-e-modul/{eModul}', [EModulReviewController::class, 'show'])->name('tinjau-e-modul.show');
+    Route::get('/tinjau-e-modul/{eModul}/versi/{versi}', [EModulReviewController::class, 'versi'])->name('tinjau-e-modul.versi');
     Route::post('/tinjau-e-modul/{eModul}/setujui', [EModulReviewController::class, 'setujui'])->name('tinjau-e-modul.setujui');
+    Route::post('/tinjau-e-modul/{eModul}/batalkan-jadwal', [EModulReviewController::class, 'batalkanJadwal'])->name('tinjau-e-modul.batalkan-jadwal');
     Route::post('/tinjau-e-modul/{eModul}/tolak', [EModulReviewController::class, 'tolak'])->name('tinjau-e-modul.tolak');
     Route::post('/tinjau-e-modul/{eModul}/minta-perbaikan', [EModulReviewController::class, 'mintaPerbaikan'])->name('tinjau-e-modul.minta-perbaikan');
 
@@ -113,6 +116,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'peran:a
     });
 
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::get('/pengguna/ekspor', [PenggunaController::class, 'ekspor'])->name('pengguna.ekspor');
     Route::get('/pengguna/{pengguna}', [PenggunaController::class, 'show'])->name('pengguna.show');
     Route::patch('/pengguna/{pengguna}/status', [PenggunaController::class, 'ubahStatus'])->name('pengguna.ubah-status');
 

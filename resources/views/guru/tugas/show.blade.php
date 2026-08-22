@@ -1,7 +1,12 @@
 <x-layout-dashboard judul-seo="Detail Tugas" :menu="\App\Support\MenuDashboard::guru()">
     <a href="{{ route('guru.tugas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">&larr; Kembali</a>
-    <h1 class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $tugas->judul }}</h1>
-    <p class="text-sm text-slate-500 dark:text-slate-400">Kelas: {{ $tugas->kelasBelajar->nama_kelas }}</p>
+    <div class="mt-2 flex flex-wrap items-start justify-between gap-3">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $tugas->judul }}</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Kelas: {{ $tugas->kelasBelajar->nama_kelas }}</p>
+        </div>
+        <x-tombol-ekspor rute="guru.tugas.ekspor-nilai" :parameter="['tugas' => $tugas]" />
+    </div>
 
     <x-kartu class="mt-6">
         <h2 class="font-semibold text-slate-800 dark:text-slate-100">Pengumpulan Siswa</h2>

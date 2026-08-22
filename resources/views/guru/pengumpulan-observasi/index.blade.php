@@ -1,5 +1,8 @@
 <x-layout-dashboard judul-seo="Pengumpulan Observasi" :menu="\App\Support\MenuDashboard::guru()">
-    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Pengumpulan Observasi</h1>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Pengumpulan Observasi</h1>
+        <x-tombol-ekspor rute="guru.pengumpulan-observasi.ekspor" />
+    </div>
 
     <x-kartu class="mt-6">
         @if($pengumpulan->isEmpty())

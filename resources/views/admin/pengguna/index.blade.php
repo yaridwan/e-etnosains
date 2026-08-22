@@ -1,5 +1,8 @@
 <x-layout-dashboard judul-seo="Pengguna" :menu="\App\Support\MenuDashboard::administrator()">
-    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Semua Pengguna</h1>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Semua Pengguna</h1>
+        <x-tombol-ekspor rute="admin.pengguna.ekspor" />
+    </div>
 
     <form method="GET" class="mt-4 flex flex-wrap gap-3">
         <input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama/email..." class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">

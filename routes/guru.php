@@ -23,6 +23,8 @@ Route::prefix('guru')->name('guru.')->middleware(['auth', 'verified', 'peran:gur
 
     Route::resource('e-modul', EModulController::class)->except(['show'])->parameters(['e-modul' => 'eModul']);
     Route::get('/e-modul/{eModul}/preview', [EModulController::class, 'preview'])->name('e-modul.preview');
+    Route::get('/e-modul/{eModul}/versi/{versi}', [EModulController::class, 'versi'])->name('e-modul.versi');
+    Route::patch('/e-modul/{eModul}/simpan-otomatis', [EModulController::class, 'simpanOtomatis'])->name('e-modul.simpan-otomatis');
     Route::post('/e-modul/{eModul}/ajukan', [EModulController::class, 'ajukan'])->name('e-modul.ajukan');
 
     Route::resource('lkpd', LkpdController::class)->except(['show']);
@@ -32,14 +34,17 @@ Route::prefix('guru')->name('guru.')->middleware(['auth', 'verified', 'peran:gur
     Route::resource('observasi', ObservasiController::class)->except(['show']);
 
     Route::resource('kelas', KelasBelajarController::class)->except(['edit'])->parameters(['kelas' => 'kelas']);
+    Route::get('/kelas/{kelas}/ekspor-anggota', [KelasBelajarController::class, 'eksporAnggota'])->name('kelas.ekspor-anggota');
     Route::post('/kelas/{kelas}/konten', [KelasBelajarController::class, 'tambahKonten'])->name('kelas.tambah-konten');
     Route::delete('/kelas/{kelas}/konten/{konten}', [KelasBelajarController::class, 'hapusKonten'])->name('kelas.hapus-konten');
     Route::delete('/kelas/{kelas}/anggota/{pengguna}', [KelasBelajarController::class, 'keluarkanAnggota'])->name('kelas.keluarkan-anggota');
 
     Route::resource('tugas', TugasKelasController::class)->only(['index', 'create', 'store', 'show'])->parameters(['tugas' => 'tugas']);
+    Route::get('/tugas/{tugas}/ekspor-nilai', [TugasKelasController::class, 'eksporNilai'])->name('tugas.ekspor-nilai');
     Route::post('/tugas/{tugas}/pengumpulan/{pengumpulan}/nilai', [TugasKelasController::class, 'nilai'])->name('tugas.nilai');
 
     Route::get('/pengumpulan-observasi', [PengumpulanObservasiController::class, 'index'])->name('pengumpulan-observasi.index');
+    Route::get('/pengumpulan-observasi/ekspor', [PengumpulanObservasiController::class, 'ekspor'])->name('pengumpulan-observasi.ekspor');
     Route::get('/pengumpulan-observasi/{pengumpulanObservasi}', [PengumpulanObservasiController::class, 'show'])->name('pengumpulan-observasi.show');
     Route::post('/pengumpulan-observasi/{pengumpulanObservasi}/nilai', [PengumpulanObservasiController::class, 'nilai'])->name('pengumpulan-observasi.nilai');
 

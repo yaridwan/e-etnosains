@@ -22,7 +22,7 @@ class EModul extends ModelDasarHapusLunak
         'kelas', 'fase', 'tahun', 'kata_kunci', 'gambar_sampul', 'gambar_poster',
         'berkas_pdf', 'jumlah_halaman', 'izin_unduh', 'pengetahuan_lokal',
         'konsep_sains', 'konteks_wilayah', 'aktivitas_saintifik', 'nilai_karakter',
-        'status_publikasi', 'unggulan', 'catatan_reviewer', 'dipublikasikan_pada',
+        'status_publikasi', 'unggulan', 'catatan_reviewer', 'dipublikasikan_pada', 'dijadwalkan_pada',
     ];
 
     protected static function booted(): void
@@ -54,6 +54,7 @@ class EModul extends ModelDasarHapusLunak
             'unggulan' => 'boolean',
             'status_publikasi' => StatusPublikasi::class,
             'dipublikasikan_pada' => 'datetime',
+            'dijadwalkan_pada' => 'datetime',
         ];
     }
 
@@ -100,6 +101,11 @@ class EModul extends ModelDasarHapusLunak
     public function catatanPeninjauan(): HasMany
     {
         return $this->hasMany(CatatanPeninjauanEModul::class, 'id_e_modul')->latest('dibuat_pada');
+    }
+
+    public function versi(): HasMany
+    {
+        return $this->hasMany(VersiEModul::class, 'id_e_modul')->orderByDesc('nomor_versi');
     }
 
     public function lkpd(): HasMany

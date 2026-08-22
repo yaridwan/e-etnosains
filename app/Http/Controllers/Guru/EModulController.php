@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Guru;
 use App\Enums\StatusPublikasi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Guru\SimpanEModulRequest;
+use App\Http\Requests\Guru\SimpanOtomatisEModulRequest;
 use App\Models\DaerahEtnosains;
 use App\Models\EModul;
 use App\Models\JenjangPendidikan;
 use App\Models\MataPelajaran;
 use App\Models\TopikEtnosains;
+use App\Models\VersiEModul;
 use App\Services\PublikasiEModulService;
 use App\Services\UploadService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -58,7 +61,7 @@ class EModulController extends Controller
     public function edit(EModul $eModul): View
     {
         $this->pastikanPemilik($eModul);
-        $eModul->load(['lkpd', 'observasi', 'video', 'poster']);
+        $eModul->load(['lkpd', 'observasi', 'video', 'poster', 'versi']);
 
         return view('guru.e-modul.form', [
             'eModul' => $eModul,
@@ -93,6 +96,23 @@ class EModulController extends Controller
         return back()->with('status', 'E-Modul berhasil diperbarui.');
     }
 
+    /**
+     * Simpan draf otomatis (autosave), dipanggil lewat AJAX beberapa detik
+     * setelah guru berhenti mengetik. Hanya kolom teks yang disimpan — tidak
+     * ada berkas, tidak mengubah status publikasi, dan tidak memicu versi
+     * baru — supaya aman dipanggil berulang kali tanpa efek samping.
+     */
+    public function simpanOtomatis(SimpanOtomatisEModulRequest $request, EModul $eModul): JsonResponse
+    {
+        $this->pastikanPemilik($eModul);
+
+        $eModul->update($request->validated());
+
+        return response()->json([
+            'tersimpan_pada' => now()->translatedFormat('H:i:s'),
+        ]);
+    }
+
     public function destroy(EModul $eModul): RedirectResponse
     {
         $this->pastikanPemilik($eModul);
@@ -107,6 +127,15 @@ class EModulController extends Controller
         $eModul->load(['mataPelajaran', 'jenjangPendidikan', 'topikEtnosains', 'daerahEtnosains']);
 
         return view('guru.e-modul.preview', ['eModul' => $eModul]);
+    }
+
+    public function versi(EModul $eModul, VersiEModul $versi): View
+    {
+        $this->pastikanPemilik($eModul);
+        abort_unless($versi->id_e_modul === $eModul->id, 404);
+        $versi->load('penerbit');
+
+        return view('guru.e-modul.versi', ['eModul' => $eModul, 'versi' => $versi]);
     }
 
     public function ajukan(EModul $eModul, PublikasiEModulService $publikasi, Request $request): RedirectResponse
