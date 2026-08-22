@@ -132,6 +132,18 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 - Verifikasi guru: setujui, tolak, atau minta perbaikan data disertai catatan.
 - Peninjauan E-Modul: setujui & publikasikan, minta perbaikan, atau tolak — dengan riwayat
   status yang tidak pernah ditimpa.
+- **Jadwal publikasi**: saat menyetujui, Administrator dapat memilih tanggal & jam terbit
+  di masa depan alih-alih menerbitkan langsung. Perintah terjadwal
+  `e-modul:terbitkan-terjadwal` (berjalan tiap menit lewat scheduler) yang menerbitkannya
+  begitu jadwal tiba, sehingga tidak perlu online saat itu. Penjadwalan dapat dibatalkan
+  selama belum terbit.
+- **Riwayat versi E-Modul**: setiap kali E-Modul terbit (langsung maupun via jadwal),
+  seluruh isinya dibekukan sebagai satu baris baru di tabel `versi_e_modul` — abadi, tidak
+  pernah ditimpa maupun dihapus — sehingga versi lama tetap bisa ditelusuri dan dibuka
+  kembali.
+- **Ekspor laporan** (XLSX/CSV): daftar pengguna dan daftar E-Modul dapat diunduh sebagai
+  spreadsheet lewat `App\Services\EksporService` (memakai PhpSpreadsheet), mengikuti
+  filter yang sedang aktif di halaman.
 - Master data: jenjang pendidikan, mata pelajaran, topik etnosains, daerah etnosains,
   instansi pendidikan, dan tag.
 - Konten website: banner, testimoni, FAQ, halaman statis, pengumuman.
@@ -140,14 +152,26 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 ### Guru
 
 - CRUD E-Modul dengan formulir bertahap, pratinjau, dan pengajuan publikasi.
+- **Simpan draf otomatis (autosave)**: 2,5 detik setelah berhenti mengetik pada form
+  E-Modul yang sedang diubah, isian teks dikirim diam-diam lewat AJAX
+  (`PATCH .../simpan-otomatis`) tanpa memuat ulang halaman dan tanpa mengubah status
+  publikasi — indikator kecil di atas form menunjukkan waktu simpan terakhir.
 - Kartu **Konten Terkait** pada form E-Modul: melihat sekaligus menambahkan LKPD,
-  observasi, video, dan poster yang terhubung ke E-Modul tersebut.
+  observasi, video, dan poster yang terhubung ke E-Modul tersebut, serta kartu
+  **Riwayat Versi Terbit** untuk membuka kembali versi yang pernah dipublikasikan.
 - CRUD LKPD (berkas maupun digital), bahan ajar, video YouTube (URL divalidasi dan
   di-embed melalui `youtube-nocookie.com`), dan poster.
+- **LKPD interaktif**: satu LKPD dapat dihubungkan ke satu atau lebih Observasi
+  (instrumen dinamis dengan 11 tipe pertanyaan) lewat kolom `id_lkpd`. Guru membuatnya
+  langsung dari form LKPD ("+ Buat Versi Interaktif"), dan siswa yang membuka halaman
+  publik LKPD tersebut melihat tombol "Kerjakan Sekarang" menuju instrumen yang bisa
+  diisi dan dikumpulkan daring — LKPD tidak lagi terbatas pada berkas PDF statis.
 - Perancang instrumen observasi dinamis: 11 tipe pertanyaan, penanda wajib, dan opsi
   jawaban.
 - Kelas belajar berkode, penambahan konten kelas, tugas, serta penilaian tugas dan
   observasi siswa.
+- **Ekspor laporan** (XLSX/CSV): nilai tugas per kelas, anggota kelas beserta rata-rata
+  nilai, dan rekap pengumpulan observasi.
 
 ### Siswa
 
@@ -170,6 +194,7 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 | page-flip       | `page-flip`                | Efek balik halaman flipbook               |
 | dompdf          | `dompdf/dompdf`            | Pembuat PDF demo untuk seeder             |
 | BaconQrCode     | `bacon/bacon-qr-code`      | QR Code SVG tanpa ekstensi tambahan       |
+| PhpSpreadsheet  | `phpoffice/phpspreadsheet` | Ekspor laporan ke XLSX dan CSV            |
 | PHPUnit         | 11.x                       | Kerangka pengujian                        |
 | Laravel Pint    | 1.x                        | Penyeragaman gaya kode                    |
 
@@ -387,7 +412,10 @@ sedangkan catatan reviewer disimpan di `catatan_peninjauan_e_modul`.
 stateDiagram-v2
     [*] --> draf
     draf --> diajukan: Guru mengajukan
-    diajukan --> dipublikasikan: Admin menyetujui
+    diajukan --> dipublikasikan: Admin menyetujui (langsung)
+    diajukan --> dijadwalkan: Admin menyetujui + pilih jadwal
+    dijadwalkan --> dipublikasikan: Jadwal tiba (otomatis)
+    dijadwalkan --> disetujui: Admin batalkan jadwal
     diajukan --> perlu_perbaikan: Admin minta perbaikan
     diajukan --> ditolak: Admin menolak
     perlu_perbaikan --> diajukan: Guru mengajukan ulang
@@ -397,10 +425,25 @@ stateDiagram-v2
 ```
 
 Nilai status tersedia pada enum `App\Enums\StatusPublikasi`: `draf`, `diajukan`,
-`dalam_peninjauan`, `perlu_perbaikan`, `disetujui`, `dipublikasikan`, `ditolak`,
-`diarsipkan`.
+`dalam_peninjauan`, `perlu_perbaikan`, `disetujui`, `dijadwalkan`, `dipublikasikan`,
+`ditolak`, `diarsipkan`.
 
 Pengajuan ditolak sistem (HTTP 422) apabila berkas PDF belum diunggah.
+
+**Penjadwalan terbit.** Pada halaman peninjauan, Administrator dapat mencentang
+"Jadwalkan terbit nanti" dan memilih tanggal & jam. E-Modul berpindah ke status
+`dijadwalkan` (kolom `dijadwalkan_pada` terisi) dan belum tampil di portal publik.
+Perintah `php artisan e-modul:terbitkan-terjadwal` — dijalankan tiap menit lewat
+`Schedule::command(...)->everyMinute()` di `routes/console.php` — memeriksa E-Modul yang
+jadwalnya sudah lewat, menerbitkannya (`PublikasiEModulService::terbitkan()`), dan
+mengirim notifikasi ke guru. Penjadwalan dapat dibatalkan kapan saja sebelum jadwal tiba.
+
+**Riwayat versi.** Setiap kali `terbitkan()` dijalankan (baik oleh Administrator secara
+langsung maupun oleh perintah terjadwal), seluruh kolom konten E-Modul saat itu dibekukan
+menjadi satu baris baru di `versi_e_modul` dengan nomor versi yang bertambah otomatis
+(`PublikasiEModulService::buatVersi()`). Baris ini tidak pernah diperbarui atau dihapus,
+sehingga guru maupun Administrator dapat membuka kembali isi persis seperti saat versi
+tersebut diterbitkan, meskipun E-Modul telah direvisi berkali-kali sesudahnya.
 
 ## Workflow Observasi
 
@@ -431,7 +474,7 @@ Seluruh nama tabel dan kolom menggunakan Bahasa Indonesia. Timestamp memakai
 kelas abstrak `App\Models\ModelDasar` dan `App\Models\ModelDasarHapusLunak`, bukan
 diulang di setiap model.
 
-Terdapat **60 tabel**: 52 tabel domain ditambah 8 tabel infrastruktur Laravel yang juga
+Terdapat **61 tabel**: 53 tabel domain ditambah 8 tabel infrastruktur Laravel yang juga
 di-Indonesiakan (`sesi`, `cache_aplikasi`, `cache_locks`, `antrian_tugas`,
 `kelompok_tugas`, `tugas_gagal`, `token_pengaturan_ulang_sandi`, dan `migrations`).
 Relasi utama:
@@ -455,6 +498,7 @@ erDiagram
     e_modul ||--o{ bab_e_modul : berisi
     e_modul ||--o{ riwayat_status_e_modul : mencatat
     e_modul ||--o{ catatan_peninjauan_e_modul : ditinjau
+    e_modul ||--o{ versi_e_modul : "dibekukan sebagai"
     e_modul ||--o{ lkpd : "didukung oleh"
     e_modul ||--o{ video_pembelajaran : "didukung oleh"
     e_modul ||--o{ poster : "didukung oleh"
@@ -571,7 +615,7 @@ app/
 database/
 ├── factories/        # 11 factory
 ├── migrations/       # 54 berkas migrasi
-└── seeders/          # 33 seeder + DatabaseSeeder
+└── seeders/          # 34 seeder + DatabaseSeeder
 
 lang/
 └── id/               # validation, auth, passwords, pagination
@@ -715,7 +759,7 @@ php artisan migrate:fresh --seed
 
 ## Seeder
 
-Seluruh 33 seeder dipanggil berurutan oleh `DatabaseSeeder` dengan memperhatikan
+Seluruh 34 seeder dipanggil berurutan oleh `DatabaseSeeder` dengan memperhatikan
 ketergantungan antar tabel sehingga tidak menghasilkan kunci asing yatim:
 
 1. **Sistem & RBAC** — `PeranSeeder`, `IzinSeeder`, `PeranIzinSeeder`, `PengaturanAplikasiSeeder`
@@ -855,7 +899,7 @@ php artisan event:cache
 
 ## Testing
 
-Suite berisi **61 test** (187 asertion) yang berjalan terhadap database MySQL terpisah:
+Suite berisi **76 test** (231 asertion) yang berjalan terhadap database MySQL terpisah:
 
 ```bash
 php artisan test
@@ -875,15 +919,17 @@ Cakupan pengujian:
 | `Auth/RegistrasiGuruTest`               | Registrasi guru, status menunggu verifikasi, email duplikat    |
 | `Auth/RegistrasiSiswaTest`              | Registrasi siswa aktif langsung beserta profil                 |
 | `Admin/VerifikasiGuruTest`              | Setujui/tolak guru, larangan akses non-admin                   |
-| `Admin/EModulReviewTest`                | Setujui, minta perbaikan, riwayat status, draf tidak publik    |
+| `Admin/EModulReviewTest`                | Setujui, minta perbaikan, riwayat status, draf tidak publik, jadwalkan/batalkan jadwal terbit, versi terbekukan saat terbit, perintah `e-modul:terbitkan-terjadwal` |
 | `Admin/MasterDataTest`                  | CRUD master data, larangan akses siswa                         |
-| `Guru/EModulTest`                       | Buat draf + unggah PDF, ajukan, larangan lintas pemilik, gate verifikasi |
+| `Admin/EksporLaporanTest`               | Unduh laporan pengguna (XLSX/CSV) dan laporan E-Modul, larangan akses non-admin |
+| `Guru/EModulTest`                       | Buat draf + unggah PDF, ajukan, larangan lintas pemilik, gate verifikasi, simpan draf otomatis (tidak mengubah status/izin unduh), larangan autosave lintas pemilik |
 | `Guru/KelasBelajarTest`                 | Pembuatan kelas dan kode kelas otomatis                        |
 | `Siswa/KelasBelajarTest`                | Gabung kelas, kode salah, larangan akses kelas asing           |
 | `Siswa/ObservasiTest`                   | Kirim jawaban observasi, penilaian oleh guru                   |
 | `Siswa/TugasTest`                       | Pengumpulan tugas, larangan bukan anggota kelas                |
 | `Siswa/FavoritTest`                     | Toggle favorit                                                 |
 | `Publik/BerandaTest`, `Publik/EModulTest` | Akses publik, URL slug, gate unduhan, flipbook tanpa PDF     |
+| `Publik/LkpdTest`                       | Tautan LKPD interaktif ke Observasi terhubung, tombol siswa vs pengunjung, Observasi draf tidak ikut tampil |
 | `Publik/UlasanTest`                     | Ulasan menunggu moderasi, larangan mengulas konten sendiri     |
 | `Publik/SeoTest`                        | Sitemap hanya memuat konten terbit, robots.txt, noindex area privat |
 | `NotifikasiTest`                        | Notifikasi verifikasi & publikasi, tandai dibaca, isolasi antar pengguna |
@@ -967,8 +1013,15 @@ Queue memakai driver `database`. Jalankan worker di production:
 php artisan queue:work --tries=3 --timeout=90
 ```
 
-Scheduler dipanggil melalui satu entri cron (lihat bagian [Cron](#cron)) dan digunakan
-untuk pemeliharaan berkala seperti kedaluwarsanya pengumuman.
+Scheduler dipanggil melalui satu entri cron (lihat bagian [Cron](#cron)). Tugas terjadwal
+yang terdaftar di `routes/console.php`:
+
+| Perintah                          | Jadwal      | Fungsi                                                              |
+| ---------------------------------- | ----------- | -------------------------------------------------------------------- |
+| `e-modul:terbitkan-terjadwal`       | Tiap menit  | Menerbitkan E-Modul berstatus `dijadwalkan` yang jadwalnya sudah tiba, sekaligus membekukan versi barunya dan mengirim notifikasi ke guru. |
+
+Selama pengembangan tanpa cron, jalankan `php artisan schedule:work` di terminal terpisah
+agar tugas terjadwal tetap berjalan.
 
 ## Deployment Shared Hosting
 
