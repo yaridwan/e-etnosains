@@ -25,7 +25,10 @@ class ObservasiController extends Controller
     public function create(Request $request): View
     {
         return view('guru.observasi.form', [
-            'observasi' => new Observasi(['id_e_modul' => $request->integer('e_modul') ?: null]),
+            'observasi' => new Observasi([
+                'id_e_modul' => $request->integer('e_modul') ?: null,
+                'id_lkpd' => $request->integer('lkpd') ?: null,
+            ]),
             'eModulSaya' => $request->user()->eModul()->get(),
             'lkpdSaya' => $request->user()->lkpd()->get(),
             'jenisPertanyaan' => JenisPertanyaan::cases(),

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\StatusPublikasi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 
@@ -65,6 +66,16 @@ class Lkpd extends ModelDasarHapusLunak
     public function eModul(): BelongsTo
     {
         return $this->belongsTo(EModul::class, 'id_e_modul');
+    }
+
+    /**
+     * Instrumen interaktif (dapat diisi siswa) yang terhubung ke LKPD ini.
+     * Satu LKPD bisa memiliki lebih dari satu versi interaktif, misalnya
+     * untuk jenjang atau kelas paralel yang berbeda.
+     */
+    public function observasi(): HasMany
+    {
+        return $this->hasMany(Observasi::class, 'id_lkpd');
     }
 
     public function mataPelajaran(): BelongsTo

@@ -6,6 +6,7 @@ use App\Enums\JenisPertanyaan;
 use App\Enums\StatusPublikasi;
 use App\Models\ButirObservasi;
 use App\Models\EModul;
+use App\Models\Lkpd;
 use App\Models\Observasi;
 use App\Models\OpsiButirObservasi;
 use Illuminate\Database\Seeder;
@@ -16,10 +17,15 @@ class ObservasiSeeder extends Seeder
     {
         $gulaAren = EModul::where('judul', 'like', '%Gula Aren%')->first();
         $tanamanObat = EModul::where('judul', 'like', '%Tanaman Obat%')->first();
+        $lkpdGulaAren = Lkpd::where('id_e_modul', $gulaAren->id)->first();
 
         $observasi1 = Observasi::create([
             'id_pengguna' => $gulaAren->id_pengguna,
             'id_e_modul' => $gulaAren->id,
+            // Dihubungkan ke LKPD-nya agar menjadi contoh "LKPD interaktif":
+            // siswa yang membuka LKPD ini akan melihat tautan untuk langsung
+            // mengerjakan instrumen observasi secara daring.
+            'id_lkpd' => $lkpdGulaAren?->id,
             'judul' => 'Observasi Proses Pembuatan Gula Aren dan Konsep Perubahan Zat',
             'deskripsi' => 'Siswa mengamati langsung proses penyadapan dan pemasakan nira aren di lingkungan sekitar.',
             'tujuan' => 'Mengidentifikasi tahapan perubahan wujud zat selama proses pembuatan gula aren.',

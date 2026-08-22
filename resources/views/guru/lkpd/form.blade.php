@@ -37,4 +37,27 @@
 
         <x-tombol type="submit">Simpan &amp; Publikasikan</x-tombol>
     </form>
+
+    @if($sedangUbah)
+        <x-kartu class="mt-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="font-semibold text-slate-800 dark:text-slate-100">LKPD Interaktif</h2>
+                    <p class="text-sm text-slate-400 dark:text-slate-500">Versi yang bisa diisi dan dikumpulkan siswa langsung secara daring, memakai instrumen dinamis (11 jenis pertanyaan).</p>
+                </div>
+                <x-tombol :href="route('guru.observasi.create', ['lkpd' => $lkpd->id])" varian="sekunder">+ Buat Versi Interaktif</x-tombol>
+            </div>
+
+            <ul class="mt-4 space-y-2">
+                @forelse($lkpd->observasi as $observasiTerkait)
+                    <li class="flex items-center justify-between gap-3 rounded-lg border border-slate-100 dark:border-slate-800 px-4 py-2.5 text-sm">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">{{ $observasiTerkait->judul }}</span>
+                        <a href="{{ route('guru.observasi.edit', $observasiTerkait) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Kelola Butir Soal</a>
+                    </li>
+                @empty
+                    <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada versi interaktif untuk LKPD ini. Siswa hanya akan melihat berkas PDF.</li>
+                @endforelse
+            </ul>
+        </x-kartu>
+    @endif
 </x-layout-dashboard>

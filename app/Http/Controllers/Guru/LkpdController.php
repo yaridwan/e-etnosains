@@ -55,6 +55,7 @@ class LkpdController extends Controller
     public function edit(Request $request, Lkpd $lkpd): View
     {
         $this->pastikanPemilik($lkpd);
+        $lkpd->load('observasi');
 
         return view('guru.lkpd.form', [
             'lkpd' => $lkpd,

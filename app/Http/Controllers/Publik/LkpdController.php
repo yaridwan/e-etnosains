@@ -27,6 +27,7 @@ class LkpdController extends Controller
 
         $aktivitas->catatDilihat($lkpd, 'lkpd', $request);
         $lkpd->load(['pengguna', 'mataPelajaran', 'jenjangPendidikan', 'eModul']);
+        $lkpd->load(['observasi' => fn ($q) => $q->dipublikasikan()]);
 
         return view('publik.lkpd.show', ['lkpd' => $lkpd]);
     }
