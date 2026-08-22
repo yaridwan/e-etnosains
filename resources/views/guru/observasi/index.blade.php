@@ -18,10 +18,12 @@
                             <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->judul }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->pengumpulan_count }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->batas_pengumpulan?->translatedFormat('d M Y') ?? '-' }}</td>
-                            <td class="py-3 text-right space-x-3">
-                                <a href="{{ route('guru.pengumpulan-observasi.index', ['observasi' => $item->id]) }}" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:underline">Pengumpulan</a>
-                                <a href="{{ route('guru.observasi.edit', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</a>
-                                <x-form-hapus :aksi="route('guru.observasi.destroy', $item)" class="inline" />
+                            <td class="py-3 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <x-tombol-ikon :href="route('guru.pengumpulan-observasi.index', ['observasi' => $item->id])" ikon="kotak-masuk" label="Pengumpulan" />
+                                    <x-tombol-ikon :href="route('guru.observasi.edit', $item)" ikon="pensil" label="Ubah" />
+                                    <x-form-hapus :aksi="route('guru.observasi.destroy', $item)" />
+                                </div>
                             </td>
                         </tr>
                     @endforeach

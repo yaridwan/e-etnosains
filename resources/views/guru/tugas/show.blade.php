@@ -22,13 +22,13 @@
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $pengumpulan->nilai?->nilai ?? '-' }}</td>
                         <td class="py-3">
                             @if($pengumpulan->berkas)
-                                <a href="{{ \Illuminate\Support\Facades\Storage::url($pengumpulan->berkas) }}" target="_blank" rel="noopener" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat</a>
+                                <x-tombol-ikon :href="\Illuminate\Support\Facades\Storage::url($pengumpulan->berkas)" target="_blank" rel="noopener" ikon="dokumen" label="Lihat Berkas" />
                             @else
                                 <span class="text-sm text-slate-400 dark:text-slate-500">-</span>
                             @endif
                         </td>
                         <td class="py-3 text-right">
-                            <button type="button" x-data @click="$dispatch('buka-modal', 'nilai-{{ $pengumpulan->id }}')" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Nilai</button>
+                            <x-tombol-ikon type="button" x-data @click="$dispatch('buka-modal', 'nilai-{{ $pengumpulan->id }}')" ikon="pensil-kotak" label="Nilai" />
                         </td>
                     </tr>
 

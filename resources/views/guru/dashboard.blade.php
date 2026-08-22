@@ -4,32 +4,29 @@
 
     <div class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         @foreach([
-            ['label' => 'E-Modul', 'nilai' => $statistik['e_modul']],
-            ['label' => 'Dipublikasikan', 'nilai' => $statistik['e_modul_terbit']],
-            ['label' => 'Menunggu Review', 'nilai' => $statistik['e_modul_menunggu']],
-            ['label' => 'LKPD', 'nilai' => $statistik['lkpd']],
-            ['label' => 'Observasi', 'nilai' => $statistik['observasi']],
-            ['label' => 'Video', 'nilai' => $statistik['video']],
-            ['label' => 'Kelas Belajar', 'nilai' => $statistik['kelas']],
-            ['label' => 'Total Dilihat', 'nilai' => $statistik['total_dilihat']],
+            ['label' => 'E-Modul', 'nilai' => $statistik['e_modul'], 'ikon' => 'tumpukan', 'warna' => 'teal'],
+            ['label' => 'Dipublikasikan', 'nilai' => $statistik['e_modul_terbit'], 'ikon' => 'centang', 'warna' => 'emerald'],
+            ['label' => 'Menunggu Review', 'nilai' => $statistik['e_modul_menunggu'], 'ikon' => 'jam', 'warna' => 'amber'],
+            ['label' => 'LKPD', 'nilai' => $statistik['lkpd'], 'ikon' => 'clipboard-centang', 'warna' => 'sky'],
+            ['label' => 'Observasi', 'nilai' => $statistik['observasi'], 'ikon' => 'mata', 'warna' => 'violet'],
+            ['label' => 'Video', 'nilai' => $statistik['video'], 'ikon' => 'putar', 'warna' => 'rose'],
+            ['label' => 'Kelas Belajar', 'nilai' => $statistik['kelas'], 'ikon' => 'kelompok', 'warna' => 'teal'],
+            ['label' => 'Total Dilihat', 'nilai' => $statistik['total_dilihat'], 'ikon' => 'bintang', 'warna' => 'slate'],
         ] as $kartu)
-            <x-kartu padat>
-                <p class="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">{{ $kartu['label'] }}</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $kartu['nilai'] }}</p>
-            </x-kartu>
+            <x-kartu-statistik :label="$kartu['label']" :nilai="$kartu['nilai']" :ikon="$kartu['ikon']" :warna="$kartu['warna']" />
         @endforeach
     </div>
 
     <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800 dark:text-slate-100">E-Modul Terbaru</h2>
+                <x-judul-seksi ikon="tumpukan" warna="teal">E-Modul Terbaru</x-judul-seksi>
                 <a href="{{ route('guru.e-modul.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">
                 @forelse($eModulTerbaru as $item)
-                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0">
-                        <p class="text-sm font-medium text-slate-800 dark:text-slate-100">{{ $item->judul }}</p>
+                    <div class="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0">
+                        <p class="min-w-0 truncate text-sm font-medium text-slate-800 dark:text-slate-100">{{ $item->judul }}</p>
                         <x-status-publikasi :status="$item->status_publikasi" />
                     </div>
                 @empty
@@ -40,17 +37,17 @@
 
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Kelas Belajar Saya</h2>
+                <x-judul-seksi ikon="kelompok" warna="sky">Kelas Belajar Saya</x-judul-seksi>
                 <a href="{{ route('guru.kelas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">
                 @forelse($kelasSaya as $kelas)
                     <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0">
-                        <div>
-                            <p class="text-sm font-medium text-slate-800 dark:text-slate-100">{{ $kelas->nama_kelas }}</p>
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{{ $kelas->nama_kelas }}</p>
                             <p class="text-xs text-slate-500 dark:text-slate-400">Kode: {{ $kelas->kode_kelas }}</p>
                         </div>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">{{ $kelas->anggota_count }} siswa</span>
+                        <span class="shrink-0 text-xs text-slate-500 dark:text-slate-400">{{ $kelas->anggota_count }} siswa</span>
                     </div>
                 @empty
                     <p class="text-sm text-slate-400 dark:text-slate-500">Belum ada kelas belajar.</p>

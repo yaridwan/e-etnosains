@@ -21,7 +21,7 @@
                             }">{{ $item->status->label() }}</x-badge>
                         </td>
                         <td class="py-3 text-right">
-                            <a href="{{ route('admin.verifikasi-guru.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Tinjau</a>
+                            <x-tombol-ikon :href="route('admin.verifikasi-guru.show', $item)" ikon="mata" label="Tinjau" />
                         </td>
                     </tr>
                 @empty

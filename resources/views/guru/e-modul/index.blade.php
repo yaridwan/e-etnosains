@@ -19,10 +19,12 @@
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->mataPelajaran->nama_mata_pelajaran }}</td>
                             <td class="py-3"><x-status-publikasi :status="$item->status_publikasi" /></td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->jumlah_dilihat }}</td>
-                            <td class="py-3 text-right space-x-3">
-                                <a href="{{ route('guru.e-modul.preview', $item) }}" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:underline">Pratinjau</a>
-                                <a href="{{ route('guru.e-modul.edit', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</a>
-                                <x-form-hapus :aksi="route('guru.e-modul.destroy', $item)" class="inline" />
+                            <td class="py-3 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <x-tombol-ikon :href="route('guru.e-modul.preview', $item)" ikon="mata" label="Pratinjau" />
+                                    <x-tombol-ikon :href="route('guru.e-modul.edit', $item)" ikon="pensil" label="Ubah" />
+                                    <x-form-hapus :aksi="route('guru.e-modul.destroy', $item)" />
+                                </div>
                             </td>
                         </tr>
                     @endforeach

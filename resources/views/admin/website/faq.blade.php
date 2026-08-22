@@ -15,8 +15,10 @@
                         <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->pertanyaan }}</td>
                         <td class="py-3"><x-badge :warna="$item->aktif ? 'emerald' : 'slate'">{{ $item->aktif ? 'Aktif' : 'Nonaktif' }}</x-badge></td>
                         <td class="py-3 text-right">
-                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</button>
-                            <x-form-hapus :aksi="route('admin.faq.destroy', $item)" class="inline" />
+                            <div class="flex items-center justify-end gap-1">
+                                <x-tombol-ikon type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" ikon="pensil" label="Ubah" />
+                                <x-form-hapus :aksi="route('admin.faq.destroy', $item)" />
+                            </div>
                         </td>
                     </tr>
 

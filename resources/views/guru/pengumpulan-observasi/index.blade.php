@@ -19,7 +19,7 @@
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->observasi->judul }}</td>
                             <td class="py-3"><x-badge :warna="$item->status === 'dinilai' ? 'emerald' : 'amber'">{{ ucfirst($item->status) }}</x-badge></td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->skor ?? '-' }}</td>
-                            <td class="py-3 text-right"><a href="{{ route('guru.pengumpulan-observasi.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Tinjau &amp; Nilai</a></td>
+                            <td class="py-3 text-right"><x-tombol-ikon :href="route('guru.pengumpulan-observasi.show', $item)" ikon="pensil-kotak" label="Tinjau & Nilai" /></td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -13,8 +13,8 @@
                     <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
                         <img src="{{ \Illuminate\Support\Facades\Storage::url($item->gambar) }}" class="aspect-[3/4] w-full rounded-lg object-cover" alt="{{ $item->judul }}">
                         <p class="mt-2 truncate text-sm font-medium text-slate-700 dark:text-slate-300">{{ $item->judul }}</p>
-                        <div class="mt-2 flex justify-between text-sm">
-                            <a href="{{ route('guru.poster.edit', $item) }}" class="font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</a>
+                        <div class="mt-2 flex items-center justify-end gap-1">
+                            <x-tombol-ikon :href="route('guru.poster.edit', $item)" ikon="pensil" label="Ubah" />
                             <x-form-hapus :aksi="route('guru.poster.destroy', $item)" />
                         </div>
                     </div>

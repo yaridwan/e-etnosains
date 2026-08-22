@@ -18,7 +18,7 @@
                             <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->judul }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->kelasBelajar->nama_kelas }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->batas_waktu?->translatedFormat('d M Y, H:i') ?? '-' }}</td>
-                            <td class="py-3 text-right"><a href="{{ route('guru.tugas.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Lihat & Nilai</a></td>
+                            <td class="py-3 text-right"><x-tombol-ikon :href="route('guru.tugas.show', $item)" ikon="lencana-centang" label="Lihat & Nilai" /></td>
                         </tr>
                     @endforeach
                 </tbody>

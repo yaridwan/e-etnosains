@@ -21,11 +21,17 @@
                             @foreach($item as $tautan)
                                 <a href="{{ $tautan['url'] }}"
                                    @class([
-                                       'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                       'group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
                                        'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
                                        'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100' => ! ($tautan['aktif'] ?? false),
                                    ])>
-                                    {{ $tautan['label'] }}
+                                    <x-ikon :nama="$tautan['ikon'] ?? 'grid'"
+                                        @class([
+                                            'h-[18px] w-[18px] shrink-0 transition',
+                                            'text-teal-700 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                            'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300' => ! ($tautan['aktif'] ?? false),
+                                        ]) />
+                                    <span class="truncate">{{ $tautan['label'] }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -56,11 +62,17 @@
                                 @foreach($item as $tautan)
                                     <a href="{{ $tautan['url'] }}"
                                        @class([
-                                           'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
+                                           'group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
                                            'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
                                            'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' => ! ($tautan['aktif'] ?? false),
                                        ])>
-                                        {{ $tautan['label'] }}
+                                        <x-ikon :nama="$tautan['ikon'] ?? 'grid'"
+                                            @class([
+                                                'h-[18px] w-[18px] shrink-0',
+                                                'text-teal-700 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                                'text-slate-400 dark:text-slate-500' => ! ($tautan['aktif'] ?? false),
+                                            ]) />
+                                        <span class="truncate">{{ $tautan['label'] }}</span>
                                     </a>
                                 @endforeach
                             </div>
@@ -125,13 +137,15 @@
                                 <p class="truncate text-xs text-slate-400 dark:text-slate-500">{{ auth()->user()->email }}</p>
                             </div>
 
-                            <a href="{{ route('beranda') }}" class="mt-1 block rounded-lg px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800">
+                            <a href="{{ route('beranda') }}" class="mt-1 flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800">
+                                <x-ikon nama="cari" class="h-[18px] w-[18px] shrink-0 text-slate-400 dark:text-slate-500" />
                                 Lihat Situs Publik
                             </a>
 
                             <form method="POST" action="{{ route('keluar') }}">
                                 @csrf
-                                <button type="submit" class="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950">
+                                <button type="submit" class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950">
+                                    <svg class="h-[18px] w-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 17.5 20 12.75 15.5 8" /><path d="M20 12.75H9" /><path d="M13 5.5H6.5A1.5 1.5 0 0 0 5 7v10a1.5 1.5 0 0 0 1.5 1.5H13" /></svg>
                                     Keluar
                                 </button>
                             </form>

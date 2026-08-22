@@ -44,17 +44,17 @@
                                     </x-badge>
                                 </td>
                                 <td class="py-3 text-right">
-                                    <div class="flex items-center justify-end gap-3">
+                                    <div class="flex items-center justify-end gap-1">
                                         @if($item->status_moderasi !== 'disetujui')
                                             <form method="POST" action="{{ route('admin.moderasi-ulasan.setujui', $item) }}">
                                                 @csrf
-                                                <button type="submit" class="text-sm font-medium text-emerald-700 dark:text-emerald-400 hover:underline">Setujui</button>
+                                                <x-tombol-ikon type="submit" ikon="centang" label="Setujui" varian="sukses" />
                                             </form>
                                         @endif
                                         @if($item->status_moderasi !== 'ditolak')
                                             <form method="POST" action="{{ route('admin.moderasi-ulasan.tolak', $item) }}">
                                                 @csrf
-                                                <button type="submit" class="text-sm font-medium text-amber-700 dark:text-amber-400 hover:underline">Tolak</button>
+                                                <x-tombol-ikon type="submit" ikon="silang" label="Tolak" varian="peringatan" />
                                             </form>
                                         @endif
                                         <x-form-hapus :aksi="route('admin.moderasi-ulasan.destroy', $item)" pesan="Hapus ulasan ini secara permanen?" />

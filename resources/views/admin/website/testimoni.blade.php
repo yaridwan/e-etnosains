@@ -16,8 +16,10 @@
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->peran_testimoni }}</td>
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->rating }}/5</td>
                         <td class="py-3 text-right">
-                            <button type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" class="mr-3 text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</button>
-                            <x-form-hapus :aksi="route('admin.testimoni.destroy', $item)" class="inline" />
+                            <div class="flex items-center justify-end gap-1">
+                                <x-tombol-ikon type="button" x-data @click="$dispatch('buka-modal', 'edit-{{ $item->id }}')" ikon="pensil" label="Ubah" />
+                                <x-form-hapus :aksi="route('admin.testimoni.destroy', $item)" />
+                            </div>
                         </td>
                     </tr>
 

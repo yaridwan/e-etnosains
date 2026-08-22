@@ -19,7 +19,7 @@
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->pengguna->nama_lengkap }}</td>
                         <td class="py-3"><x-status-publikasi :status="$item->status_publikasi" /></td>
                         <td class="py-3 text-right">
-                            <a href="{{ route('admin.tinjau-e-modul.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Tinjau</a>
+                            <x-tombol-ikon :href="route('admin.tinjau-e-modul.show', $item)" ikon="mata" label="Tinjau" />
                         </td>
                     </tr>
                 @empty

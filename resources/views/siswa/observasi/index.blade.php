@@ -20,7 +20,9 @@
                                     {{ match($status) { 'dinilai' => 'Dinilai', 'dikirim' => 'Menunggu Penilaian', default => 'Belum Dikerjakan' } }}
                                 </x-badge>
                             </td>
-                            <td class="py-3 text-right"><a href="{{ route('siswa.observasi.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">{{ $status === 'belum' ? 'Kerjakan' : 'Lihat' }}</a></td>
+                            <td class="py-3 text-right">
+                                <x-tombol-ikon :href="route('siswa.observasi.show', $item)" :ikon="$status === 'belum' ? 'pensil-kotak' : 'mata'" :label="$status === 'belum' ? 'Kerjakan' : 'Lihat'" />
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

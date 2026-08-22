@@ -8,29 +8,27 @@
 
     <div class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-5">
         @foreach([
-            ['label' => 'E-Modul Dipelajari', 'nilai' => $statistik['e_modul_dipelajari']],
-            ['label' => 'Selesai', 'nilai' => $statistik['e_modul_selesai']],
-            ['label' => 'Observasi Dinilai', 'nilai' => $statistik['observasi_selesai']],
-            ['label' => 'Kelas Diikuti', 'nilai' => $statistik['kelas']],
-            ['label' => 'Tugas Belum Selesai', 'nilai' => $statistik['tugas_belum']],
+            ['label' => 'E-Modul Dipelajari', 'nilai' => $statistik['e_modul_dipelajari'], 'ikon' => 'tumpukan', 'warna' => 'teal'],
+            ['label' => 'Selesai', 'nilai' => $statistik['e_modul_selesai'], 'ikon' => 'centang', 'warna' => 'emerald'],
+            ['label' => 'Observasi Dinilai', 'nilai' => $statistik['observasi_selesai'], 'ikon' => 'mata', 'warna' => 'violet'],
+            ['label' => 'Kelas Diikuti', 'nilai' => $statistik['kelas'], 'ikon' => 'kelompok', 'warna' => 'sky'],
+            ['label' => 'Tugas Belum Selesai', 'nilai' => $statistik['tugas_belum'], 'ikon' => 'lencana-centang', 'warna' => 'amber'],
         ] as $kartu)
-            <x-kartu padat>
-                <p class="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">{{ $kartu['label'] }}</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $kartu['nilai'] }}</p>
-            </x-kartu>
+            <x-kartu-statistik :label="$kartu['label']" :nilai="$kartu['nilai']" :ikon="$kartu['ikon']" :warna="$kartu['warna']" />
         @endforeach
     </div>
 
     <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Kelas Saya</h2>
+                <x-judul-seksi ikon="kelompok" warna="sky">Kelas Saya</x-judul-seksi>
                 <a href="{{ route('siswa.kelas.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">
                 @forelse($kelasSaya as $kelas)
-                    <a href="{{ route('siswa.kelas.show', $kelas) }}" class="block border-b border-slate-100 dark:border-slate-800 pb-3 text-sm last:border-0">
-                        <p class="font-medium text-slate-800 dark:text-slate-100">{{ $kelas->nama_kelas }}</p>
+                    <a href="{{ route('siswa.kelas.show', $kelas) }}" class="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3 text-sm last:border-0 hover:text-teal-700 dark:hover:text-teal-400">
+                        <x-ikon nama="kelompok" class="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
+                        <span class="truncate font-medium text-slate-800 dark:text-slate-100">{{ $kelas->nama_kelas }}</span>
                     </a>
                 @empty
                     <p class="text-sm text-slate-400 dark:text-slate-500">Anda belum bergabung ke kelas manapun.</p>
@@ -40,7 +38,7 @@
 
         <x-kartu>
             <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800 dark:text-slate-100">Kemajuan Belajar Terbaru</h2>
+                <x-judul-seksi ikon="jam" warna="violet">Kemajuan Belajar Terbaru</x-judul-seksi>
                 <a href="{{ route('siswa.riwayat.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
             </div>
             <div class="mt-4 space-y-3">

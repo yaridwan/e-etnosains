@@ -21,7 +21,7 @@
                                     {{ $status?->status === 'dinilai' ? 'Dinilai' : ($status ? 'Dikirim' : 'Belum Dikerjakan') }}
                                 </x-badge>
                             </td>
-                            <td class="py-3 text-right"><a href="{{ route('siswa.tugas.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Lihat</a></td>
+                            <td class="py-3 text-right"><x-tombol-ikon :href="route('siswa.tugas.show', $item)" ikon="mata" label="Lihat" /></td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -18,9 +18,11 @@
                             <td class="py-3 font-medium text-slate-700 dark:text-slate-300">{{ $item->judul }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->mataPelajaran->nama_mata_pelajaran }}</td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->jumlah_dilihat }}</td>
-                            <td class="py-3 text-right space-x-3">
-                                <a href="{{ route('guru.lkpd.edit', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Ubah</a>
-                                <x-form-hapus :aksi="route('guru.lkpd.destroy', $item)" class="inline" />
+                            <td class="py-3 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <x-tombol-ikon :href="route('guru.lkpd.edit', $item)" ikon="pensil" label="Ubah" />
+                                    <x-form-hapus :aksi="route('guru.lkpd.destroy', $item)" />
+                                </div>
                             </td>
                         </tr>
                     @endforeach

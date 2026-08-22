@@ -30,7 +30,7 @@
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->peran->pluck('nama_peran')->map(fn($p) => ucfirst($p))->implode(', ') }}</td>
                         <td class="py-3"><x-badge :warna="$item->status_akun->value === 'aktif' ? 'emerald' : 'slate'">{{ $item->status_akun->label() }}</x-badge></td>
                         <td class="py-3 text-right">
-                            <a href="{{ route('admin.pengguna.show', $item) }}" class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">Detail</a>
+                            <x-tombol-ikon :href="route('admin.pengguna.show', $item)" ikon="mata" label="Detail" />
                         </td>
                     </tr>
                 @empty

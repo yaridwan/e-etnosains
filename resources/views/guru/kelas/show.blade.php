@@ -19,7 +19,7 @@
                             <span class="font-medium text-slate-700 dark:text-slate-300">{{ $siswa->nama_lengkap }}</span>
                             <form method="POST" action="{{ route('guru.kelas.keluarkan-anggota', [$kelas, $siswa]) }}">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-rose-600 dark:text-rose-400 hover:underline">Keluarkan</button>
+                                <x-tombol-ikon type="submit" ikon="silang" label="Keluarkan" varian="bahaya" />
                             </form>
                         </div>
                     @empty
@@ -42,7 +42,7 @@
                             </span>
                             <form method="POST" action="{{ route('guru.kelas.hapus-konten', [$kelas, $konten->id]) }}">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-rose-600 dark:text-rose-400 hover:underline">Hapus</button>
+                                <x-tombol-ikon type="submit" ikon="sampah" label="Hapus" varian="bahaya" />
                             </form>
                         </div>
                     @empty
@@ -60,7 +60,7 @@
                     @forelse($kelas->tugasKelas as $tugas)
                         <div class="flex items-center justify-between py-2 text-sm">
                             <span class="font-medium text-slate-700 dark:text-slate-300">{{ $tugas->judul }}</span>
-                            <a href="{{ route('guru.tugas.show', $tugas) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Lihat</a>
+                            <x-tombol-ikon :href="route('guru.tugas.show', $tugas)" ikon="mata" label="Lihat" />
                         </div>
                     @empty
                         <p class="py-2 text-sm text-slate-400 dark:text-slate-500">Belum ada tugas untuk kelas ini.</p>
