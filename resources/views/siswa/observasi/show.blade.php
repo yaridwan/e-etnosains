@@ -33,30 +33,40 @@
                         {{ $butir->pertanyaan }} @if($butir->wajib)<span class="text-rose-600 dark:text-rose-400">*</span>@endif
                     </label>
 
+                    @php($kelasKontrol = 'block w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm shadow-sm transition placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/30 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-500')
+
                     @if(in_array($butir->tipe_pertanyaan->value, ['teks_pendek']))
-                        <input type="text" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_teks }}" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
+                        <input type="text" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_teks }}" {{ $sudahDinilai ? 'disabled' : '' }} class="{{ $kelasKontrol }}">
                     @elseif($butir->tipe_pertanyaan->value === 'teks_panjang')
-                        <textarea name="jawaban[{{ $butir->id }}]" rows="3" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">{{ $jawabanAda?->jawaban_teks }}</textarea>
+                        <textarea name="jawaban[{{ $butir->id }}]" rows="3" {{ $sudahDinilai ? 'disabled' : '' }} class="{{ $kelasKontrol }}">{{ $jawabanAda?->jawaban_teks }}</textarea>
                     @elseif($butir->tipe_pertanyaan->value === 'angka')
-                        <input type="number" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_angka }}" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
+                        <input type="number" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_angka }}" {{ $sudahDinilai ? 'disabled' : '' }} class="{{ $kelasKontrol }}">
                     @elseif($butir->tipe_pertanyaan->value === 'ya_tidak')
-                        <select name="jawaban[{{ $butir->id }}]" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
-                            <option value="Ya" @selected($jawabanAda?->jawaban_teks === 'Ya')>Ya</option>
-                            <option value="Tidak" @selected($jawabanAda?->jawaban_teks === 'Tidak')>Tidak</option>
-                        </select>
+                        <div class="relative">
+                            <select name="jawaban[{{ $butir->id }}]" {{ $sudahDinilai ? 'disabled' : '' }} class="{{ $kelasKontrol }} appearance-none bg-no-repeat pr-9">
+                                <option value="Ya" @selected($jawabanAda?->jawaban_teks === 'Ya')>Ya</option>
+                                <option value="Tidak" @selected($jawabanAda?->jawaban_teks === 'Tidak')>Tidak</option>
+                            </select>
+                            <svg class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 10.5 3.75 3.75 3.75-3.75" />
+                            </svg>
+                        </div>
                     @elseif(in_array($butir->tipe_pertanyaan->value, ['pilihan_tunggal', 'pilihan_ganda']))
                         <div class="space-y-1.5">
                             @foreach($butir->opsi as $opsi)
-                                <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                    <input type="radio" name="jawaban_opsi[{{ $butir->id }}]" value="{{ $opsi->id }}" {{ $sudahDinilai ? 'disabled' : '' }} @checked($jawabanAda?->id_opsi_butir_observasi === $opsi->id)>
+                                <label class="flex cursor-pointer items-center gap-2.5 text-sm text-slate-600 dark:text-slate-400">
+                                    <span class="relative flex h-5 w-5 shrink-0 items-center justify-center">
+                                        <input type="radio" name="jawaban_opsi[{{ $butir->id }}]" value="{{ $opsi->id }}" {{ $sudahDinilai ? 'disabled' : '' }} @checked($jawabanAda?->id_opsi_butir_observasi === $opsi->id) class="peer absolute inset-0 h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-full border border-slate-300 bg-white transition checked:border-teal-700 checked:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-600/30 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-600 dark:bg-slate-900 dark:checked:border-teal-500 dark:checked:bg-teal-500">
+                                        <span class="pointer-events-none relative hidden h-1.5 w-1.5 rounded-full bg-white peer-checked:block"></span>
+                                    </span>
                                     {{ $opsi->teks_opsi }}
                                 </label>
                             @endforeach
                         </div>
                     @elseif($butir->tipe_pertanyaan->value === 'unggah_foto')
-                        <input type="file" name="dokumentasi[]" accept="image/*" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full text-sm">
+                        <x-unggah name="dokumentasi[]" :id="'dokumentasi_'.$butir->id" jenis="gambar" accept="image/*" :disabled="$sudahDinilai" />
                     @else
-                        <input type="text" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_teks }}" {{ $sudahDinilai ? 'disabled' : '' }} class="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
+                        <input type="text" name="jawaban[{{ $butir->id }}]" value="{{ $jawabanAda?->jawaban_teks }}" {{ $sudahDinilai ? 'disabled' : '' }} class="{{ $kelasKontrol }}">
                     @endif
                 </div>
             @endforeach

@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'peran' => PastikanPeran::class,
             'guru.terverifikasi' => PastikanGuruTerverifikasi::class,
         ]);
+
+        // Rute login bernama "masuk" (bukan "login" bawaan Laravel), jadi
+        // tamu yang mengakses halaman terproteksi harus diarahkan ke sana.
+        $middleware->redirectGuestsTo(fn () => route('masuk'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

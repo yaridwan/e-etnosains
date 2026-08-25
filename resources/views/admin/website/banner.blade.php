@@ -31,7 +31,7 @@
                                 <x-input label="Teks Tombol" name="teks_tombol" :value="$item->teks_tombol" />
                                 <x-input label="Tautan Tombol" name="tautan_tombol" :value="$item->tautan_tombol" />
                             </div>
-                            <x-unggah label="Gambar" name="gambar" jenis="gambar" accept="image/*" :pratinjau="$item->gambar ? \Illuminate\Support\Facades\Storage::url($item->gambar) : null" />
+                            <x-unggah label="Gambar" name="gambar" :id="'gambar-'.$item->id" jenis="gambar" accept="image/*" :pratinjau="$item->gambar ? \Illuminate\Support\Facades\Storage::url($item->gambar) : null" />
                             <x-checkbox name="aktif" :checked="$item->aktif">Aktifkan</x-checkbox>
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>

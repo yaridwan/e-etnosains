@@ -1,4 +1,12 @@
-@props(['label' => null, 'name', 'wajib' => false, 'petunjuk' => null, 'pratinjau' => null, 'jenis' => 'gambar'])
+@props(['label' => null, 'name', 'id' => null, 'wajib' => false, 'petunjuk' => null, 'pratinjau' => null, 'jenis' => 'gambar'])
+
+@php
+    // ID elemen boleh berbeda dari nama field — perlu unik walau beberapa
+    // input berbagi nama array yang sama (mis. beberapa butir observasi
+    // yang sama-sama memakai "dokumentasi[]"), agar <label for> tidak
+    // bertabrakan dengan id yang ganda.
+    $idElemen = $id ?? $name;
+@endphp
 
 {{--
     Input berkas dengan pratinjau. Untuk jenis="gambar", memperlihatkan
@@ -26,7 +34,7 @@
     },
 }">
     @if($label)
-        <label for="{{ $name }}" class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+        <label for="{{ $idElemen }}" class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
             {{ $label }} @if($wajib)<span class="text-rose-600 dark:text-rose-400">*</span>@endif
         </label>
     @endif
@@ -48,7 +56,7 @@
         @endif
 
         <div class="min-w-0 flex-1">
-            <label for="{{ $name }}" @class([
+            <label for="{{ $idElemen }}" @class([
                 'flex cursor-pointer items-center justify-between gap-2 rounded-lg border border-dashed px-3.5 py-2.5 text-sm transition hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/20',
                 'border-rose-400 dark:border-rose-500' => $adaGalat,
                 'border-slate-300 dark:border-slate-700' => ! $adaGalat,
@@ -59,7 +67,7 @@
             <input
                 type="file"
                 name="{{ $name }}"
-                id="{{ $name }}"
+                id="{{ $idElemen }}"
                 @change="pilih($event)"
                 @if($adaGalat) aria-invalid="true" aria-describedby="{{ $name }}-galat" @endif
                 {{ $attributes->merge(['class' => 'sr-only']) }}

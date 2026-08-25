@@ -16,6 +16,14 @@ class MasukTest extends TestCase
         $this->get(route('masuk'))->assertOk();
     }
 
+    public function test_tamu_yang_mengakses_halaman_terproteksi_diarahkan_ke_halaman_masuk(): void
+    {
+        // Rute login aplikasi ini bernama "masuk", bukan "login" bawaan
+        // Laravel — tanpa redirectGuestsTo dikonfigurasi, middleware auth
+        // akan gagal dengan RouteNotFoundException alih-alih redirect.
+        $this->get(route('guru.dashboard'))->assertRedirect(route('masuk'));
+    }
+
     public function test_halaman_masuk_menampilkan_soal_captcha_penjumlahan(): void
     {
         $this->get(route('masuk'))
