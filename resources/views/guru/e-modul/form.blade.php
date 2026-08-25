@@ -51,8 +51,8 @@
         @endif
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">1. Informasi Dasar</h2>
-            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <x-judul-form-seksi :nomor="1">Informasi Dasar</x-judul-form-seksi>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div class="sm:col-span-2">
                     <x-input label="Judul E-Modul" name="judul" :value="$eModul->judul" wajib />
                 </div>
@@ -66,8 +66,8 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">2. Informasi Pembelajaran</h2>
-            <div class="mt-4 space-y-4">
+            <x-judul-form-seksi :nomor="2">Informasi Pembelajaran</x-judul-form-seksi>
+            <div class="space-y-4">
                 <x-textarea label="Ringkasan" name="ringkasan" wajib>{{ $eModul->ringkasan }}</x-textarea>
                 <x-textarea label="Deskripsi Lengkap" name="deskripsi" :baris="6" wajib>{{ $eModul->deskripsi }}</x-textarea>
                 <x-textarea label="Capaian Pembelajaran" name="capaian_pembelajaran">{{ $eModul->capaian_pembelajaran }}</x-textarea>
@@ -76,9 +76,8 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">3. Eksplorasi Etnosains</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Hubungkan kearifan lokal dengan konsep sains yang dipelajari.</p>
-            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <x-judul-form-seksi :nomor="3" deskripsi="Hubungkan kearifan lokal dengan konsep sains yang dipelajari.">Eksplorasi Etnosains</x-judul-form-seksi>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $eModul->id_topik_etnosains }}" />
                 <x-select label="Daerah Etnosains" name="id_daerah_etnosains" :opsi="$daerah->pluck('nama_kearifan_lokal', 'id')" selected="{{ $eModul->id_daerah_etnosains }}" />
                 <x-input label="Konteks Wilayah" name="konteks_wilayah" :value="$eModul->konteks_wilayah" class="sm:col-span-2" />
@@ -90,21 +89,21 @@
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">4. Media dan Berkas PDF</h2>
-            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <x-input type="file" label="Gambar Sampul" name="gambar_sampul" />
-                <x-input type="file" label="Gambar Poster" name="gambar_poster" />
-                <div class="sm:col-span-2"><x-input type="file" label="Berkas PDF E-Modul" name="berkas_pdf" /></div>
+            <x-judul-form-seksi :nomor="4">Media dan Berkas PDF</x-judul-form-seksi>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-unggah label="Gambar Sampul" name="gambar_sampul" jenis="gambar" accept="image/*" :pratinjau="$eModul->gambar_sampul ? \Illuminate\Support\Facades\Storage::url($eModul->gambar_sampul) : null" />
+                <x-unggah label="Gambar Poster" name="gambar_poster" jenis="gambar" accept="image/*" :pratinjau="$eModul->gambar_poster ? \Illuminate\Support\Facades\Storage::url($eModul->gambar_poster) : null" />
+                <div class="sm:col-span-2">
+                    <x-unggah label="Berkas PDF E-Modul" name="berkas_pdf" jenis="dokumen" accept="application/pdf" :pratinjau="$eModul->berkas_pdf ? \Illuminate\Support\Facades\Storage::url($eModul->berkas_pdf) : null" />
+                </div>
             </div>
         </x-kartu>
 
         <x-kartu>
-            <h2 class="font-semibold text-slate-800 dark:text-slate-100">5. Pengaturan Publikasi</h2>
-            <label class="mt-4 flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <input type="hidden" name="izin_unduh" value="0">
-                <input type="checkbox" name="izin_unduh" value="1" @checked($eModul->izin_unduh) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
+            <x-judul-form-seksi :nomor="5">Pengaturan Publikasi</x-judul-form-seksi>
+            <x-checkbox name="izin_unduh" :checked="$eModul->izin_unduh">
                 Izinkan pengunjung mengunduh berkas PDF
-            </label>
+            </x-checkbox>
         </x-kartu>
 
         <div class="flex gap-3">

@@ -8,19 +8,26 @@
         @csrf
         @if($sedangUbah) @method('PUT') @endif
 
-        <x-kartu class="space-y-4">
-            <x-input label="Judul" name="judul" :value="$bahanAjar->judul" wajib />
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <x-select label="Mata Pelajaran" name="id_mata_pelajaran" wajib :opsi="$mataPelajaran->pluck('nama_mata_pelajaran', 'id')" selected="{{ $bahanAjar->id_mata_pelajaran }}" />
-                <x-select label="Jenjang Pendidikan" name="id_jenjang_pendidikan" wajib :opsi="$jenjang->pluck('nama_jenjang', 'id')" selected="{{ $bahanAjar->id_jenjang_pendidikan }}" />
-                <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $bahanAjar->id_topik_etnosains }}" />
-                <x-select label="Jenis Berkas" name="jenis_berkas" wajib :opsi="['pdf'=>'PDF','ppt'=>'PPT/PPTX','doc'=>'DOC/DOCX','gambar'=>'Gambar','tautan'=>'Tautan Eksternal']" selected="{{ $bahanAjar->jenis_berkas }}" />
+        <x-kartu>
+            <x-judul-form-seksi :nomor="1">Informasi Dasar</x-judul-form-seksi>
+            <div class="space-y-4">
+                <x-input label="Judul" name="judul" :value="$bahanAjar->judul" wajib />
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <x-select label="Mata Pelajaran" name="id_mata_pelajaran" wajib :opsi="$mataPelajaran->pluck('nama_mata_pelajaran', 'id')" selected="{{ $bahanAjar->id_mata_pelajaran }}" />
+                    <x-select label="Jenjang Pendidikan" name="id_jenjang_pendidikan" wajib :opsi="$jenjang->pluck('nama_jenjang', 'id')" selected="{{ $bahanAjar->id_jenjang_pendidikan }}" />
+                    <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $bahanAjar->id_topik_etnosains }}" />
+                    <x-select label="Jenis Berkas" name="jenis_berkas" wajib :opsi="['pdf'=>'PDF','ppt'=>'PPT/PPTX','doc'=>'DOC/DOCX','gambar'=>'Gambar','tautan'=>'Tautan Eksternal']" selected="{{ $bahanAjar->jenis_berkas }}" />
+                </div>
+                <x-textarea label="Deskripsi" name="deskripsi">{{ $bahanAjar->deskripsi }}</x-textarea>
+                <x-input label="Tautan Eksternal (jika ada)" name="tautan_eksternal" :value="$bahanAjar->tautan_eksternal" />
             </div>
-            <x-textarea label="Deskripsi" name="deskripsi">{{ $bahanAjar->deskripsi }}</x-textarea>
-            <x-input label="Tautan Eksternal (jika ada)" name="tautan_eksternal" :value="$bahanAjar->tautan_eksternal" />
+        </x-kartu>
+
+        <x-kartu>
+            <x-judul-form-seksi :nomor="2">Berkas</x-judul-form-seksi>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <x-input type="file" label="Berkas" name="berkas" />
-                <x-input type="file" label="Gambar Sampul" name="gambar_sampul" />
+                <x-unggah label="Berkas" name="berkas" jenis="dokumen" :pratinjau="$bahanAjar->berkas ? \Illuminate\Support\Facades\Storage::url($bahanAjar->berkas) : null" />
+                <x-unggah label="Gambar Sampul" name="gambar_sampul" jenis="gambar" accept="image/*" :pratinjau="$bahanAjar->gambar_sampul ? \Illuminate\Support\Facades\Storage::url($bahanAjar->gambar_sampul) : null" />
             </div>
         </x-kartu>
 

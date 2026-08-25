@@ -1,4 +1,4 @@
-@props(['label' => null, 'name', 'wajib' => false, 'baris' => 4])
+@props(['label' => null, 'name', 'wajib' => false, 'baris' => 4, 'petunjuk' => null])
 
 @php
     $adaGalat = $errors->has($name);
@@ -19,10 +19,15 @@
         name="{{ $name }}"
         id="{{ $name }}"
         rows="{{ $baris }}"
+        @if($adaGalat) aria-invalid="true" aria-describedby="{{ $name }}-galat" @endif
         {{ $attributes->merge(['class' => "$kelasDasar $kelasWarna"]) }}
     >{{ old($name, $slot) }}</textarea>
 
+    @if($petunjuk && ! $adaGalat)
+        <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400">{{ $petunjuk }}</p>
+    @endif
+
     @error($name)
-        <p class="mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+        <p id="{{ $name }}-galat" class="mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
     @enderror
 </div>

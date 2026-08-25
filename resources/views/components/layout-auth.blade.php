@@ -1,4 +1,4 @@
-@props(['judulSeo' => null])
+@props(['judulSeo' => null, 'lebar' => 'max-w-md'])
 
 <x-layout-app :judul-seo="$judulSeo">
     <div class="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-teal-50 via-white to-white px-4 py-12 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
@@ -13,7 +13,7 @@
             </span>
         </a>
 
-        <div class="w-full max-w-md">
+        <div class="w-full {{ $lebar }}">
             @if(session('status'))
                 <x-alert jenis="sukses" class="mb-4">{{ session('status') }}</x-alert>
             @endif

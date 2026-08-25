@@ -9,10 +9,12 @@
         @if($sedangUbah) @method('PUT') @endif
 
         <x-kartu class="space-y-4">
-            <x-input label="Judul" name="judul" :value="$poster->judul" wajib />
-            <x-select label="E-Modul Terkait" name="id_e_modul" :opsi="$eModulSaya->pluck('judul', 'id')" selected="{{ $poster->id_e_modul }}" />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-input label="Judul" name="judul" :value="$poster->judul" wajib />
+                <x-select label="E-Modul Terkait" name="id_e_modul" :opsi="$eModulSaya->pluck('judul', 'id')" selected="{{ $poster->id_e_modul }}" />
+            </div>
             <x-textarea label="Deskripsi" name="deskripsi">{{ $poster->deskripsi }}</x-textarea>
-            <x-input type="file" label="Gambar Poster" name="gambar" :wajib="! $sedangUbah" />
+            <x-unggah label="Gambar Poster" name="gambar" jenis="gambar" accept="image/*" :wajib="! $sedangUbah" :pratinjau="$poster->gambar ? \Illuminate\Support\Facades\Storage::url($poster->gambar) : null" />
         </x-kartu>
 
         <x-tombol type="submit">Simpan &amp; Publikasikan</x-tombol>
