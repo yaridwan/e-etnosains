@@ -26,13 +26,13 @@
                     <x-modal :nama="'edit-'.$item->id" judul="Ubah Testimoni">
                         <form method="POST" action="{{ route('admin.testimoni.update', $item) }}" class="space-y-4">
                             @csrf @method('PUT')
-                            <x-input label="Nama" name="nama" :value="$item->nama" wajib />
-                            <x-input label="Peran/Jabatan" name="peran_testimoni" :value="$item->peran_testimoni" />
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <x-input label="Nama" name="nama" :value="$item->nama" wajib />
+                                <x-input label="Peran/Jabatan" name="peran_testimoni" :value="$item->peran_testimoni" />
+                            </div>
                             <x-textarea label="Isi Testimoni" name="isi_testimoni" wajib>{{ $item->isi_testimoni }}</x-textarea>
                             <x-input label="Rating (1-5)" name="rating" type="number" :value="$item->rating" wajib />
-                            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <input type="checkbox" name="aktif" value="1" @checked($item->aktif) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400"> Aktifkan
-                            </label>
+                            <x-checkbox name="aktif" :checked="$item->aktif">Aktifkan</x-checkbox>
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
                     </x-modal>
@@ -46,8 +46,10 @@
     <x-modal nama="tambah" judul="Tambah Testimoni">
         <form method="POST" action="{{ route('admin.testimoni.store') }}" class="space-y-4">
             @csrf
-            <x-input label="Nama" name="nama" wajib />
-            <x-input label="Peran/Jabatan" name="peran_testimoni" />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-input label="Nama" name="nama" wajib />
+                <x-input label="Peran/Jabatan" name="peran_testimoni" />
+            </div>
             <x-textarea label="Isi Testimoni" name="isi_testimoni" wajib />
             <x-input label="Rating (1-5)" name="rating" type="number" value="5" wajib />
             <x-tombol type="submit" class="w-full">Simpan</x-tombol>

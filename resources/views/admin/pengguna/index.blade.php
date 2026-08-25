@@ -4,14 +4,13 @@
         <x-tombol-ekspor rute="admin.pengguna.ekspor" />
     </div>
 
-    <form method="GET" class="mt-4 flex flex-wrap gap-3">
-        <input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama/email..." class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
-        <select name="peran" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
-            <option value="">Semua Peran</option>
-            <option value="administrator" @selected(request('peran')==='administrator')>Administrator</option>
-            <option value="guru" @selected(request('peran')==='guru')>Guru</option>
-            <option value="siswa" @selected(request('peran')==='siswa')>Siswa</option>
-        </select>
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama/email..." />
+        </div>
+        <div class="w-full sm:w-48">
+            <x-select name="peran" placeholder="Semua Peran" :opsi="['administrator' => 'Administrator', 'guru' => 'Guru', 'siswa' => 'Siswa']" :selected="request('peran')" />
+        </div>
         <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
     </form>
 

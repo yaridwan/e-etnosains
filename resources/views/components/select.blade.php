@@ -22,7 +22,9 @@
             @if($adaGalat) aria-invalid="true" aria-describedby="{{ $name }}-galat" @endif
             {{ $attributes->merge(['class' => "$kelasDasar $kelasWarna"]) }}
         >
-            <option value="">{{ $placeholder }}</option>
+            @if($placeholder !== null)
+                <option value="">{{ $placeholder }}</option>
+            @endif
             @foreach($opsi as $nilai => $label_opsi)
                 <option value="{{ $nilai }}" @selected(old($name, $selected) == $nilai)>{{ $label_opsi }}</option>
             @endforeach

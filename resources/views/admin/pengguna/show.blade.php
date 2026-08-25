@@ -14,12 +14,11 @@
             <div><dt class="text-slate-400 dark:text-slate-500">Terakhir Masuk</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $pengguna->terakhir_masuk_pada?->translatedFormat('d M Y, H:i') ?? '-' }}</dd></div>
         </dl>
 
-        <form method="POST" action="{{ route('admin.pengguna.ubah-status', $pengguna) }}" class="mt-6 flex items-center gap-3">
+        <form method="POST" action="{{ route('admin.pengguna.ubah-status', $pengguna) }}" class="mt-6 flex items-end gap-3">
             @csrf @method('PATCH')
-            <select name="status_akun" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
-                <option value="aktif" @selected($pengguna->status_akun->value === 'aktif')>Aktif</option>
-                <option value="nonaktif" @selected($pengguna->status_akun->value === 'nonaktif')>Nonaktif</option>
-            </select>
+            <div class="w-40">
+                <x-select name="status_akun" :placeholder="null" :opsi="['aktif' => 'Aktif', 'nonaktif' => 'Nonaktif']" :selected="$pengguna->status_akun->value" />
+            </div>
             <x-tombol type="submit" varian="sekunder">Perbarui Status</x-tombol>
         </form>
     </x-kartu>

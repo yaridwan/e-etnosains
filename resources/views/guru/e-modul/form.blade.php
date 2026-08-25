@@ -80,7 +80,7 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $eModul->id_topik_etnosains }}" />
                 <x-select label="Daerah Etnosains" name="id_daerah_etnosains" :opsi="$daerah->pluck('nama_kearifan_lokal', 'id')" selected="{{ $eModul->id_daerah_etnosains }}" />
-                <x-input label="Konteks Wilayah" name="konteks_wilayah" :value="$eModul->konteks_wilayah" class="sm:col-span-2" />
+                <div class="sm:col-span-2"><x-input label="Konteks Wilayah" name="konteks_wilayah" :value="$eModul->konteks_wilayah" /></div>
                 <div class="sm:col-span-2"><x-textarea label="Pengetahuan Lokal" name="pengetahuan_lokal">{{ $eModul->pengetahuan_lokal }}</x-textarea></div>
                 <div class="sm:col-span-2"><x-textarea label="Konsep Sains Terkait" name="konsep_sains">{{ $eModul->konsep_sains }}</x-textarea></div>
                 <div class="sm:col-span-2"><x-textarea label="Aktivitas Saintifik" name="aktivitas_saintifik">{{ $eModul->aktivitas_saintifik }}</x-textarea></div>

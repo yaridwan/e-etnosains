@@ -13,17 +13,15 @@
                 <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     @foreach($item as $pengaturan)
                         @if($pengaturan->tipe === 'boolean')
-                            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <input type="hidden" name="{{ $pengaturan->kunci }}" value="0">
-                                <input type="checkbox" name="{{ $pengaturan->kunci }}" value="1" @checked($pengaturan->nilai) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
-                                {{ $pengaturan->keterangan }}
-                            </label>
+                            <div class="flex items-center">
+                                <x-checkbox :name="$pengaturan->kunci" :checked="(bool) $pengaturan->nilai">{{ $pengaturan->keterangan }}</x-checkbox>
+                            </div>
                         @elseif($pengaturan->tipe === 'teks_panjang')
                             <div class="sm:col-span-2">
                                 <x-textarea :label="$pengaturan->keterangan" :name="$pengaturan->kunci">{{ $pengaturan->nilai }}</x-textarea>
                             </div>
                         @elseif($pengaturan->tipe === 'berkas')
-                            <x-input type="file" :label="$pengaturan->keterangan" :name="$pengaturan->kunci" />
+                            <x-unggah :label="$pengaturan->keterangan" :name="$pengaturan->kunci" jenis="gambar" accept="image/*" :pratinjau="$pengaturan->nilai ? \Illuminate\Support\Facades\Storage::url($pengaturan->nilai) : null" />
                         @elseif($pengaturan->tipe === 'warna')
                             <x-input type="color" :label="$pengaturan->keterangan" :name="$pengaturan->kunci" :value="$pengaturan->nilai" />
                         @else

@@ -14,7 +14,7 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-select label="Mata Pelajaran" name="id_mata_pelajaran" wajib :opsi="$mataPelajaran->pluck('nama_mata_pelajaran', 'id')" selected="{{ $video->id_mata_pelajaran }}" />
                 <x-select label="Topik Etnosains" name="id_topik_etnosains" :opsi="$topik->pluck('nama_topik', 'id')" selected="{{ $video->id_topik_etnosains }}" />
-                <x-select label="E-Modul Terkait" name="id_e_modul" :opsi="$eModulSaya->pluck('judul', 'id')" selected="{{ $video->id_e_modul }}" class="sm:col-span-2" />
+                <div class="sm:col-span-2"><x-select label="E-Modul Terkait" name="id_e_modul" :opsi="$eModulSaya->pluck('judul', 'id')" selected="{{ $video->id_e_modul }}" /></div>
             </div>
             <x-textarea label="Deskripsi" name="deskripsi">{{ $video->deskripsi }}</x-textarea>
         </x-kartu>

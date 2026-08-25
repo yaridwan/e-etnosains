@@ -23,14 +23,16 @@
                         </td>
                     </tr>
 
-                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Instansi Pendidikan">
+                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Instansi Pendidikan" lebar="max-w-xl">
                         <form method="POST" action="{{ route('admin.instansi-pendidikan.update', $item) }}" class="space-y-4">
                             @csrf @method('PUT')
-                            <x-input label="Nama Instansi" name="nama_instansi" :value="$item->nama_instansi" wajib />
-                            <x-select label="Jenis Instansi" name="jenis_instansi" :opsi="['SD/MI'=>'SD/MI','SMP/MTs'=>'SMP/MTs','SMA/MA'=>'SMA/MA','SMK'=>'SMK','Perguruan Tinggi'=>'Perguruan Tinggi']" selected="{{ $item->jenis_instansi }}" />
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <x-input label="Nama Instansi" name="nama_instansi" :value="$item->nama_instansi" wajib />
+                                <x-select label="Jenis Instansi" name="jenis_instansi" :opsi="['SD/MI'=>'SD/MI','SMP/MTs'=>'SMP/MTs','SMA/MA'=>'SMA/MA','SMK'=>'SMK','Perguruan Tinggi'=>'Perguruan Tinggi']" selected="{{ $item->jenis_instansi }}" />
+                                <x-input label="Kota" name="kota" :value="$item->kota" />
+                                <x-input label="Provinsi" name="provinsi" :value="$item->provinsi" />
+                            </div>
                             <x-input label="Alamat" name="alamat" :value="$item->alamat" />
-                            <x-input label="Kota" name="kota" :value="$item->kota" />
-                            <x-input label="Provinsi" name="provinsi" :value="$item->provinsi" />
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
                     </x-modal>
@@ -41,14 +43,16 @@
         </table>
     </x-kartu>
 
-    <x-modal nama="tambah" judul="Tambah Instansi Pendidikan">
+    <x-modal nama="tambah" judul="Tambah Instansi Pendidikan" lebar="max-w-xl">
         <form method="POST" action="{{ route('admin.instansi-pendidikan.store') }}" class="space-y-4">
             @csrf
-            <x-input label="Nama Instansi" name="nama_instansi" wajib />
-            <x-select label="Jenis Instansi" name="jenis_instansi" :opsi="['SD/MI'=>'SD/MI','SMP/MTs'=>'SMP/MTs','SMA/MA'=>'SMA/MA','SMK'=>'SMK','Perguruan Tinggi'=>'Perguruan Tinggi']" />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-input label="Nama Instansi" name="nama_instansi" wajib />
+                <x-select label="Jenis Instansi" name="jenis_instansi" :opsi="['SD/MI'=>'SD/MI','SMP/MTs'=>'SMP/MTs','SMA/MA'=>'SMA/MA','SMK'=>'SMK','Perguruan Tinggi'=>'Perguruan Tinggi']" />
+                <x-input label="Kota" name="kota" />
+                <x-input label="Provinsi" name="provinsi" />
+            </div>
             <x-input label="Alamat" name="alamat" />
-            <x-input label="Kota" name="kota" />
-            <x-input label="Provinsi" name="provinsi" />
             <x-tombol type="submit" class="w-full">Simpan</x-tombol>
         </form>
     </x-modal>

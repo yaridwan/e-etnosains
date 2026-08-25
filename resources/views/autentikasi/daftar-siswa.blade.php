@@ -1,20 +1,29 @@
-<x-layout-auth judul-seo="Daftar sebagai Siswa">
+<x-layout-auth judul-seo="Daftar sebagai Siswa" lebar="max-w-2xl">
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Siswa</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Mulai belajar sains lewat kearifan lokal Indonesia.</p>
 
-    <form method="POST" action="{{ route('daftar.siswa.proses') }}" class="mt-6 space-y-4">
+    <form method="POST" action="{{ route('daftar.siswa.proses') }}" class="mt-6 space-y-6">
         @csrf
 
-        <x-input label="Nama Lengkap" name="nama_lengkap" wajib autofocus />
-        <x-input label="Email" name="email" type="email" wajib />
-        <x-input label="Nomor Telepon (opsional)" name="nomor_telepon" />
+        <div>
+            <x-judul-form-seksi>Data Akun</x-judul-form-seksi>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2"><x-input label="Nama Lengkap" name="nama_lengkap" wajib autofocus /></div>
+                <x-input label="Email" name="email" type="email" wajib />
+                <x-input label="Nomor Telepon (opsional)" name="nomor_telepon" />
+                <x-input label="Kata Sandi" name="kata_sandi" type="password" wajib />
+                <x-input label="Konfirmasi Kata Sandi" name="kata_sandi_confirmation" type="password" wajib />
+            </div>
+        </div>
 
-        <x-select label="Jenis Kelamin" name="jenis_kelamin" wajib :opsi="['Laki-laki' => 'Laki-laki', 'Perempuan' => 'Perempuan']" />
-        <x-select label="Sekolah" name="id_instansi_pendidikan" wajib :opsi="$instansi->pluck('nama_instansi', 'id')" />
-        <x-input label="Kelas" name="kelas" wajib placeholder="Contoh: X IPA 1" />
-
-        <x-input label="Kata Sandi" name="kata_sandi" type="password" wajib />
-        <x-input label="Konfirmasi Kata Sandi" name="kata_sandi_confirmation" type="password" wajib />
+        <div>
+            <x-judul-form-seksi>Data Sekolah</x-judul-form-seksi>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-select label="Jenis Kelamin" name="jenis_kelamin" wajib :opsi="['Laki-laki' => 'Laki-laki', 'Perempuan' => 'Perempuan']" />
+                <x-input label="Kelas" name="kelas" wajib placeholder="Contoh: X IPA 1" />
+                <div class="sm:col-span-2"><x-select label="Sekolah" name="id_instansi_pendidikan" wajib :opsi="$instansi->pluck('nama_instansi', 'id')" /></div>
+            </div>
+        </div>
 
         <x-tombol type="submit" varian="utama" class="w-full">Daftar</x-tombol>
     </form>

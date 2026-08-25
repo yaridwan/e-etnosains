@@ -2,13 +2,10 @@
     <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Moderasi Ulasan</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tinjau ulasan siswa sebelum tampil di halaman publik.</p>
 
-    <form method="GET" class="mt-4 flex flex-wrap gap-3">
-        <select name="status" class="rounded-lg border border-slate-300 dark:border-slate-700 px-3.5 py-2 text-sm">
-            <option value="">Semua Status</option>
-            <option value="menunggu" @selected(request('status') === 'menunggu')>Menunggu</option>
-            <option value="disetujui" @selected(request('status') === 'disetujui')>Disetujui</option>
-            <option value="ditolak" @selected(request('status') === 'ditolak')>Ditolak</option>
-        </select>
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-56">
+            <x-select name="status" placeholder="Semua Status" :opsi="['menunggu' => 'Menunggu', 'disetujui' => 'Disetujui', 'ditolak' => 'Ditolak']" :selected="request('status')" />
+        </div>
         <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
     </form>
 

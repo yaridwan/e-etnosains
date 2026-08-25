@@ -22,14 +22,12 @@
                         </td>
                     </tr>
 
-                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Halaman Statis">
+                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Halaman Statis" lebar="max-w-2xl">
                         <form method="POST" action="{{ route('admin.halaman-statis.update', $item) }}" class="space-y-4">
                             @csrf @method('PUT')
                             <x-input label="Judul" name="judul" :value="$item->judul" wajib />
-                            <x-textarea label="Konten (HTML)" name="konten" :baris="8" wajib>{{ $item->konten }}</x-textarea>
-                            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <input type="checkbox" name="aktif" value="1" @checked($item->aktif) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400"> Aktifkan
-                            </label>
+                            <x-textarea label="Konten (HTML)" name="konten" :baris="8" wajib petunjuk="Konten ditulis sebagai HTML mentah.">{{ $item->konten }}</x-textarea>
+                            <x-checkbox name="aktif" :checked="$item->aktif">Aktifkan</x-checkbox>
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
                     </x-modal>
@@ -40,11 +38,11 @@
         </table>
     </x-kartu>
 
-    <x-modal nama="tambah" judul="Tambah Halaman Statis">
+    <x-modal nama="tambah" judul="Tambah Halaman Statis" lebar="max-w-2xl">
         <form method="POST" action="{{ route('admin.halaman-statis.store') }}" class="space-y-4">
             @csrf
             <x-input label="Judul" name="judul" wajib />
-            <x-textarea label="Konten (HTML)" name="konten" :baris="8" wajib />
+            <x-textarea label="Konten (HTML)" name="konten" :baris="8" wajib petunjuk="Konten ditulis sebagai HTML mentah." />
             <x-tombol type="submit" class="w-full">Simpan</x-tombol>
         </form>
     </x-modal>

@@ -22,17 +22,17 @@
                         </td>
                     </tr>
 
-                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Banner">
+                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Banner" lebar="max-w-xl">
                         <form method="POST" action="{{ route('admin.banner.update', $item) }}" class="space-y-4" enctype="multipart/form-data">
                             @csrf
-                            <x-input label="Judul" name="judul" :value="$item->judul" wajib />
-                            <x-input label="Subjudul" name="subjudul" :value="$item->subjudul" />
-                            <x-input label="Teks Tombol" name="teks_tombol" :value="$item->teks_tombol" />
-                            <x-input label="Tautan Tombol" name="tautan_tombol" :value="$item->tautan_tombol" />
-                            <x-input label="Gambar" name="gambar" type="file" />
-                            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <input type="checkbox" name="aktif" value="1" @checked($item->aktif) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400"> Aktifkan
-                            </label>
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <x-input label="Judul" name="judul" :value="$item->judul" wajib />
+                                <x-input label="Subjudul" name="subjudul" :value="$item->subjudul" />
+                                <x-input label="Teks Tombol" name="teks_tombol" :value="$item->teks_tombol" />
+                                <x-input label="Tautan Tombol" name="tautan_tombol" :value="$item->tautan_tombol" />
+                            </div>
+                            <x-unggah label="Gambar" name="gambar" jenis="gambar" accept="image/*" :pratinjau="$item->gambar ? \Illuminate\Support\Facades\Storage::url($item->gambar) : null" />
+                            <x-checkbox name="aktif" :checked="$item->aktif">Aktifkan</x-checkbox>
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
                     </x-modal>
@@ -43,14 +43,16 @@
         </table>
     </x-kartu>
 
-    <x-modal nama="tambah" judul="Tambah Banner">
+    <x-modal nama="tambah" judul="Tambah Banner" lebar="max-w-xl">
         <form method="POST" action="{{ route('admin.banner.store') }}" class="space-y-4" enctype="multipart/form-data">
             @csrf
-            <x-input label="Judul" name="judul" wajib />
-            <x-input label="Subjudul" name="subjudul" />
-            <x-input label="Teks Tombol" name="teks_tombol" />
-            <x-input label="Tautan Tombol" name="tautan_tombol" />
-            <x-input label="Gambar" name="gambar" type="file" />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-input label="Judul" name="judul" wajib />
+                <x-input label="Subjudul" name="subjudul" />
+                <x-input label="Teks Tombol" name="teks_tombol" />
+                <x-input label="Tautan Tombol" name="tautan_tombol" />
+            </div>
+            <x-unggah label="Gambar" name="gambar" jenis="gambar" accept="image/*" />
             <x-tombol type="submit" class="w-full">Simpan</x-tombol>
         </form>
     </x-modal>

@@ -50,10 +50,7 @@
         </div>
 
         <div class="flex items-center justify-between gap-3">
-            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <input type="checkbox" name="ingat_saya" class="rounded border-slate-300 text-teal-700 dark:text-teal-400 focus:ring-teal-600 dark:border-slate-600 dark:bg-slate-800">
-                Ingat saya
-            </label>
+            <x-checkbox name="ingat_saya">Ingat saya</x-checkbox>
             <a href="{{ route('lupa-kata-sandi') }}" class="text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">
                 Lupa kata sandi?
             </a>

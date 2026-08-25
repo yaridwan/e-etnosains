@@ -8,7 +8,7 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-input label="Nama Kelas" name="nama_kelas" wajib placeholder="Contoh: BIOLOGI X-A" />
                 <x-select label="Mata Pelajaran" name="id_mata_pelajaran" wajib :opsi="$mataPelajaran->pluck('nama_mata_pelajaran', 'id')" />
-                <x-input label="Tahun Ajaran" name="tahun_ajaran" placeholder="Contoh: 2026/2027" class="sm:col-span-2" />
+                <div class="sm:col-span-2"><x-input label="Tahun Ajaran" name="tahun_ajaran" placeholder="Contoh: 2026/2027" /></div>
             </div>
             <x-textarea label="Deskripsi" name="deskripsi" />
         </x-kartu>

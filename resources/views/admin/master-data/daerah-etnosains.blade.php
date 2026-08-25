@@ -23,13 +23,15 @@
                         </td>
                     </tr>
 
-                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Daerah Etnosains">
+                    <x-modal :nama="'edit-'.$item->id" judul="Ubah Daerah Etnosains" lebar="max-w-xl">
                         <form method="POST" action="{{ route('admin.daerah-etnosains.update', $item) }}" class="space-y-4">
                             @csrf @method('PUT')
-                            <x-input label="Provinsi" name="provinsi" :value="$item->provinsi" wajib />
-                            <x-input label="Kabupaten/Kota" name="kabupaten_kota" :value="$item->kabupaten_kota" />
-                            <x-input label="Kecamatan" name="kecamatan" :value="$item->kecamatan" />
-                            <x-input label="Desa/Kelurahan" name="desa_kelurahan" :value="$item->desa_kelurahan" />
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <x-input label="Provinsi" name="provinsi" :value="$item->provinsi" wajib />
+                                <x-input label="Kabupaten/Kota" name="kabupaten_kota" :value="$item->kabupaten_kota" />
+                                <x-input label="Kecamatan" name="kecamatan" :value="$item->kecamatan" />
+                                <x-input label="Desa/Kelurahan" name="desa_kelurahan" :value="$item->desa_kelurahan" />
+                            </div>
                             <x-input label="Nama Kearifan Lokal" name="nama_kearifan_lokal" :value="$item->nama_kearifan_lokal" />
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
@@ -41,13 +43,15 @@
         </table>
     </x-kartu>
 
-    <x-modal nama="tambah" judul="Tambah Daerah Etnosains">
+    <x-modal nama="tambah" judul="Tambah Daerah Etnosains" lebar="max-w-xl">
         <form method="POST" action="{{ route('admin.daerah-etnosains.store') }}" class="space-y-4">
             @csrf
-            <x-input label="Provinsi" name="provinsi" wajib />
-            <x-input label="Kabupaten/Kota" name="kabupaten_kota" />
-            <x-input label="Kecamatan" name="kecamatan" />
-            <x-input label="Desa/Kelurahan" name="desa_kelurahan" />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-input label="Provinsi" name="provinsi" wajib />
+                <x-input label="Kabupaten/Kota" name="kabupaten_kota" />
+                <x-input label="Kecamatan" name="kecamatan" />
+                <x-input label="Desa/Kelurahan" name="desa_kelurahan" />
+            </div>
             <x-input label="Nama Kearifan Lokal" name="nama_kearifan_lokal" />
             <x-tombol type="submit" class="w-full">Simpan</x-tombol>
         </form>

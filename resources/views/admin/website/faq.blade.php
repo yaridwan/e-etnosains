@@ -28,10 +28,7 @@
                             <x-input label="Pertanyaan" name="pertanyaan" :value="$item->pertanyaan" wajib />
                             <x-textarea label="Jawaban" name="jawaban" wajib>{{ $item->jawaban }}</x-textarea>
                             <x-input label="Urutan" name="urutan" type="number" :value="$item->urutan" />
-                            <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <input type="checkbox" name="aktif" value="1" @checked($item->aktif) class="rounded border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400">
-                                Aktifkan
-                            </label>
+                            <x-checkbox name="aktif" :checked="$item->aktif">Aktifkan</x-checkbox>
                             <x-tombol type="submit" class="w-full">Simpan Perubahan</x-tombol>
                         </form>
                     </x-modal>
