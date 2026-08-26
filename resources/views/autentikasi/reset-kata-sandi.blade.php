@@ -1,4 +1,5 @@
 <x-layout-auth judul-seo="Atur Ulang Kata Sandi">
+    <x-lencana-ikon nama="gembok" warna="amber" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Atur Ulang Kata Sandi</h1>
 
     <form method="POST" action="{{ route('reset-kata-sandi.proses') }}" class="mt-6 space-y-4">

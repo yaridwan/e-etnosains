@@ -1,4 +1,5 @@
 <x-layout-auth judul-seo="Daftar sebagai Siswa" lebar="max-w-2xl">
+    <x-lencana-ikon nama="lingkaran-pengguna" warna="violet" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Siswa</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Mulai belajar sains lewat kearifan lokal Indonesia.</p>
 

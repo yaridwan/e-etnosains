@@ -1,4 +1,5 @@
 <x-layout-auth judul-seo="Daftar sebagai Guru" lebar="max-w-2xl">
+    <x-lencana-ikon nama="topi" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Guru</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
 

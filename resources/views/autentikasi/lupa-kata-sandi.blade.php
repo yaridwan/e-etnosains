@@ -1,4 +1,5 @@
 <x-layout-auth judul-seo="Lupa Kata Sandi">
+    <x-lencana-ikon nama="gembok" warna="amber" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Lupa Kata Sandi</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Masukkan email Anda, kami akan mengirimkan tautan atur ulang kata sandi.</p>
 

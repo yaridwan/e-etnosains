@@ -46,6 +46,8 @@
         'centang' => '<circle cx="12" cy="12" r="8.25"/><path d="m8.25 12.25 2.5 2.5 5-5.5"/>',
         'silang' => '<circle cx="12" cy="12" r="8.25"/><path d="m9 9 6 6M15 9l-6 6"/>',
         'unduh' => '<path d="M12 3.5v11.5M8 11.5l4 4 4-4"/><path d="M4.5 17v2A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5v-2"/>',
+        'gembok' => '<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><path d="M12 14.25v2.5"/>',
+        'amplop' => '<rect x="3.5" y="5.5" width="17" height="13" rx="1.75"/><path d="m4.5 7 7.5 6 7.5-6"/>',
         default => '',
     };
 @endphp
