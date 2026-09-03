@@ -11,7 +11,7 @@
     <nav class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
         {{-- Merek: whitespace-nowrap mencegah nama aplikasi patah menjadi dua baris --}}
         <a href="{{ route('beranda') }}" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap">
-            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-700 text-sm font-bold text-white shadow-sm">E</span>
+            <x-logo-aplikasi ukuran="h-9 w-9" />
             <span class="text-base font-bold tracking-tight text-teal-800 dark:text-teal-300">
                 {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
             </span>

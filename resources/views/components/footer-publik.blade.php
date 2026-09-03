@@ -10,7 +10,7 @@
         <div class="grid grid-cols-1 gap-10 md:grid-cols-4">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-2.5">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-700 text-sm font-bold text-white">E</span>
+                    <x-logo-aplikasi ukuran="h-9 w-9" />
                     <span class="text-base font-bold tracking-tight text-teal-800 dark:text-teal-300">
                         {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
                     </span>

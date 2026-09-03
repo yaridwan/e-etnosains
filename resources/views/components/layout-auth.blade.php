@@ -7,7 +7,7 @@
         </div>
 
         <a href="{{ route('beranda') }}" class="mb-8 flex items-center gap-2.5">
-            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-700 text-base font-bold text-white shadow-sm">E</span>
+            <x-logo-aplikasi ukuran="h-10 w-10" teks="text-base" />
             <span class="text-xl font-bold tracking-tight text-teal-800 dark:text-teal-300">
                 {{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}
             </span>

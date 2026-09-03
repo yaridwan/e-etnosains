@@ -20,7 +20,11 @@
         <meta name="robots" content="noindex, nofollow">
     @endif
 
-    <link rel="icon" href="data:image/svg+xml,{{ rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="%230f766e"/><text x="12" y="17" font-size="14" text-anchor="middle" fill="white" font-family="sans-serif">E</text></svg>') }}">
+    @if(pengaturan('favicon'))
+        <link rel="icon" href="{{ \Illuminate\Support\Facades\Storage::url(pengaturan('favicon')) }}">
+    @else
+        <link rel="icon" href="data:image/svg+xml,{{ rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="%230f766e"/><text x="12" y="17" font-size="14" text-anchor="middle" fill="white" font-family="sans-serif">E</text></svg>') }}">
+    @endif
 
     {{-- Dijalankan sebelum render agar tidak terjadi kedip putih saat mode gelap aktif. --}}
     <script>

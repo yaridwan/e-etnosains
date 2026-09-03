@@ -7,7 +7,7 @@
         {{-- Sidebar desktop --}}
         <aside class="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-900">
             <a href="{{ route('beranda') }}" class="flex h-16 items-center gap-2.5 whitespace-nowrap border-b border-slate-100 px-6 dark:border-slate-800">
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-sm font-bold text-white">E</span>
+                <x-logo-aplikasi ukuran="h-8 w-8" bulat="rounded-lg" />
                 <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
             </a>
 
@@ -46,7 +46,10 @@
 
             <aside x-show="sidebarTerbuka" x-transition.origin.left class="relative flex h-full w-72 flex-col bg-white dark:bg-slate-900">
                 <div class="flex h-16 items-center justify-between border-b border-slate-100 px-6 dark:border-slate-800">
-                    <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
+                    <div class="flex items-center gap-2.5">
+                        <x-logo-aplikasi ukuran="h-8 w-8" bulat="rounded-lg" />
+                        <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
+                    </div>
                     <button @click="sidebarTerbuka = false" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Tutup menu">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
                     </button>
