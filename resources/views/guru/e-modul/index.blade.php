@@ -8,6 +8,7 @@
         @if($eModul->isEmpty())
             <x-empty-state judul="Belum ada E-Modul." deskripsi="Mulai bagikan pembelajaran berbasis etnosains Anda." teks-tombol="Buat E-Modul Pertama" :tautan-tombol="route('guru.e-modul.create')" />
         @else
+            <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                     <tr><th class="pb-2">Judul</th><th class="pb-2">Mata Pelajaran</th><th class="pb-2">Status</th><th class="pb-2">Dilihat</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -30,6 +31,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             <div class="mt-4">{{ $eModul->links() }}</div>
         @endif
     </x-kartu>

@@ -12,6 +12,7 @@
     </form>
 
     <x-kartu class="mt-6">
+        <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Nama Topik</th><th class="pb-2">Deskripsi</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -42,6 +43,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
 
         <div class="mt-4">{{ $data->links() }}</div>
     </x-kartu>

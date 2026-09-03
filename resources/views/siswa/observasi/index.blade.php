@@ -5,6 +5,7 @@
         @if($observasi->isEmpty())
             <x-empty-state judul="Belum ada aktivitas observasi tersedia." />
         @else
+            <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                     <tr><th class="pb-2">Judul</th><th class="pb-2">Batas Waktu</th><th class="pb-2">Status</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -27,6 +28,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             <div class="mt-4">{{ $observasi->links() }}</div>
         @endif
     </x-kartu>

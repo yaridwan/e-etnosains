@@ -10,6 +10,7 @@
 
     <x-kartu class="mt-6">
         <h2 class="font-semibold text-slate-800 dark:text-slate-100">Pengumpulan Siswa</h2>
+        <div class="overflow-x-auto">
         <table class="mt-4 w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Siswa</th><th class="pb-2">Status</th><th class="pb-2">Nilai</th><th class="pb-2">Berkas</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -45,5 +46,6 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </x-kartu>
 </x-layout-dashboard>

@@ -19,6 +19,7 @@
     </form>
 
     <x-kartu class="mt-6">
+        <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Waktu</th><th class="pb-2">Pengguna</th><th class="pb-2">Aktivitas</th><th class="pb-2">Modul</th></tr>
@@ -36,6 +37,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
 
         <div class="mt-4">{{ $audit->links() }}</div>
     </x-kartu>

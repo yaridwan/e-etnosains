@@ -13,6 +13,7 @@
     </form>
 
     <x-kartu class="mt-6">
+        <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                 <tr><th class="pb-2">Nama</th><th class="pb-2">Instansi</th><th class="pb-2">Status</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -39,6 +40,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
 
         <div class="mt-4">{{ $verifikasi->links() }}</div>
     </x-kartu>

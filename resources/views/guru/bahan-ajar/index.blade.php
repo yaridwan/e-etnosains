@@ -8,6 +8,7 @@
         @if($bahanAjar->isEmpty())
             <x-empty-state judul="Belum ada bahan ajar." teks-tombol="Tambah Bahan Ajar" :tautan-tombol="route('guru.bahan-ajar.create')" />
         @else
+            <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
                     <tr><th class="pb-2">Judul</th><th class="pb-2">Mata Pelajaran</th><th class="pb-2">Jenis</th><th class="pb-2 text-right">Aksi</th></tr>
@@ -28,6 +29,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             <div class="mt-4">{{ $bahanAjar->links() }}</div>
         @endif
     </x-kartu>
