@@ -3,6 +3,9 @@
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tinjau ulasan siswa sebelum tampil di halaman publik.</p>
 
     <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari komentar/pengulas..." />
+        </div>
         <div class="w-full sm:w-56">
             <x-select name="status" placeholder="Semua Status" :opsi="['menunggu' => 'Menunggu', 'disetujui' => 'Disetujui', 'ditolak' => 'Ditolak']" :selected="request('status')" />
         </div>
@@ -11,7 +14,7 @@
 
     <x-kartu class="mt-6">
         @if($ulasan->isEmpty())
-            <x-empty-state judul="Belum ada ulasan." deskripsi="Ulasan dari siswa akan muncul di sini untuk dimoderasi." />
+            <x-empty-state judul="Belum ada ulasan." deskripsi="{{ request('q') || request('status') ? 'Tidak ada ulasan yang cocok dengan filter.' : 'Ulasan dari siswa akan muncul di sini untuk dimoderasi.' }}" />
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">

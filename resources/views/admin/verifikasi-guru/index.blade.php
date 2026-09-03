@@ -2,6 +2,16 @@
     <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Verifikasi Guru</h1>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tinjau dan setujui pendaftaran akun guru baru.</p>
 
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama/email guru..." />
+        </div>
+        <div class="w-full sm:w-48">
+            <x-select name="status" placeholder="Semua Status" :opsi="['menunggu' => 'Menunggu', 'perlu_perbaikan' => 'Perlu Perbaikan', 'disetujui' => 'Disetujui', 'ditolak' => 'Ditolak']" :selected="request('status')" />
+        </div>
+        <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
+    </form>
+
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
@@ -25,7 +35,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4"><x-empty-state judul="Belum ada pendaftaran guru." /></td></tr>
+                    <tr><td colspan="4"><x-empty-state judul="Belum ada pendaftaran guru." deskripsi="{{ request('q') || request('status') ? 'Tidak ada pendaftaran yang cocok dengan filter.' : null }}" /></td></tr>
                 @endforelse
             </tbody>
         </table>

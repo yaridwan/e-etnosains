@@ -11,10 +11,17 @@ use Illuminate\View\View;
 
 class TopikEtnosainsController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = TopikEtnosains::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('nama_topik', 'like', "%{$kataKunci}%")->orWhere('deskripsi', 'like', "%{$kataKunci}%"));
+        }
+
         return view('admin.master-data.topik-etnosains', [
-            'data' => TopikEtnosains::orderBy('nama_topik')->get(),
+            'data' => $query->orderBy('nama_topik')->paginate(15)->withQueryString(),
         ]);
     }
 

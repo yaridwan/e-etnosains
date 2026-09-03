@@ -10,10 +10,21 @@ use Illuminate\View\View;
 
 class InstansiPendidikanController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = InstansiPendidikan::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('nama_instansi', 'like', "%{$kataKunci}%")->orWhere('kota', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('jenis_instansi')) {
+            $query->where('jenis_instansi', $request->string('jenis_instansi'));
+        }
+
         return view('admin.master-data.instansi-pendidikan', [
-            'data' => InstansiPendidikan::orderBy('nama_instansi')->get(),
+            'data' => $query->orderBy('nama_instansi')->paginate(15)->withQueryString(),
         ]);
     }
 

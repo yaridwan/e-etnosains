@@ -4,6 +4,13 @@
         <x-tombol x-data @click="$dispatch('buka-modal', 'tambah')">Tambah Mata Pelajaran</x-tombol>
     </div>
 
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari mata pelajaran..." />
+        </div>
+        <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
+    </form>
+
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
@@ -29,10 +36,12 @@
                         </form>
                     </x-modal>
                 @empty
-                    <tr><td colspan="2"><x-empty-state judul="Belum ada mata pelajaran." /></td></tr>
+                    <tr><td colspan="2"><x-empty-state judul="Belum ada mata pelajaran." deskripsi="{{ request('q') ? 'Tidak ada mata pelajaran yang cocok dengan pencarian.' : null }}" /></td></tr>
                 @endforelse
             </tbody>
         </table>
+
+        <div class="mt-4">{{ $data->links() }}</div>
     </x-kartu>
 
     <x-modal nama="tambah" judul="Tambah Mata Pelajaran">

@@ -11,9 +11,22 @@ use Illuminate\View\View;
 
 class HalamanStatisController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.website.halaman-statis', ['data' => HalamanStatis::orderBy('judul')->get()]);
+        $query = HalamanStatis::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('judul', 'like', "%{$kataKunci}%")->orWhere('konten', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->string('status') === 'aktif');
+        }
+
+        return view('admin.website.halaman-statis', [
+            'data' => $query->orderBy('judul')->paginate(15)->withQueryString(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse

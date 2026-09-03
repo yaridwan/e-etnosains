@@ -59,4 +59,27 @@ class VerifikasiGuruTest extends TestCase
             ->get(route('admin.verifikasi-guru.index'))
             ->assertForbidden();
     }
+
+    public function test_filter_status_menampilkan_hanya_guru_yang_cocok(): void
+    {
+        $admin = $this->buatAdmin();
+        $this->buatGuru(['nama_lengkap' => 'Guru Menunggu Uji'], terverifikasi: false);
+        $guruDisetujui = $this->buatGuru(['nama_lengkap' => 'Guru Disetujui Uji'], terverifikasi: true);
+        $guruDisetujui->verifikasiGuru->update(['status' => StatusVerifikasiGuru::Disetujui]);
+
+        $respons = $this->actingAs($admin)->get(route('admin.verifikasi-guru.index', ['status' => 'menunggu']));
+
+        $respons->assertOk()->assertSee('Guru Menunggu Uji')->assertDontSee('Guru Disetujui Uji');
+    }
+
+    public function test_pencarian_nama_guru_pada_verifikasi(): void
+    {
+        $admin = $this->buatAdmin();
+        $this->buatGuru(['nama_lengkap' => 'Siti Rahayu Uji'], terverifikasi: false);
+        $this->buatGuru(['nama_lengkap' => 'Bambang Wijaya Uji'], terverifikasi: false);
+
+        $respons = $this->actingAs($admin)->get(route('admin.verifikasi-guru.index', ['q' => 'Siti Rahayu']));
+
+        $respons->assertOk()->assertSee('Siti Rahayu Uji')->assertDontSee('Bambang Wijaya Uji');
+    }
 }

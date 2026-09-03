@@ -10,9 +10,22 @@ use Illuminate\View\View;
 
 class TestimoniController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.website.testimoni', ['data' => Testimoni::orderBy('urutan')->get()]);
+        $query = Testimoni::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('nama', 'like', "%{$kataKunci}%")->orWhere('isi_testimoni', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->string('status') === 'aktif');
+        }
+
+        return view('admin.website.testimoni', [
+            'data' => $query->orderBy('urutan')->paginate(15)->withQueryString(),
+        ]);
     }
 
     private function aturan(): array

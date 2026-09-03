@@ -139,6 +139,28 @@ class EModulReviewTest extends TestCase
         $this->assertSame(StatusPublikasi::Dijadwalkan, $eModulBelumWaktunya->fresh()->status_publikasi);
     }
 
+    public function test_pencarian_judul_pada_tinjau_e_modul(): void
+    {
+        $admin = $this->buatAdmin();
+        $guru = $this->buatGuru();
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Diajukan,
+            'judul' => 'Sains dalam Kerajinan Anyaman Bambu',
+        ]);
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Diajukan,
+            'judul' => 'Konservasi Air Tradisional',
+        ]);
+
+        $respons = $this->actingAs($admin)->get(route('admin.tinjau-e-modul.index', ['q' => 'Anyaman Bambu']));
+
+        $respons->assertOk()->assertSee('Sains dalam Kerajinan Anyaman Bambu')->assertDontSee('Konservasi Air Tradisional');
+    }
+
     public function test_administrator_dapat_membatalkan_penjadwalan_terbit(): void
     {
         $admin = $this->buatAdmin();

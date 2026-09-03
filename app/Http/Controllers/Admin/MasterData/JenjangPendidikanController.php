@@ -11,10 +11,16 @@ use Illuminate\View\View;
 
 class JenjangPendidikanController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = JenjangPendidikan::query();
+
+        if ($request->filled('q')) {
+            $query->where('nama_jenjang', 'like', '%'.$request->string('q').'%');
+        }
+
         return view('admin.master-data.jenjang-pendidikan', [
-            'data' => JenjangPendidikan::orderBy('urutan')->get(),
+            'data' => $query->orderBy('urutan')->paginate(15)->withQueryString(),
         ]);
     }
 

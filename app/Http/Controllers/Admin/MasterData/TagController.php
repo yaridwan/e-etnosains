@@ -11,10 +11,16 @@ use Illuminate\View\View;
 
 class TagController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = Tag::query();
+
+        if ($request->filled('q')) {
+            $query->where('nama_tag', 'like', '%'.$request->string('q').'%');
+        }
+
         return view('admin.master-data.tag', [
-            'data' => Tag::orderBy('nama_tag')->get(),
+            'data' => $query->orderBy('nama_tag')->paginate(15)->withQueryString(),
         ]);
     }
 

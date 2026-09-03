@@ -10,10 +10,20 @@ use Illuminate\View\View;
 
 class DaerahEtnosainsController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = DaerahEtnosains::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q
+                ->where('provinsi', 'like', "%{$kataKunci}%")
+                ->orWhere('kabupaten_kota', 'like', "%{$kataKunci}%")
+                ->orWhere('nama_kearifan_lokal', 'like', "%{$kataKunci}%"));
+        }
+
         return view('admin.master-data.daerah-etnosains', [
-            'data' => DaerahEtnosains::orderBy('provinsi')->get(),
+            'data' => $query->orderBy('provinsi')->paginate(15)->withQueryString(),
         ]);
     }
 

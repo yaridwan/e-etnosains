@@ -10,9 +10,22 @@ use Illuminate\View\View;
 
 class FaqController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.website.faq', ['data' => Faq::orderBy('urutan')->get()]);
+        $query = Faq::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('pertanyaan', 'like', "%{$kataKunci}%")->orWhere('jawaban', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->string('status') === 'aktif');
+        }
+
+        return view('admin.website.faq', [
+            'data' => $query->orderBy('urutan')->paginate(15)->withQueryString(),
+        ]);
     }
 
     private function aturan(): array

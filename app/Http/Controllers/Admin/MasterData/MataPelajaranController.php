@@ -11,10 +11,16 @@ use Illuminate\View\View;
 
 class MataPelajaranController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = MataPelajaran::query();
+
+        if ($request->filled('q')) {
+            $query->where('nama_mata_pelajaran', 'like', '%'.$request->string('q').'%');
+        }
+
         return view('admin.master-data.mata-pelajaran', [
-            'data' => MataPelajaran::orderBy('nama_mata_pelajaran')->get(),
+            'data' => $query->orderBy('nama_mata_pelajaran')->paginate(15)->withQueryString(),
         ]);
     }
 

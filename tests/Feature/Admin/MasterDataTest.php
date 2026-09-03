@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\InstansiPendidikan;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Concerns\MembuatDataDasar;
@@ -57,5 +58,27 @@ class MasterDataTest extends TestCase
         $this->actingAs($siswa)
             ->get(route('admin.mata-pelajaran.index'))
             ->assertForbidden();
+    }
+
+    public function test_pencarian_tag_hanya_menampilkan_yang_cocok(): void
+    {
+        $admin = $this->buatAdmin();
+        Tag::create(['nama_tag' => 'Kearifan Lokal', 'alamat_tautan' => 'kearifan-lokal']);
+        Tag::create(['nama_tag' => 'Konservasi Air', 'alamat_tautan' => 'konservasi-air']);
+
+        $respons = $this->actingAs($admin)->get(route('admin.tag.index', ['q' => 'Kearifan']));
+
+        $respons->assertOk()->assertSee('Kearifan Lokal')->assertDontSee('Konservasi Air');
+    }
+
+    public function test_filter_jenis_instansi_pendidikan(): void
+    {
+        $admin = $this->buatAdmin();
+        InstansiPendidikan::factory()->create(['nama_instansi' => 'SMA Negeri Uji Coba', 'jenis_instansi' => 'SMA/MA']);
+        InstansiPendidikan::factory()->create(['nama_instansi' => 'SMK Negeri Uji Coba', 'jenis_instansi' => 'SMK']);
+
+        $respons = $this->actingAs($admin)->get(route('admin.instansi-pendidikan.index', ['jenis_instansi' => 'SMK']));
+
+        $respons->assertOk()->assertSee('SMK Negeri Uji Coba')->assertDontSee('SMA Negeri Uji Coba');
     }
 }

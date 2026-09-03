@@ -10,9 +10,26 @@ use Illuminate\View\View;
 
 class PengumumanController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.website.pengumuman', ['data' => Pengumuman::latest()->get()]);
+        $query = Pengumuman::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('judul', 'like', "%{$kataKunci}%")->orWhere('isi', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('target')) {
+            $query->where('target', $request->string('target'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->string('status') === 'aktif');
+        }
+
+        return view('admin.website.pengumuman', [
+            'data' => $query->latest()->paginate(15)->withQueryString(),
+        ]);
     }
 
     private function aturan(): array

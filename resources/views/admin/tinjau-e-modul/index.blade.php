@@ -7,6 +7,16 @@
         <x-tombol-ekspor rute="admin.tinjau-e-modul.ekspor" />
     </div>
 
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari judul/penulis..." />
+        </div>
+        <div class="w-full sm:w-52">
+            <x-select name="status" placeholder="Status Menunggu Aksi" :opsi="collect(\App\Enums\StatusPublikasi::cases())->mapWithKeys(fn ($status) => [$status->value => $status->label()])->all()" :selected="request('status')" />
+        </div>
+        <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
+    </form>
+
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
@@ -23,7 +33,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4"><x-empty-state judul="Tidak ada E-Modul yang perlu ditinjau." /></td></tr>
+                    <tr><td colspan="4"><x-empty-state judul="Tidak ada E-Modul yang perlu ditinjau." deskripsi="{{ request('q') || request('status') ? 'Tidak ada E-Modul yang cocok dengan filter.' : null }}" /></td></tr>
                 @endforelse
             </tbody>
         </table>

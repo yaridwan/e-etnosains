@@ -32,6 +32,13 @@ class EModulReviewController extends Controller
     {
         $query = EModul::with(['pengguna', 'mataPelajaran']);
 
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q
+                ->where('judul', 'like', "%{$kataKunci}%")
+                ->orWhereHas('pengguna', fn ($p) => $p->where('nama_lengkap', 'like', "%{$kataKunci}%")));
+        }
+
         if ($request->filled('status')) {
             $query->where('status_publikasi', $request->string('status'));
         } else {

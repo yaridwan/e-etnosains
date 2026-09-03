@@ -11,9 +11,22 @@ use Illuminate\View\View;
 
 class BannerController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.website.banner', ['data' => Banner::orderBy('urutan')->get()]);
+        $query = Banner::query();
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q->where('judul', 'like', "%{$kataKunci}%")->orWhere('subjudul', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->string('status') === 'aktif');
+        }
+
+        return view('admin.website.banner', [
+            'data' => $query->orderBy('urutan')->paginate(15)->withQueryString(),
+        ]);
     }
 
     public function store(Request $request, UploadService $upload): RedirectResponse

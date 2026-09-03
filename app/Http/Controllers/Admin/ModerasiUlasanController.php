@@ -15,6 +15,13 @@ class ModerasiUlasanController extends Controller
     {
         $query = Ulasan::with('pengguna');
 
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->where(fn ($q) => $q
+                ->where('komentar', 'like', "%{$kataKunci}%")
+                ->orWhereHas('pengguna', fn ($p) => $p->where('nama_lengkap', 'like', "%{$kataKunci}%")));
+        }
+
         if ($request->filled('status')) {
             $query->where('status_moderasi', $request->string('status'));
         }

@@ -14,12 +14,25 @@ use Illuminate\View\View;
 
 class VerifikasiGuruController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = VerifikasiGuru::with(['pengguna.profilGuru.instansiPendidikan']);
+
+        if ($request->filled('q')) {
+            $kataKunci = $request->string('q');
+            $query->whereHas('pengguna', fn ($p) => $p
+                ->where('nama_lengkap', 'like', "%{$kataKunci}%")
+                ->orWhere('email', 'like', "%{$kataKunci}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->string('status'));
+        } else {
+            $query->orderByRaw("FIELD(status, 'menunggu', 'perlu_perbaikan', 'disetujui', 'ditolak')");
+        }
+
         return view('admin.verifikasi-guru.index', [
-            'verifikasi' => VerifikasiGuru::with(['pengguna.profilGuru.instansiPendidikan'])
-                ->orderByRaw("FIELD(status, 'menunggu', 'perlu_perbaikan', 'disetujui', 'ditolak')")
-                ->latest()->paginate(15),
+            'verifikasi' => $query->latest()->paginate(15)->withQueryString(),
         ]);
     }
 

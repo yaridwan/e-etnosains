@@ -4,6 +4,16 @@
         <x-tombol x-data @click="$dispatch('buka-modal', 'tambah')">Tambah FAQ</x-tombol>
     </div>
 
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari pertanyaan/jawaban..." />
+        </div>
+        <div class="w-full sm:w-44">
+            <x-select name="status" placeholder="Semua Status" :opsi="['aktif' => 'Aktif', 'nonaktif' => 'Nonaktif']" :selected="request('status')" />
+        </div>
+        <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
+    </form>
+
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
@@ -33,10 +43,12 @@
                         </form>
                     </x-modal>
                 @empty
-                    <tr><td colspan="3"><x-empty-state judul="Belum ada FAQ." /></td></tr>
+                    <tr><td colspan="3"><x-empty-state judul="Belum ada FAQ." deskripsi="{{ request('q') || request('status') ? 'Tidak ada FAQ yang cocok dengan filter.' : null }}" /></td></tr>
                 @endforelse
             </tbody>
         </table>
+
+        <div class="mt-4">{{ $data->links() }}</div>
     </x-kartu>
 
     <x-modal nama="tambah" judul="Tambah FAQ">

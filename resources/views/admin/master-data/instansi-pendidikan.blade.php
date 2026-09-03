@@ -4,6 +4,16 @@
         <x-tombol x-data @click="$dispatch('buka-modal', 'tambah')">Tambah Instansi</x-tombol>
     </div>
 
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="w-full sm:w-64">
+            <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama instansi/kota..." />
+        </div>
+        <div class="w-full sm:w-48">
+            <x-select name="jenis_instansi" placeholder="Semua Jenis" :opsi="['SD/MI'=>'SD/MI','SMP/MTs'=>'SMP/MTs','SMA/MA'=>'SMA/MA','SMK'=>'SMK','Perguruan Tinggi'=>'Perguruan Tinggi']" :selected="request('jenis_instansi')" />
+        </div>
+        <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
+    </form>
+
     <x-kartu class="mt-6">
         <table class="w-full text-left text-sm">
             <thead class="text-xs uppercase text-slate-400 dark:text-slate-500">
@@ -37,10 +47,12 @@
                         </form>
                     </x-modal>
                 @empty
-                    <tr><td colspan="4"><x-empty-state judul="Belum ada instansi pendidikan." /></td></tr>
+                    <tr><td colspan="4"><x-empty-state judul="Belum ada instansi pendidikan." deskripsi="{{ request('q') || request('jenis_instansi') ? 'Tidak ada instansi yang cocok dengan filter.' : null }}" /></td></tr>
                 @endforelse
             </tbody>
         </table>
+
+        <div class="mt-4">{{ $data->links() }}</div>
     </x-kartu>
 
     <x-modal nama="tambah" judul="Tambah Instansi Pendidikan" lebar="max-w-xl">
