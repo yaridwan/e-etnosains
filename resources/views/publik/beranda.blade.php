@@ -17,17 +17,16 @@
                 </p>
 
                 <form action="{{ route('pencarian') }}" method="GET" class="mx-auto mt-8 flex max-w-xl gap-2">
-                    <input type="search" name="q" placeholder="Cari e-modul, topik, atau daerah..." class="flex-1 rounded-full border border-slate-200 dark:border-slate-800 px-5 py-3 text-sm shadow-sm focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600">
+                    <input type="search" name="q" placeholder="Cari e-modul, topik, atau daerah..." class="flex-1 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm text-slate-800 shadow-sm placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500">
                     <button type="submit" class="rounded-full bg-teal-700 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-800">Cari</button>
                 </form>
 
+                @php($tombolKedua = ($bannerAktif?->teks_tombol && $bannerAktif?->tautan_tombol && strcasecmp(trim($bannerAktif->teks_tombol), 'Jelajahi E-Modul') !== 0)
+                    ? ['teks' => $bannerAktif->teks_tombol, 'tautan' => $bannerAktif->tautan_tombol]
+                    : ['teks' => 'Daftar sebagai Guru', 'tautan' => route('daftar.guru')])
                 <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
                     <x-tombol :href="route('e-modul.index')">Jelajahi E-Modul</x-tombol>
-                    @if($bannerAktif?->teks_tombol && $bannerAktif?->tautan_tombol)
-                        <x-tombol :href="$bannerAktif->tautan_tombol" varian="sekunder">{{ $bannerAktif->teks_tombol }}</x-tombol>
-                    @else
-                        <x-tombol :href="route('daftar.guru')" varian="sekunder">Daftar sebagai Guru</x-tombol>
-                    @endif
+                    <x-tombol :href="$tombolKedua['tautan']" varian="sekunder">{{ $tombolKedua['teks'] }}</x-tombol>
                 </div>
 
                 <div class="mx-auto mt-12 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
