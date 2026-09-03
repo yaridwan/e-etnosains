@@ -4,7 +4,7 @@
     <section class="relative overflow-hidden bg-gradient-to-b from-teal-50 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
         @if($bannerAktif?->gambar)
             <img src="{{ \Illuminate\Support\Facades\Storage::url($bannerAktif->gambar) }}" alt="" class="absolute inset-0 h-full w-full object-cover">
-            <div class="absolute inset-0 bg-slate-900/70"></div>
+            <div class="absolute inset-0 bg-slate-900/85"></div>
         @endif
 
         <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
