@@ -3,7 +3,7 @@
 @php($belumDibaca = app(\App\Services\NotifikasiService::class)->jumlahBelumDibaca(auth()->user()))
 
 <x-layout-app :judul-seo="$judulSeo">
-    <div x-data="{ sidebarTerbuka: false }" class="flex min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div x-data="{ sidebarTerbuka: false }" class="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
         {{-- Sidebar desktop --}}
         <aside class="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-900">
             <a href="{{ route('beranda') }}" class="flex h-16 items-center gap-2.5 whitespace-nowrap border-b border-slate-100 px-6 dark:border-slate-800">
@@ -85,7 +85,7 @@
             </aside>
         </div>
 
-        <div class="flex min-w-0 flex-1 flex-col">
+        <div class="flex min-w-0 flex-1 flex-col overflow-y-auto">
             <header class="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur-md sm:px-6 dark:border-slate-800 dark:bg-slate-900/90">
                 <button @click="sidebarTerbuka = true" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 lg:hidden dark:border-slate-700 dark:text-slate-300" aria-label="Buka menu">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
