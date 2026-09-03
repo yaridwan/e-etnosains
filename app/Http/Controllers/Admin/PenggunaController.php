@@ -8,6 +8,8 @@ use App\Models\Pengguna;
 use App\Services\EksporService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password as AturanKataSandi;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -66,12 +68,60 @@ class PenggunaController extends Controller
         return view('admin.pengguna.show', ['pengguna' => $pengguna]);
     }
 
+    public function update(Request $request, Pengguna $pengguna): RedirectResponse
+    {
+        $data = $request->validate([
+            'nama_lengkap' => ['required', 'string', 'max:150'],
+            'email' => ['required', 'email', 'max:150', Rule::unique('pengguna', 'email')->ignore($pengguna->id)],
+            'nomor_telepon' => ['nullable', 'string', 'max:20'],
+        ]);
+
+        $pengguna->update($data);
+
+        return back()->with('status', 'Data pengguna berhasil diperbarui.');
+    }
+
+    public function ubahKataSandi(Request $request, Pengguna $pengguna): RedirectResponse
+    {
+        $data = $request->validate([
+            'kata_sandi' => ['required', 'confirmed', AturanKataSandi::min(8)],
+        ]);
+
+        $pengguna->update(['kata_sandi' => $data['kata_sandi']]);
+
+        return back()->with('status', 'Kata sandi pengguna berhasil diperbarui.');
+    }
+
     public function ubahStatus(Request $request, Pengguna $pengguna): RedirectResponse
     {
         $request->validate(['status_akun' => ['required', 'in:aktif,nonaktif']]);
 
+        if ($request->string('status_akun')->toString() === 'nonaktif' && $galat = $this->cegahAksiTerlarang($pengguna)) {
+            return $galat;
+        }
+
         $pengguna->update(['status_akun' => StatusAkun::from($request->string('status_akun')->toString())]);
 
         return back()->with('status', 'Status akun pengguna berhasil diperbarui.');
+    }
+
+    public function destroy(Pengguna $pengguna): RedirectResponse
+    {
+        if ($galat = $this->cegahAksiTerlarang($pengguna)) {
+            return $galat;
+        }
+
+        $pengguna->delete();
+
+        return redirect()->route('admin.pengguna.index')->with('status', 'Pengguna berhasil dihapus.');
+    }
+
+    private function cegahAksiTerlarang(Pengguna $pengguna): ?RedirectResponse
+    {
+        if ($pengguna->id === auth()->id()) {
+            return back()->with('galat', 'Anda tidak dapat menonaktifkan atau menghapus akun Anda sendiri.');
+        }
+
+        return null;
     }
 }

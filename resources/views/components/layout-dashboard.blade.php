@@ -161,6 +161,9 @@
                 @if(session('status'))
                     <x-alert jenis="sukses" class="mb-6">{{ session('status') }}</x-alert>
                 @endif
+                @if(session('galat'))
+                    <x-alert jenis="bahaya" class="mb-6">{{ session('galat') }}</x-alert>
+                @endif
 
                 {{ $slot }}
             </main>

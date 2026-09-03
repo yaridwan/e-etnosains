@@ -118,7 +118,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'peran:a
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::get('/pengguna/ekspor', [PenggunaController::class, 'ekspor'])->name('pengguna.ekspor');
     Route::get('/pengguna/{pengguna}', [PenggunaController::class, 'show'])->name('pengguna.show');
+    Route::put('/pengguna/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
+    Route::put('/pengguna/{pengguna}/kata-sandi', [PenggunaController::class, 'ubahKataSandi'])->name('pengguna.ubah-kata-sandi');
     Route::patch('/pengguna/{pengguna}/status', [PenggunaController::class, 'ubahStatus'])->name('pengguna.ubah-status');
+    Route::delete('/pengguna/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
     Route::post('/pengaturan', [PengaturanController::class, 'simpan'])->name('pengaturan.simpan');

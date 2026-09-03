@@ -30,7 +30,12 @@
                         <td class="py-3 text-slate-500 dark:text-slate-400">{{ $item->peran->pluck('nama_peran')->map(fn($p) => ucfirst($p))->implode(', ') }}</td>
                         <td class="py-3"><x-badge :warna="$item->status_akun->value === 'aktif' ? 'emerald' : 'slate'">{{ $item->status_akun->label() }}</x-badge></td>
                         <td class="py-3 text-right">
-                            <x-tombol-ikon :href="route('admin.pengguna.show', $item)" ikon="mata" label="Detail" />
+                            <div class="flex items-center justify-end gap-1">
+                                <x-tombol-ikon :href="route('admin.pengguna.show', $item)" ikon="mata" label="Detail" />
+                                @if($item->id !== auth()->id())
+                                    <x-form-hapus :aksi="route('admin.pengguna.destroy', $item)" pesan="Yakin ingin menghapus pengguna ini? Seluruh akses akunnya akan dicabut dan tindakan ini tidak dapat dibatalkan." />
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @empty
