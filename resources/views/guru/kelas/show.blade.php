@@ -87,6 +87,7 @@
                     <option value="e_modul">E-Modul</option>
                     <option value="lkpd">LKPD</option>
                     <option value="observasi">Observasi</option>
+                    <option value="evaluasi">Evaluasi</option>
                 </select>
             </div>
 
@@ -98,6 +99,9 @@
             </div>
             <div x-show="jenis === 'observasi'" x-cloak>
                 <x-select label="Pilih Observasi" name="id_referensi_observasi" :opsi="$observasiSaya->pluck('judul', 'id')" x-bind:name="jenis === 'observasi' ? 'id_referensi' : 'nonaktif_observasi'" />
+            </div>
+            <div x-show="jenis === 'evaluasi'" x-cloak>
+                <x-select label="Pilih Evaluasi" name="id_referensi_evaluasi" :opsi="$evaluasiSaya->pluck('judul', 'id')" x-bind:name="jenis === 'evaluasi' ? 'id_referensi' : 'nonaktif_evaluasi'" />
             </div>
 
             <x-tombol type="submit" class="w-full">Tambahkan</x-tombol>

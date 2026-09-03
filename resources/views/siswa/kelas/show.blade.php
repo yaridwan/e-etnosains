@@ -17,6 +17,8 @@
                             <a href="{{ route('e-modul.show', $item['model']) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Buka</a>
                         @elseif($item['jenisKonten'] === 'lkpd')
                             <a href="{{ route('lkpd.show', $item['model']) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Buka</a>
+                        @elseif($item['jenisKonten'] === 'evaluasi')
+                            <a href="{{ route('evaluasi.show', $item['model']) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Buka</a>
                         @else
                             <a href="{{ route('observasi.show', $item['model']) }}" class="text-teal-700 dark:text-teal-400 hover:underline">Buka</a>
                         @endif

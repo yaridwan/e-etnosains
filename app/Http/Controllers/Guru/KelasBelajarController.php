@@ -60,6 +60,7 @@ class KelasBelajarController extends Controller
             'eModulSaya' => $request->user()->eModul()->get(),
             'lkpdSaya' => $request->user()->lkpd()->get(),
             'observasiSaya' => $request->user()->observasi()->get(),
+            'evaluasiSaya' => $request->user()->evaluasi()->get(),
         ]);
     }
 
@@ -100,7 +101,7 @@ class KelasBelajarController extends Controller
         $this->pastikanPemilik($kelas);
 
         $data = $request->validate([
-            'jenis_konten' => ['required', 'in:e_modul,lkpd,observasi'],
+            'jenis_konten' => ['required', 'in:e_modul,lkpd,observasi,evaluasi'],
             'id_referensi' => ['required', 'integer'],
         ]);
 

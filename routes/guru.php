@@ -3,6 +3,7 @@
 use App\Http\Controllers\Guru\BahanAjarController;
 use App\Http\Controllers\Guru\DashboardController;
 use App\Http\Controllers\Guru\EModulController;
+use App\Http\Controllers\Guru\EvaluasiController;
 use App\Http\Controllers\Guru\KelasBelajarController;
 use App\Http\Controllers\Guru\LkpdController;
 use App\Http\Controllers\Guru\MenungguVerifikasiController;
@@ -32,6 +33,7 @@ Route::prefix('guru')->name('guru.')->middleware(['auth', 'verified', 'peran:gur
     Route::resource('video', VideoController::class)->except(['show']);
     Route::resource('poster', PosterController::class)->except(['show']);
     Route::resource('observasi', ObservasiController::class)->except(['show']);
+    Route::resource('evaluasi', EvaluasiController::class)->except(['show']);
 
     Route::resource('kelas', KelasBelajarController::class)->except(['edit'])->parameters(['kelas' => 'kelas']);
     Route::get('/kelas/{kelas}/ekspor-anggota', [KelasBelajarController::class, 'eksporAnggota'])->name('kelas.ekspor-anggota');

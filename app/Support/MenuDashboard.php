@@ -56,6 +56,7 @@ class MenuDashboard
                 self::item('Video Saya', route('guru.video.index'), request()->routeIs('guru.video.*'), 'putar'),
                 self::item('Poster Saya', route('guru.poster.index'), request()->routeIs('guru.poster.*'), 'gambar'),
                 self::item('Observasi Saya', route('guru.observasi.index'), request()->routeIs('guru.observasi.*'), 'mata'),
+                self::item('Evaluasi Saya', route('guru.evaluasi.index'), request()->routeIs('guru.evaluasi.*'), 'dokumen'),
             ],
             'Pembelajaran' => [
                 self::item('Kelas Saya', route('guru.kelas.index'), request()->routeIs('guru.kelas.*'), 'kelompok'),

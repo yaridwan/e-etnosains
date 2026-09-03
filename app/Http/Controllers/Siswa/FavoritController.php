@@ -25,7 +25,7 @@ class FavoritController extends Controller
     public function toggle(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'jenis_konten' => ['required', 'in:e_modul,lkpd,bahan_ajar,video_pembelajaran,poster,observasi'],
+            'jenis_konten' => ['required', 'in:e_modul,lkpd,bahan_ajar,video_pembelajaran,poster,observasi,evaluasi'],
             'id_referensi' => ['required', 'integer'],
         ]);
 

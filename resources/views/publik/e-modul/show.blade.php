@@ -44,10 +44,10 @@
                     </div>
                 </div>
 
-                @if($eModul->lkpd->isNotEmpty() || $eModul->video->isNotEmpty() || $eModul->observasi->isNotEmpty() || $eModul->poster->isNotEmpty())
+                @if($eModul->lkpd->isNotEmpty() || $eModul->video->isNotEmpty() || $eModul->observasi->isNotEmpty() || $eModul->poster->isNotEmpty() || $eModul->evaluasi->isNotEmpty())
                     <div class="mt-8">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Konten Pendukung</h2>
-                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">LKPD, observasi, video, dan poster yang menyertai E-Modul ini.</p>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">LKPD, observasi, video, poster, dan evaluasi yang menyertai E-Modul ini.</p>
 
                         <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                             @foreach($eModul->lkpd as $lkpd)
@@ -81,6 +81,13 @@
                                         <x-badge warna="amber">Poster</x-badge>
                                         <p class="mt-2 font-medium text-slate-800 dark:text-slate-100">{{ $poster->judul }}</p>
                                     </div>
+                                </a>
+                            @endforeach
+
+                            @foreach($eModul->evaluasi as $evaluasi)
+                                <a href="{{ route('evaluasi.show', $evaluasi) }}" class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 transition hover:border-teal-600 dark:hover:border-teal-500 hover:shadow-sm">
+                                    <x-badge warna="violet">Evaluasi</x-badge>
+                                    <p class="mt-2 font-medium text-slate-800 dark:text-slate-100">{{ $evaluasi->judul }}</p>
                                 </a>
                             @endforeach
                         </div>

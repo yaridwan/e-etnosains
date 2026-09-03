@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Publik\BahanAjarController;
 use App\Http\Controllers\Publik\EModulController;
+use App\Http\Controllers\Publik\EvaluasiController;
 use App\Http\Controllers\Publik\GuruProfilController;
 use App\Http\Controllers\Publik\LkpdController;
 use App\Http\Controllers\Publik\ObservasiController;
@@ -41,6 +42,12 @@ Route::prefix('poster')->name('poster.')->group(function () {
 Route::prefix('observasi')->name('observasi.')->group(function () {
     Route::get('/', [ObservasiController::class, 'index'])->name('index');
     Route::get('/{observasi:alamat_tautan}', [ObservasiController::class, 'show'])->name('show');
+});
+
+Route::prefix('evaluasi')->name('evaluasi.')->group(function () {
+    Route::get('/', [EvaluasiController::class, 'index'])->name('index');
+    Route::get('/{evaluasi:alamat_tautan}', [EvaluasiController::class, 'show'])->name('show');
+    Route::get('/{evaluasi:alamat_tautan}/unduh', [EvaluasiController::class, 'unduh'])->name('unduh');
 });
 
 Route::prefix('topik-etnosains')->name('topik-etnosains.')->group(function () {

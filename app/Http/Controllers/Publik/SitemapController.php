@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Publik;
 use App\Http\Controllers\Controller;
 use App\Models\BahanAjar;
 use App\Models\EModul;
+use App\Models\Evaluasi;
 use App\Models\HalamanStatis;
 use App\Models\Lkpd;
 use App\Models\Observasi;
@@ -25,6 +26,7 @@ class SitemapController extends Controller
             ['loc' => route('video.index'), 'lastmod' => now()],
             ['loc' => route('poster.index'), 'lastmod' => now()],
             ['loc' => route('observasi.index'), 'lastmod' => now()],
+            ['loc' => route('evaluasi.index'), 'lastmod' => now()],
             ['loc' => route('topik-etnosains.index'), 'lastmod' => now()],
             ['loc' => route('pencarian'), 'lastmod' => now()],
         ]);
@@ -48,6 +50,10 @@ class SitemapController extends Controller
             ]))
             ->concat(Observasi::dipublikasikan()->get(['alamat_tautan', 'diperbarui_pada'])->map(fn ($item) => [
                 'loc' => route('observasi.show', $item->alamat_tautan),
+                'lastmod' => $item->diperbarui_pada,
+            ]))
+            ->concat(Evaluasi::dipublikasikan()->get(['alamat_tautan', 'diperbarui_pada'])->map(fn ($item) => [
+                'loc' => route('evaluasi.show', $item->alamat_tautan),
                 'lastmod' => $item->diperbarui_pada,
             ]))
             ->concat(TopikEtnosains::all(['alamat_tautan', 'diperbarui_pada'])->map(fn ($item) => [

@@ -138,6 +138,11 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Observasi::class, 'id_pengguna');
     }
 
+    public function evaluasi(): HasMany
+    {
+        return $this->hasMany(Evaluasi::class, 'id_pengguna');
+    }
+
     public function kelasBelajar(): HasMany
     {
         return $this->hasMany(KelasBelajar::class, 'id_pengguna');

@@ -83,6 +83,11 @@ class JudulDemo
         return 'LKPD '.self::acak(self::AKTIVITAS_OBSERVASI);
     }
 
+    public static function evaluasi(): string
+    {
+        return 'Evaluasi '.self::acak(self::E_MODUL);
+    }
+
     public static function bahanAjar(): string
     {
         return self::acak(self::BAHAN_AJAR);

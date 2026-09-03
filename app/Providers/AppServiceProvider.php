@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\BahanAjar;
 use App\Models\EModul;
+use App\Models\Evaluasi;
 use App\Models\Lkpd;
 use App\Models\MenuNavigasi;
 use App\Models\Observasi;
@@ -54,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
             'video_pembelajaran' => VideoPembelajaran::class,
             'poster' => Poster::class,
             'observasi' => Observasi::class,
+            'evaluasi' => Evaluasi::class,
         ]);
 
         if ($this->app->isProduction()) {

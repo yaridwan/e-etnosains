@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             VideoPembelajaranSeeder::class,
             PosterSeeder::class,
             ObservasiSeeder::class,
+            EvaluasiSeeder::class,
             KontenTagSeeder::class,
 
             // Kelas & pembelajaran

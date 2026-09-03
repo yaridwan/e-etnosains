@@ -125,10 +125,10 @@
         <x-kartu class="mt-6">
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-slate-800 dark:text-slate-100">Konten Terkait</h2>
-                <p class="text-sm text-slate-400 dark:text-slate-500">LKPD, observasi, video, dan poster yang terhubung ke E-Modul ini</p>
+                <p class="text-sm text-slate-400 dark:text-slate-500">LKPD, observasi, video, poster, dan evaluasi yang terhubung ke E-Modul ini</p>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 <div>
                     <div class="flex items-center justify-between">
                         <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">LKPD</p>
@@ -179,6 +179,20 @@
                     <ul class="mt-2 space-y-1">
                         @forelse($eModul->poster as $poster)
                             <li><a href="{{ route('guru.poster.edit', $poster) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $poster->judul }}</a></li>
+                        @empty
+                            <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Evaluasi</p>
+                        <x-tombol :href="route('guru.evaluasi.create', ['e_modul' => $eModul->id])" varian="hantu" class="px-2! py-1! text-xs">+ Tambah</x-tombol>
+                    </div>
+                    <ul class="mt-2 space-y-1">
+                        @forelse($eModul->evaluasi as $evaluasi)
+                            <li><a href="{{ route('guru.evaluasi.edit', $evaluasi) }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">{{ $evaluasi->judul }}</a></li>
                         @empty
                             <li class="text-sm text-slate-400 dark:text-slate-500">Belum ada.</li>
                         @endforelse

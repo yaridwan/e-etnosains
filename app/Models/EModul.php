@@ -128,6 +128,11 @@ class EModul extends ModelDasarHapusLunak
         return $this->hasMany(Observasi::class, 'id_e_modul');
     }
 
+    public function evaluasi(): HasMany
+    {
+        return $this->hasMany(Evaluasi::class, 'id_e_modul');
+    }
+
     public function favorit(): MorphMany
     {
         return $this->morphMany(Favorit::class, 'konten', 'jenis_konten', 'id_referensi');

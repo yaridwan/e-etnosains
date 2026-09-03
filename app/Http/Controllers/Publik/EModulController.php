@@ -45,6 +45,7 @@ class EModulController extends Controller
             'video' => fn ($q) => $q->dipublikasikan(),
             'observasi' => fn ($q) => $q->dipublikasikan(),
             'poster' => fn ($q) => $q->dipublikasikan(),
+            'evaluasi' => fn ($q) => $q->dipublikasikan(),
         ]);
 
         $ulasan = $eModul->ulasan()->disetujui()->with('pengguna')->latest('dibuat_pada')->take(10)->get();

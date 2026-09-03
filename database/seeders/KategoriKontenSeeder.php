@@ -11,7 +11,7 @@ class KategoriKontenSeeder extends Seeder
     public function run(): void
     {
         foreach ([
-            'E-Modul', 'LKPD', 'Bahan Ajar', 'Video Pembelajaran', 'Poster', 'Observasi',
+            'E-Modul', 'LKPD', 'Bahan Ajar', 'Video Pembelajaran', 'Poster', 'Observasi', 'Evaluasi',
         ] as $nama) {
             KategoriKonten::query()->updateOrCreate(
                 ['alamat_tautan' => Str::slug($nama)],

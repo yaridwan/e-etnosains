@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use App\Models\BahanAjar;
 use App\Models\EModul;
+use App\Models\Evaluasi;
 use App\Models\Lkpd;
 use App\Models\Observasi;
 use App\Models\Poster;
@@ -17,6 +18,7 @@ enum JenisKonten: string
     case VideoPembelajaran = 'video_pembelajaran';
     case Poster = 'poster';
     case Observasi = 'observasi';
+    case Evaluasi = 'evaluasi';
 
     public function label(): string
     {
@@ -27,6 +29,7 @@ enum JenisKonten: string
             self::VideoPembelajaran => 'Video Pembelajaran',
             self::Poster => 'Poster',
             self::Observasi => 'Observasi',
+            self::Evaluasi => 'Evaluasi',
         };
     }
 
@@ -39,6 +42,7 @@ enum JenisKonten: string
             self::VideoPembelajaran => VideoPembelajaran::class,
             self::Poster => Poster::class,
             self::Observasi => Observasi::class,
+            self::Evaluasi => Evaluasi::class,
         };
     }
 }
