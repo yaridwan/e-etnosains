@@ -1,13 +1,19 @@
 <x-layout-publik>
+    @php($bannerAktif = $banner->first())
     <!-- Hero -->
     <section class="relative overflow-hidden bg-gradient-to-b from-teal-50 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
-        <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+        @if($bannerAktif?->gambar)
+            <img src="{{ \Illuminate\Support\Facades\Storage::url($bannerAktif->gambar) }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+            <div class="absolute inset-0 bg-slate-900/70"></div>
+        @endif
+
+        <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="mx-auto max-w-3xl text-center">
-                <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
-                    {{ $banner->first()->judul ?? 'Belajar Sains dari Kearifan Lokal' }}
+                <h1 @class(['text-4xl font-bold tracking-tight sm:text-5xl', 'text-white' => $bannerAktif?->gambar, 'text-slate-900 dark:text-slate-100' => ! $bannerAktif?->gambar])>
+                    {{ $bannerAktif->judul ?? 'Belajar Sains dari Kearifan Lokal' }}
                 </h1>
-                <p class="mt-6 text-lg text-slate-600 dark:text-slate-400">
-                    {{ $banner->first()->subjudul ?? 'Temukan e-modul, LKPD, bahan ajar, aktivitas observasi, dan video pembelajaran berbasis budaya serta kearifan lokal Indonesia.' }}
+                <p @class(['mt-6 text-lg', 'text-slate-100' => $bannerAktif?->gambar, 'text-slate-600 dark:text-slate-400' => ! $bannerAktif?->gambar])>
+                    {{ $bannerAktif->subjudul ?? 'Temukan e-modul, LKPD, bahan ajar, aktivitas observasi, dan video pembelajaran berbasis budaya serta kearifan lokal Indonesia.' }}
                 </p>
 
                 <form action="{{ route('pencarian') }}" method="GET" class="mx-auto mt-8 flex max-w-xl gap-2">
@@ -17,7 +23,11 @@
 
                 <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
                     <x-tombol :href="route('e-modul.index')">Jelajahi E-Modul</x-tombol>
-                    <x-tombol :href="route('daftar.guru')" varian="sekunder">Daftar sebagai Guru</x-tombol>
+                    @if($bannerAktif?->teks_tombol && $bannerAktif?->tautan_tombol)
+                        <x-tombol :href="$bannerAktif->tautan_tombol" varian="sekunder">{{ $bannerAktif->teks_tombol }}</x-tombol>
+                    @else
+                        <x-tombol :href="route('daftar.guru')" varian="sekunder">Daftar sebagai Guru</x-tombol>
+                    @endif
                 </div>
 
                 <div class="mx-auto mt-12 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
@@ -28,8 +38,8 @@
                         ['label' => 'Topik Etnosains', 'nilai' => $statistik['topik']],
                     ] as $item)
                         <div>
-                            <p class="text-2xl font-bold text-teal-800 dark:text-teal-300">{{ $item['nilai'] }}+</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ $item['label'] }}</p>
+                            <p @class(['text-2xl font-bold', 'text-white' => $bannerAktif?->gambar, 'text-teal-800 dark:text-teal-300' => ! $bannerAktif?->gambar])>{{ $item['nilai'] }}+</p>
+                            <p @class(['text-xs', 'text-slate-200' => $bannerAktif?->gambar, 'text-slate-500 dark:text-slate-400' => ! $bannerAktif?->gambar])>{{ $item['label'] }}</p>
                         </div>
                     @endforeach
                 </div>
