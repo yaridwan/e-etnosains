@@ -11,19 +11,19 @@
                 <span class="font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ pengaturan('nama_singkat', 'E-ETNOSAINS') }}</span>
             </a>
 
-            <nav class="flex-1 space-y-6 overflow-y-auto px-4 py-6">
+            <nav class="flex-1 overflow-y-auto px-4 py-6">
                 @foreach($menu as $kelompok => $item)
-                    <div>
+                    <div @class(['mt-6 border-t border-slate-100 pt-5 dark:border-slate-800' => ! $loop->first])>
                         @if(is_string($kelompok))
-                            <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
+                            <p class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
                         @endif
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             @foreach($item as $tautan)
                                 <a href="{{ $tautan['url'] }}"
                                    @class([
-                                       'group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
-                                       'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
-                                       'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100' => ! ($tautan['aktif'] ?? false),
+                                       'group flex items-center gap-2.5 rounded-md border-l-2 py-2 pl-3 pr-3 text-sm font-medium transition',
+                                       'border-teal-600 bg-teal-50 text-teal-800 dark:border-teal-400 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                       'border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100' => ! ($tautan['aktif'] ?? false),
                                    ])>
                                     <x-ikon :nama="$tautan['ikon'] ?? 'grid'"
                                         @class([
@@ -55,25 +55,25 @@
                     </button>
                 </div>
 
-                <nav class="flex-1 space-y-6 overflow-y-auto px-4 py-6">
+                <nav class="flex-1 overflow-y-auto px-4 py-6">
                     @foreach($menu as $kelompok => $item)
-                        <div>
+                        <div @class(['mt-6 border-t border-slate-100 pt-5 dark:border-slate-800' => ! $loop->first])>
                             @if(is_string($kelompok))
-                                <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
+                                <p class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ $kelompok }}</p>
                             @endif
-                            <div class="space-y-1">
+                            <div class="space-y-0.5">
                                 @foreach($item as $tautan)
                                     <a href="{{ $tautan['url'] }}"
                                        @class([
-                                           'group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition',
-                                           'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
-                                           'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' => ! ($tautan['aktif'] ?? false),
+                                           'group flex items-center gap-2.5 rounded-md border-l-2 py-2 pl-3 pr-3 text-sm font-medium transition',
+                                           'border-teal-600 bg-teal-50 text-teal-800 dark:border-teal-400 dark:bg-teal-950 dark:text-teal-300' => $tautan['aktif'] ?? false,
+                                           'border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100' => ! ($tautan['aktif'] ?? false),
                                        ])>
                                         <x-ikon :nama="$tautan['ikon'] ?? 'grid'"
                                             @class([
-                                                'h-[18px] w-[18px] shrink-0',
+                                                'h-[18px] w-[18px] shrink-0 transition',
                                                 'text-teal-700 dark:text-teal-300' => $tautan['aktif'] ?? false,
-                                                'text-slate-400 dark:text-slate-500' => ! ($tautan['aktif'] ?? false),
+                                                'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300' => ! ($tautan['aktif'] ?? false),
                                             ]) />
                                         <span class="truncate">{{ $tautan['label'] }}</span>
                                     </a>
