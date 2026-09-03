@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\PastikanGuruTerverifikasi;
 use App\Http\Middleware\PastikanPeran;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'peran' => PastikanPeran::class,
             'guru.terverifikasi' => PastikanGuruTerverifikasi::class,
+            // Rute notifikasi verifikasi email bernama "verifikasi-email.notice"
+            // (bukan "verification.notice" bawaan Laravel), jadi middleware
+            // "verified" harus diarahkan ke sana agar tidak 500 saat email
+            // pengguna belum terverifikasi.
+            'verified' => EnsureEmailIsVerified::redirectTo('verifikasi-email.notice'),
         ]);
 
         // Rute login bernama "masuk" (bukan "login" bawaan Laravel), jadi
