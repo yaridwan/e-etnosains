@@ -115,7 +115,8 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 
 - Landing page dinamis: banner, statistik riil dari database, E-Modul pilihan dan terbaru,
   topik etnosains populer, LKPD, observasi, testimoni, dan FAQ — semuanya dari database.
-- Katalog E-Modul, LKPD, Bahan Ajar, Video, Poster, Observasi, dan Topik Etnosains.
+- Katalog E-Modul, LKPD, Bahan Ajar, Video, Poster, Observasi, Evaluasi, dan Topik
+  Etnosains.
 - **Flipbook PDF** dengan efek balik halaman (PDF.js + page-flip), navigasi halaman,
   zoom, layar penuh, dukungan keyboard, dan mode pembaca vertikal otomatis di perangkat
   mobile.
@@ -147,7 +148,13 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 - Master data: jenjang pendidikan, mata pelajaran, topik etnosains, daerah etnosains,
   instansi pendidikan, dan tag.
 - Konten website: banner, testimoni, FAQ, halaman statis, pengumuman.
-- Moderasi ulasan, manajemen pengguna, pengaturan aplikasi, dan audit aktivitas.
+- **Manajemen pengguna penuh**: edit profil (nama, email, nomor telepon), atur ulang kata
+  sandi langsung dari admin, blokir/aktifkan akun, dan hapus (soft delete) — dengan
+  penjagaan agar admin tidak dapat memblokir atau menghapus akunnya sendiri.
+- Moderasi ulasan, pengaturan aplikasi, dan audit aktivitas.
+- Setiap halaman tabel admin memiliki pencarian dan filter sendiri (nama/email, peran,
+  status, tanggal, dsb.), dengan opsi **"Tampil Semua"** pada filter status agar data yang
+  di luar status "perlu tindakan" (draf, ditolak, diarsipkan) tetap bisa ditelusuri.
 
 ### Guru
 
@@ -160,7 +167,8 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
   observasi, video, dan poster yang terhubung ke E-Modul tersebut, serta kartu
   **Riwayat Versi Terbit** untuk membuka kembali versi yang pernah dipublikasikan.
 - CRUD LKPD (berkas maupun digital), bahan ajar, video YouTube (URL divalidasi dan
-  di-embed melalui `youtube-nocookie.com`), dan poster.
+  di-embed melalui `youtube-nocookie.com`), poster, dan **Evaluasi** (unggah berkas soal
+  formatif/sumatif berupa PDF, dengan alur publikasi yang sama seperti E-Modul).
 - **LKPD interaktif**: satu LKPD dapat dihubungkan ke satu atau lebih Observasi
   (instrumen dinamis dengan 11 tipe pertanyaan) lewat kolom `id_lkpd`. Guru membuatnya
   langsung dari form LKPD ("+ Buat Versi Interaktif"), dan siswa yang membuka halaman
@@ -311,6 +319,7 @@ Batasan integritas data yang ditegakkan dan diuji otomatis:
 | Video            | `video_pembelajaran`                                              |
 | Poster           | `poster`                                                          |
 | Observasi        | `observasi`, `butir_observasi`, `opsi_butir_observasi`            |
+| Evaluasi         | `evaluasi`                                                        |
 | Pengumpulan      | `pengumpulan_observasi`, `jawaban_observasi`, `dokumentasi_observasi` |
 | Kelas Belajar    | `kelas_belajar`, `anggota_kelas`, `konten_kelas`                  |
 | Tugas            | `tugas_kelas`, `pengumpulan_tugas`, `nilai_tugas`                 |
@@ -474,7 +483,7 @@ Seluruh nama tabel dan kolom menggunakan Bahasa Indonesia. Timestamp memakai
 kelas abstrak `App\Models\ModelDasar` dan `App\Models\ModelDasarHapusLunak`, bukan
 diulang di setiap model.
 
-Terdapat **61 tabel**: 53 tabel domain ditambah 8 tabel infrastruktur Laravel yang juga
+Terdapat **62 tabel**: 54 tabel domain ditambah 8 tabel infrastruktur Laravel yang juga
 di-Indonesiakan (`sesi`, `cache_aplikasi`, `cache_locks`, `antrian_tugas`,
 `kelompok_tugas`, `tugas_gagal`, `token_pengaturan_ulang_sandi`, dan `migrations`).
 Relasi utama:
@@ -574,6 +583,7 @@ unik, bukan `?id=`:
 | `/video`, `/video/{alamat_tautan}` | Video pembelajaran                  |
 | `/poster`                          | Galeri poster                       |
 | `/observasi`, `/observasi/{...}`   | Aktivitas observasi                 |
+| `/evaluasi`, `/evaluasi/{...}`     | Evaluasi (soal formatif/sumatif)    |
 | `/topik-etnosains`, `/topik-etnosains/{...}` | Topik etnosains           |
 | `/profil-guru/{id}`                | Profil publik guru                  |
 | `/halaman/{alamat_tautan}`         | Halaman statis (tentang, FAQ, dll.) |
@@ -606,15 +616,15 @@ app/
 │   │   └── Siswa/
 │   ├── Middleware/   # PastikanPeran, PastikanGuruTerverifikasi
 │   └── Requests/     # Auth/ dan Guru/
-├── Models/           # 52 berkas: 50 model + ModelDasar & ModelDasarHapusLunak
+├── Models/           # 54 berkas: 52 model + ModelDasar & ModelDasarHapusLunak
 ├── Providers/
 ├── Services/         # 6 service (lihat bagian Arsitektur)
 ├── Support/          # 6 kelas: MenuDashboard, CaptchaPenjumlahan, PembuatQrCode, dll.
 └── helpers.php       # pengaturan() dan pengaturan_aktif()
 
 database/
-├── factories/        # 11 factory
-├── migrations/       # 54 berkas migrasi
+├── factories/        # 12 factory
+├── migrations/       # 57 berkas migrasi
 └── seeders/          # 34 seeder + DatabaseSeeder
 
 lang/
@@ -768,7 +778,7 @@ ketergantungan antar tabel sehingga tidak menghasilkan kunci asing yatim:
    `DaerahEtnosainsSeeder`, `TagSeeder`
 3. **Pengguna** — `PenggunaSeeder`
 4. **Konten** — `EModulSeeder`, `LkpdSeeder`, `BahanAjarSeeder`, `VideoPembelajaranSeeder`,
-   `PosterSeeder`, `ObservasiSeeder`, `KontenTagSeeder`
+   `PosterSeeder`, `ObservasiSeeder`, `EvaluasiSeeder`, `KontenTagSeeder`
 5. **Kelas & pembelajaran** — `KelasBelajarSeeder`, `TugasKelasSeeder`,
    `PengumpulanObservasiSeeder`
 6. **Aktivitas** — `KemajuanBelajarSeeder`, `FavoritSeeder`, `UlasanSeeder`,
@@ -899,7 +909,7 @@ php artisan event:cache
 
 ## Testing
 
-Suite berisi **76 test** (231 asertion) yang berjalan terhadap database MySQL terpisah:
+Suite berisi **107 test** (312 asertion) yang berjalan terhadap database MySQL terpisah:
 
 ```bash
 php artisan test
@@ -918,17 +928,24 @@ Cakupan pengujian:
 | `Auth/MasukTest`                        | Login berhasil/gagal, pengalihan sesuai peran, logout, captcha (salah, kosong, tidak dapat dipakai ulang) |
 | `Auth/RegistrasiGuruTest`               | Registrasi guru, status menunggu verifikasi, email duplikat    |
 | `Auth/RegistrasiSiswaTest`              | Registrasi siswa aktif langsung beserta profil                 |
+| `Auth/VerifikasiEmailRedirectTest`      | Pengguna belum verifikasi email diarahkan ke halaman verifikasi, bukan error 500 |
 | `Admin/VerifikasiGuruTest`              | Setujui/tolak guru, larangan akses non-admin                   |
-| `Admin/EModulReviewTest`                | Setujui, minta perbaikan, riwayat status, draf tidak publik, jadwalkan/batalkan jadwal terbit, versi terbekukan saat terbit, perintah `e-modul:terbitkan-terjadwal` |
-| `Admin/MasterDataTest`                  | CRUD master data, larangan akses siswa                         |
+| `Admin/EModulReviewTest`                | Setujui, minta perbaikan, riwayat status, draf tidak publik, jadwalkan/batalkan jadwal terbit, versi terbekukan saat terbit, perintah `e-modul:terbitkan-terjadwal`, filter status default vs "Tampil Semua" |
+| `Admin/MasterDataTest`                  | CRUD master data, pencarian & filter, larangan akses siswa     |
+| `Admin/WebsiteKontenTest`               | CRUD konten website (banner, FAQ, testimoni, dll.) beserta filter |
+| `Admin/AuditAktivitasTest`              | Pencarian & filter log audit aktivitas                         |
+| `Admin/PenggunaTest`                    | Edit profil, ubah kata sandi, blokir, hapus (soft delete) pengguna, larangan admin memblokir/menghapus akun sendiri |
 | `Admin/EksporLaporanTest`               | Unduh laporan pengguna (XLSX/CSV) dan laporan E-Modul, larangan akses non-admin |
 | `Guru/EModulTest`                       | Buat draf + unggah PDF, ajukan, larangan lintas pemilik, gate verifikasi, simpan draf otomatis (tidak mengubah status/izin unduh), larangan autosave lintas pemilik |
+| `Guru/EvaluasiTest`                     | CRUD Evaluasi, unggah PDF, larangan lintas pemilik              |
+| `Guru/ObservasiTest`                    | Buat/ubah observasi beserta butir instrumen dan opsi jawaban pilihan ganda |
 | `Guru/KelasBelajarTest`                 | Pembuatan kelas dan kode kelas otomatis                        |
 | `Siswa/KelasBelajarTest`                | Gabung kelas, kode salah, larangan akses kelas asing           |
 | `Siswa/ObservasiTest`                   | Kirim jawaban observasi, penilaian oleh guru                   |
 | `Siswa/TugasTest`                       | Pengumpulan tugas, larangan bukan anggota kelas                |
 | `Siswa/FavoritTest`                     | Toggle favorit                                                 |
 | `Publik/BerandaTest`, `Publik/EModulTest` | Akses publik, URL slug, gate unduhan, flipbook tanpa PDF     |
+| `Publik/EvaluasiTest`                   | Evaluasi dipublikasikan tampil publik, draf tidak, gate unduhan |
 | `Publik/LkpdTest`                       | Tautan LKPD interaktif ke Observasi terhubung, tombol siswa vs pengunjung, Observasi draf tidak ikut tampil |
 | `Publik/UlasanTest`                     | Ulasan menunggu moderasi, larangan mengulas konten sendiri     |
 | `Publik/SeoTest`                        | Sitemap hanya memuat konten terbit, robots.txt, noindex area privat |
