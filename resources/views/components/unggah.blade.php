@@ -56,22 +56,29 @@
         @endif
 
         <div class="min-w-0 flex-1">
-            <label for="{{ $idElemen }}" @class([
-                'flex cursor-pointer items-center justify-between gap-2 rounded-lg border border-dashed px-3.5 py-2.5 text-sm transition hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/20',
+            {{--
+                Input berkas ditumpuk persis di atas label tampilan (bukan
+                disembunyikan lewat sr-only) supaya saat browser mengembalikan
+                fokus ke input ini setelah dialog pilih berkas ditutup, kotak
+                fokusnya sudah berada tepat di posisi yang terlihat — jadi
+                halaman tidak lagi ikut tergulir ke posisi lain.
+            --}}
+            <label @class([
+                'relative flex cursor-pointer items-center justify-between gap-2 rounded-lg border border-dashed px-3.5 py-2.5 text-sm transition hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/20',
                 'border-rose-400 dark:border-rose-500' => $adaGalat,
                 'border-slate-300 dark:border-slate-700' => ! $adaGalat,
             ])>
                 <span class="truncate text-slate-500 dark:text-slate-400" x-text="namaBerkas ?? 'Pilih berkas...'"></span>
                 <span class="shrink-0 rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">Telusuri</span>
+                <input
+                    type="file"
+                    name="{{ $name }}"
+                    id="{{ $idElemen }}"
+                    @change="pilih($event)"
+                    @if($adaGalat) aria-invalid="true" aria-describedby="{{ $name }}-galat" @endif
+                    {{ $attributes->merge(['class' => 'absolute inset-0 h-full w-full cursor-pointer opacity-0']) }}
+                >
             </label>
-            <input
-                type="file"
-                name="{{ $name }}"
-                id="{{ $idElemen }}"
-                @change="pilih($event)"
-                @if($adaGalat) aria-invalid="true" aria-describedby="{{ $name }}-galat" @endif
-                {{ $attributes->merge(['class' => 'sr-only']) }}
-            >
 
             @if($jenis === 'dokumen' && $pratinjau)
                 <a href="{{ $pratinjau }}" target="_blank" rel="noopener" class="mt-1 inline-block text-xs font-medium text-teal-700 hover:underline dark:text-teal-400">Lihat berkas saat ini &rarr;</a>
