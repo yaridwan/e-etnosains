@@ -16,6 +16,7 @@ class InstansiPendidikanSeeder extends Seeder
             ['nama_instansi' => 'SMK Negeri 2 Padang', 'jenis_instansi' => 'SMK', 'kota' => 'Padang', 'provinsi' => 'Sumatera Barat'],
             ['nama_instansi' => 'SD Negeri 1 Denpasar', 'jenis_instansi' => 'SD/MI', 'kota' => 'Denpasar', 'provinsi' => 'Bali'],
             ['nama_instansi' => 'Universitas Pendidikan Nusantara', 'jenis_instansi' => 'Perguruan Tinggi', 'kota' => 'Bandung', 'provinsi' => 'Jawa Barat'],
+            ['nama_instansi' => 'Umum / Tidak Terikat Instansi', 'jenis_instansi' => 'Umum'],
         ];
 
         foreach ($instansi as $data) {
