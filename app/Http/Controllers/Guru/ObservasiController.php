@@ -54,17 +54,19 @@ class ObservasiController extends Controller
             'butir.*.pertanyaan' => ['required', 'string'],
             'butir.*.tipe_pertanyaan' => ['required', 'string'],
             'butir.*.wajib' => ['nullable', 'boolean'],
-            'butir.*.opsi' => ['nullable', 'array'],
+            'butir.*.opsi_teks' => ['nullable', 'string'],
         ];
     }
 
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate($this->aturan());
+        $butir = $data['butir'] ?? [];
+        unset($data['butir']);
 
-        $observasi = DB::transaction(function () use ($data, $request) {
+        $observasi = DB::transaction(function () use ($data, $butir, $request) {
             $observasi = $request->user()->observasi()->create($data + ['status_publikasi' => StatusPublikasi::Dipublikasikan]);
-            $this->simpanButir($observasi, $data['butir'] ?? []);
+            $this->simpanButir($observasi, $butir);
 
             return $observasi;
         });
@@ -90,11 +92,13 @@ class ObservasiController extends Controller
         $this->pastikanPemilik($observasi);
 
         $data = $request->validate($this->aturan());
+        $butir = $data['butir'] ?? [];
+        unset($data['butir']);
 
-        DB::transaction(function () use ($observasi, $data) {
+        DB::transaction(function () use ($observasi, $data, $butir) {
             $observasi->update($data);
             $observasi->butirObservasi()->delete();
-            $this->simpanButir($observasi, $data['butir'] ?? []);
+            $this->simpanButir($observasi, $butir);
         });
 
         return back()->with('status', 'Observasi berhasil diperbarui.');
@@ -119,7 +123,11 @@ class ObservasiController extends Controller
                 'urutan' => $urutan + 1,
             ]);
 
-            foreach ($butir['opsi'] ?? [] as $urutanOpsi => $opsi) {
+            $daftarOpsi = explode("\n", $butir['opsi_teks'] ?? '');
+
+            foreach ($daftarOpsi as $urutanOpsi => $opsi) {
+                $opsi = trim($opsi);
+
                 if (blank($opsi)) {
                     continue;
                 }
