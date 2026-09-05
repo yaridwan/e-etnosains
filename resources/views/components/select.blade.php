@@ -1,6 +1,14 @@
-@props(['label' => null, 'name', 'wajib' => false, 'opsi' => [], 'placeholder' => 'Pilih...', 'selected' => null, 'petunjuk' => null])
+@props(['label' => null, 'name', 'wajib' => false, 'opsi' => [], 'selected' => null, 'petunjuk' => null])
 
 @php
+    // "placeholder" ditangani terpisah dari @props karena PHP tidak bisa
+    // membedakan "tidak dikirim" dari "dikirim null" lewat operator ?? yang
+    // dipakai @props secara internal — akibatnya :placeholder="null" selalu
+    // jatuh balik ke nilai default alih-alih benar-benar menghilangkan opsi
+    // "Pilih...". Cek langsung ke $attributes menghindari masalah ini.
+    $placeholder = $attributes->has('placeholder') ? $attributes->get('placeholder') : 'Pilih...';
+    $attributes = $attributes->except('placeholder');
+
     $adaGalat = $errors->has($name);
     $kelasDasar = 'block w-full appearance-none rounded-lg border bg-no-repeat px-3.5 py-2.5 pr-9 text-sm shadow-sm transition focus:outline-none focus:ring-2 dark:bg-slate-900 dark:text-slate-100';
     $kelasWarna = $adaGalat
