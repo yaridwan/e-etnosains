@@ -39,7 +39,9 @@ class EModulReviewController extends Controller
                 ->orWhereHas('pengguna', fn ($p) => $p->where('nama_lengkap', 'like', "%{$kataKunci}%")));
         }
 
-        if ($request->filled('status')) {
+        if ($request->string('status')->toString() === 'semua') {
+            // Tidak difilter sama sekali, tampilkan seluruh E-Modul apa pun statusnya.
+        } elseif ($request->filled('status')) {
             $query->where('status_publikasi', $request->string('status'));
         } else {
             $query->whereIn('status_publikasi', [

@@ -12,7 +12,7 @@
             <x-input type="search" name="q" value="{{ request('q') }}" placeholder="Cari judul/penulis..." />
         </div>
         <div class="w-full sm:w-52">
-            <x-select name="status" placeholder="Status Menunggu Aksi" :opsi="collect(\App\Enums\StatusPublikasi::cases())->mapWithKeys(fn ($status) => [$status->value => $status->label()])->all()" :selected="request('status')" />
+            <x-select name="status" placeholder="Status Menunggu Aksi" :opsi="['semua' => 'Tampil Semua'] + collect(\App\Enums\StatusPublikasi::cases())->mapWithKeys(fn ($status) => [$status->value => $status->label()])->all()" :selected="request('status')" />
         </div>
         <x-tombol type="submit" varian="sekunder">Filter</x-tombol>
     </form>

@@ -161,6 +161,50 @@ class EModulReviewTest extends TestCase
         $respons->assertOk()->assertSee('Sains dalam Kerajinan Anyaman Bambu')->assertDontSee('Konservasi Air Tradisional');
     }
 
+    public function test_daftar_tinjau_e_modul_tanpa_filter_menyembunyikan_draf_dan_ditolak(): void
+    {
+        $admin = $this->buatAdmin();
+        $guru = $this->buatGuru();
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Draf,
+            'judul' => 'E-Modul Masih Draf',
+        ]);
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Diajukan,
+            'judul' => 'E-Modul Diajukan',
+        ]);
+
+        $respons = $this->actingAs($admin)->get(route('admin.tinjau-e-modul.index'));
+
+        $respons->assertOk()->assertSee('E-Modul Diajukan')->assertDontSee('E-Modul Masih Draf');
+    }
+
+    public function test_filter_tampil_semua_menampilkan_e_modul_draf_dan_ditolak(): void
+    {
+        $admin = $this->buatAdmin();
+        $guru = $this->buatGuru();
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Draf,
+            'judul' => 'E-Modul Masih Draf',
+        ]);
+        EModul::factory()->for($guru, 'pengguna')->create([
+            'id_jenjang_pendidikan' => $this->buatJenjangPendidikan()->id,
+            'id_mata_pelajaran' => $this->buatMataPelajaran()->id,
+            'status_publikasi' => StatusPublikasi::Ditolak,
+            'judul' => 'E-Modul Ditolak',
+        ]);
+
+        $respons = $this->actingAs($admin)->get(route('admin.tinjau-e-modul.index', ['status' => 'semua']));
+
+        $respons->assertOk()->assertSee('E-Modul Masih Draf')->assertSee('E-Modul Ditolak');
+    }
+
     public function test_administrator_dapat_membatalkan_penjadwalan_terbit(): void
     {
         $admin = $this->buatAdmin();
