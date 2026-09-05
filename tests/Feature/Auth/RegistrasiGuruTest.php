@@ -41,6 +41,33 @@ class RegistrasiGuruTest extends TestCase
         $this->assertSame(StatusVerifikasiGuru::Menunggu, $guru->verifikasiGuru->status);
     }
 
+    public function test_mahasiswa_dapat_mendaftar_sebagai_guru_lewat_instansi_perguruan_tinggi(): void
+    {
+        Notification::fake();
+        $this->buatPeran('guru');
+        $kampus = InstansiPendidikan::factory()->create(['jenis_instansi' => 'Perguruan Tinggi']);
+
+        $respons = $this->post(route('daftar.guru.proses'), [
+            'nama_lengkap' => 'Mahasiswa Calon Guru',
+            'email' => 'mahasiswa@contoh.test',
+            'nomor_telepon' => '081234567890',
+            'jenis_kelamin' => 'Perempuan',
+            'id_instansi_pendidikan' => $kampus->id,
+            'nip_nuptk' => '1234567890',
+            'bidang_studi' => 'Pendidikan Biologi',
+            'alamat' => 'Jl. Kampus No. 1',
+            'kata_sandi' => 'password123',
+            'kata_sandi_confirmation' => 'password123',
+        ]);
+
+        $respons->assertRedirect(route('masuk'));
+
+        $mahasiswa = Pengguna::where('email', 'mahasiswa@contoh.test')->firstOrFail();
+        $this->assertTrue($mahasiswa->isGuru());
+        $this->assertSame($kampus->id, $mahasiswa->profilGuru->id_instansi_pendidikan);
+        $this->assertSame('1234567890', $mahasiswa->profilGuru->nip_nuptk);
+    }
+
     public function test_registrasi_guru_gagal_jika_email_sudah_terdaftar(): void
     {
         $this->buatPeran('guru');

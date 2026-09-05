@@ -9,7 +9,7 @@
                 <div><dt class="text-slate-400 dark:text-slate-500">Email</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->email }}</dd></div>
                 <div><dt class="text-slate-400 dark:text-slate-500">Nomor Telepon</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->nomor_telepon }}</dd></div>
                 <div><dt class="text-slate-400 dark:text-slate-500">Instansi</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->instansiPendidikan?->nama_instansi }}</dd></div>
-                <div><dt class="text-slate-400 dark:text-slate-500">NIP/NUPTK</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->nip_nuptk ?: '-' }}</dd></div>
+                <div><dt class="text-slate-400 dark:text-slate-500">NIP/NUPTK/NIM</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->nip_nuptk ?: '-' }}</dd></div>
                 <div><dt class="text-slate-400 dark:text-slate-500">Bidang Studi</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->bidang_studi }}</dd></div>
                 <div><dt class="text-slate-400 dark:text-slate-500">Jenis Kelamin</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->jenis_kelamin }}</dd></div>
                 <div class="sm:col-span-2"><dt class="text-slate-400 dark:text-slate-500">Alamat</dt><dd class="font-medium text-slate-700 dark:text-slate-300">{{ $verifikasi->pengguna->profilGuru?->alamat }}</dd></div>

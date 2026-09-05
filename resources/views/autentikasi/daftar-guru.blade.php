@@ -1,7 +1,7 @@
 <x-layout-auth judul-seo="Daftar sebagai Guru" lebar="max-w-2xl">
     <x-lencana-ikon nama="topi" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Guru</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Terbuka untuk guru, dosen, maupun mahasiswa. Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
 
     <form method="POST" action="{{ route('daftar.guru.proses') }}" class="mt-6 space-y-6">
         @csrf
@@ -18,12 +18,12 @@
         </div>
 
         <div>
-            <x-judul-form-seksi>Data Kepegawaian</x-judul-form-seksi>
+            <x-judul-form-seksi>Data Instansi</x-judul-form-seksi>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <x-select label="Jenis Kelamin" name="jenis_kelamin" wajib :opsi="['Laki-laki' => 'Laki-laki', 'Perempuan' => 'Perempuan']" />
-                <x-input label="NIP/NUPTK (opsional)" name="nip_nuptk" />
-                <div class="sm:col-span-2"><x-select label="Instansi/Sekolah" name="id_instansi_pendidikan" wajib :opsi="$instansi->pluck('nama_instansi', 'id')" /></div>
-                <div class="sm:col-span-2"><x-input label="Bidang/Mata Pelajaran" name="bidang_studi" wajib /></div>
+                <x-input label="NIP/NUPTK/NIM (opsional)" name="nip_nuptk" petunjuk="Guru/dosen isi NIP/NUPTK, mahasiswa dapat mengisi NIM. Boleh dikosongkan." />
+                <div class="sm:col-span-2"><x-select label="Instansi/Sekolah/Kampus" name="id_instansi_pendidikan" wajib :opsi="$instansi->pluck('nama_instansi', 'id')" /></div>
+                <div class="sm:col-span-2"><x-input label="Bidang Studi/Mata Pelajaran" name="bidang_studi" wajib petunjuk="Guru/dosen isi mata pelajaran yang diampu, mahasiswa isi program studi." /></div>
                 <div class="sm:col-span-2"><x-textarea label="Alamat" name="alamat" wajib /></div>
             </div>
         </div>

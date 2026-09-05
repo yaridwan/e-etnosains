@@ -33,8 +33,8 @@ class DaftarGuruRequest extends FormRequest
             'nama_lengkap' => 'nama lengkap',
             'nomor_telepon' => 'nomor telepon',
             'jenis_kelamin' => 'jenis kelamin',
-            'id_instansi_pendidikan' => 'instansi/sekolah',
-            'nip_nuptk' => 'NIP/NUPTK',
+            'id_instansi_pendidikan' => 'instansi/sekolah/kampus',
+            'nip_nuptk' => 'NIP/NUPTK/NIM',
             'bidang_studi' => 'bidang/mata pelajaran',
             'kata_sandi' => 'kata sandi',
         ];

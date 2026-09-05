@@ -7,7 +7,7 @@
             <x-lencana-ikon nama="topi" class="shrink-0" />
             <div class="min-w-0 flex-1">
                 <p class="font-semibold text-slate-800 dark:text-slate-100">Daftar sebagai Guru</p>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Susun dan publikasikan e-modul, LKPD, observasi, dan kelas belajar.</p>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Susun dan publikasikan e-modul, LKPD, observasi, dan kelas belajar. Terbuka untuk guru, dosen, maupun mahasiswa.</p>
             </div>
             <svg class="h-5 w-5 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-teal-600 dark:text-slate-600 dark:group-hover:text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" /></svg>
         </a>
