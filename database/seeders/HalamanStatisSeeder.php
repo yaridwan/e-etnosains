@@ -33,7 +33,7 @@ class HalamanStatisSeeder extends Seeder
             [
                 'judul' => 'Kontak',
                 'alamat_tautan' => 'kontak',
-                'konten' => '<p>Hubungi tim E-ETNOSAINS melalui email hello@e-etnosains.test untuk pertanyaan, kritik, dan saran.</p>',
+                'konten' => '<p>Hubungi tim E-ETNOSAINS melalui email hello@e-etnosains.com untuk pertanyaan, kritik, dan saran.</p>',
             ],
         ];
 
