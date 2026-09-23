@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Enums\StatusAkun;
 use App\Models\InstansiPendidikan;
+use App\Models\PengaturanAplikasi;
 use App\Models\Pengguna;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -14,7 +15,7 @@ class RegistrasiSiswaTest extends TestCase
 {
     use MembuatDataDasar, RefreshDatabase;
 
-    public function test_siswa_dapat_mendaftar_dan_langsung_aktif(): void
+    public function test_siswa_dapat_mendaftar_dan_langsung_aktif_jika_persetujuan_tidak_diwajibkan(): void
     {
         Notification::fake();
         $this->buatPeran('siswa');
@@ -36,5 +37,33 @@ class RegistrasiSiswaTest extends TestCase
         $this->assertSame(StatusAkun::Aktif, $siswa->status_akun);
         $this->assertTrue($siswa->isSiswa());
         $this->assertSame('X IPA 1', $siswa->profilSiswa->kelas);
+    }
+
+    public function test_siswa_dapat_mendaftar_dan_menunggu_persetujuan_admin_jika_diwajibkan(): void
+    {
+        Notification::fake();
+        $this->buatPeran('siswa');
+        $instansi = InstansiPendidikan::factory()->create();
+        PengaturanAplikasi::create([
+            'kelompok' => 'registrasi',
+            'kunci' => 'registrasi_siswa_perlu_persetujuan',
+            'nilai' => '1',
+            'tipe' => 'boolean',
+        ]);
+
+        $respons = $this->post(route('daftar.siswa.proses'), [
+            'nama_lengkap' => 'Siswa Menunggu',
+            'email' => 'siswa.menunggu@contoh.test',
+            'jenis_kelamin' => 'Perempuan',
+            'id_instansi_pendidikan' => $instansi->id,
+            'kelas' => 'X IPA 1',
+            'kata_sandi' => 'password123',
+            'kata_sandi_confirmation' => 'password123',
+        ]);
+
+        $respons->assertRedirect(route('masuk'));
+
+        $siswa = Pengguna::where('email', 'siswa.menunggu@contoh.test')->firstOrFail();
+        $this->assertSame(StatusAkun::MenungguVerifikasi, $siswa->status_akun);
     }
 }

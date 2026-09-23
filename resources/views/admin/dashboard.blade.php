@@ -17,7 +17,7 @@
         @endforeach
     </div>
 
-    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <x-kartu>
             <div class="flex items-center justify-between">
                 <x-judul-seksi ikon="perisai" warna="amber">Guru Menunggu Verifikasi</x-judul-seksi>
@@ -34,6 +34,26 @@
                     </div>
                 @empty
                     <p class="text-sm text-slate-400 dark:text-slate-500">Tidak ada guru yang menunggu verifikasi.</p>
+                @endforelse
+            </div>
+        </x-kartu>
+
+        <x-kartu>
+            <div class="flex items-center justify-between">
+                <x-judul-seksi ikon="lingkaran-pengguna" warna="sky">Siswa Menunggu Persetujuan</x-judul-seksi>
+                <a href="{{ route('admin.verifikasi-siswa.index') }}" class="text-sm text-teal-700 dark:text-teal-400 hover:underline">Lihat semua</a>
+            </div>
+            <div class="mt-4 space-y-3">
+                @forelse($siswaMenunggu as $item)
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0">
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{{ $item->nama_lengkap }}</p>
+                            <p class="truncate text-xs text-slate-500 dark:text-slate-400">{{ $item->email }}</p>
+                        </div>
+                        <x-tombol-ikon :href="route('admin.verifikasi-siswa.show', $item)" ikon="mata" label="Tinjau" />
+                    </div>
+                @empty
+                    <p class="text-sm text-slate-400 dark:text-slate-500">Tidak ada siswa yang menunggu persetujuan.</p>
                 @endforelse
             </div>
         </x-kartu>

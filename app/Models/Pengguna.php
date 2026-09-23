@@ -27,7 +27,7 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
 
     protected $fillable = [
         'uuid', 'nama_lengkap', 'email', 'nomor_telepon', 'kata_sandi',
-        'foto', 'status_akun', 'terakhir_masuk_pada', 'alamat_ip_terakhir',
+        'foto', 'status_akun', 'catatan_verifikasi', 'terakhir_masuk_pada', 'alamat_ip_terakhir',
     ];
 
     protected $hidden = [

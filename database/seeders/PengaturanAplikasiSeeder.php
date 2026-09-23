@@ -45,7 +45,7 @@ class PengaturanAplikasiSeeder extends Seeder
             // Registrasi
             ['registrasi', 'registrasi_guru', '1', 'boolean', 'Aktifkan registrasi guru'],
             ['registrasi', 'registrasi_siswa', '1', 'boolean', 'Aktifkan registrasi siswa'],
-            ['registrasi', 'registrasi_siswa_perlu_persetujuan', '0', 'boolean', 'Registrasi siswa memerlukan persetujuan admin'],
+            ['registrasi', 'registrasi_siswa_perlu_persetujuan', '1', 'boolean', 'Registrasi siswa memerlukan persetujuan admin'],
 
             // Pembelajaran
             ['pembelajaran', 'publikasi_otomatis_guru_terverifikasi', '0', 'boolean', 'Publikasi otomatis untuk guru terverifikasi'],

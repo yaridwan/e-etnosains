@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\StatusAkun;
 use App\Enums\StatusPublikasi;
 use App\Enums\StatusVerifikasiGuru;
 use App\Http\Controllers\Controller;
@@ -32,12 +33,14 @@ class DashboardController extends Controller
                 'observasi' => Observasi::count(),
                 'e_modul_menunggu' => EModul::where('status_publikasi', StatusPublikasi::Diajukan)->count(),
                 'guru_menunggu' => VerifikasiGuru::where('status', StatusVerifikasiGuru::Menunggu)->count(),
+                'siswa_menunggu' => Pengguna::whereHas('peran', fn ($q) => $q->where('nama_peran', 'siswa'))->where('status_akun', StatusAkun::MenungguVerifikasi)->count(),
                 'total_kunjungan' => StatistikKunjungan::count(),
                 'total_unduhan' => RiwayatUnduhan::count(),
             ],
             'eModulPopuler' => EModul::dipublikasikan()->orderByDesc('jumlah_dilihat')->take(5)->get(),
             'eModulMenunggu' => EModul::where('status_publikasi', StatusPublikasi::Diajukan)->with('pengguna')->latest()->take(5)->get(),
             'guruMenunggu' => VerifikasiGuru::where('status', StatusVerifikasiGuru::Menunggu)->with('pengguna')->latest()->take(5)->get(),
+            'siswaMenunggu' => Pengguna::whereHas('peran', fn ($q) => $q->where('nama_peran', 'siswa'))->where('status_akun', StatusAkun::MenungguVerifikasi)->latest()->take(5)->get(),
         ]);
     }
 }

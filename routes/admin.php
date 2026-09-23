@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ModerasiUlasanController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\VerifikasiGuruController;
+use App\Http\Controllers\Admin\VerifikasiSiswaController;
 use App\Http\Controllers\Admin\Website\BannerController;
 use App\Http\Controllers\Admin\Website\FaqController;
 use App\Http\Controllers\Admin\Website\HalamanStatisController;
@@ -28,6 +29,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'peran:a
     Route::post('/verifikasi-guru/{verifikasiGuru}/setujui', [VerifikasiGuruController::class, 'setujui'])->name('verifikasi-guru.setujui');
     Route::post('/verifikasi-guru/{verifikasiGuru}/tolak', [VerifikasiGuruController::class, 'tolak'])->name('verifikasi-guru.tolak');
     Route::post('/verifikasi-guru/{verifikasiGuru}/minta-perbaikan', [VerifikasiGuruController::class, 'mintaPerbaikan'])->name('verifikasi-guru.minta-perbaikan');
+
+    Route::get('/verifikasi-siswa', [VerifikasiSiswaController::class, 'index'])->name('verifikasi-siswa.index');
+    Route::get('/verifikasi-siswa/{siswa}', [VerifikasiSiswaController::class, 'show'])->name('verifikasi-siswa.show');
+    Route::post('/verifikasi-siswa/{siswa}/setujui', [VerifikasiSiswaController::class, 'setujui'])->name('verifikasi-siswa.setujui');
+    Route::post('/verifikasi-siswa/{siswa}/tolak', [VerifikasiSiswaController::class, 'tolak'])->name('verifikasi-siswa.tolak');
 
     Route::get('/tinjau-e-modul', [EModulReviewController::class, 'index'])->name('tinjau-e-modul.index');
     Route::get('/tinjau-e-modul/ekspor', [EModulReviewController::class, 'ekspor'])->name('tinjau-e-modul.ekspor');

@@ -15,11 +15,11 @@ use App\Http\Controllers\Guru\TugasKelasController;
 use App\Http\Controllers\Guru\VideoController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/guru/menunggu-verifikasi', MenungguVerifikasiController::class)->name('guru.menunggu-verifikasi');
 });
 
-Route::prefix('guru')->name('guru.')->middleware(['auth', 'verified', 'peran:guru', 'guru.terverifikasi'])->group(function () {
+Route::prefix('guru')->name('guru.')->middleware(['auth', 'peran:guru', 'guru.terverifikasi'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('e-modul', EModulController::class)->except(['show'])->parameters(['e-modul' => 'eModul']);

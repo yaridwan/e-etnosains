@@ -3,13 +3,18 @@
 use App\Http\Controllers\Siswa\DashboardController;
 use App\Http\Controllers\Siswa\FavoritController;
 use App\Http\Controllers\Siswa\KelasBelajarController;
+use App\Http\Controllers\Siswa\MenungguVerifikasiController;
 use App\Http\Controllers\Siswa\ObservasiController;
 use App\Http\Controllers\Siswa\ProfilController;
 use App\Http\Controllers\Siswa\RiwayatController;
 use App\Http\Controllers\Siswa\TugasKelasController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('siswa')->name('siswa.')->middleware(['auth', 'verified', 'peran:siswa'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('/siswa/menunggu-verifikasi', MenungguVerifikasiController::class)->name('siswa.menunggu-verifikasi');
+});
+
+Route::prefix('siswa')->name('siswa.')->middleware(['auth', 'peran:siswa', 'siswa.terverifikasi'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/kelas', [KelasBelajarController::class, 'index'])->name('kelas.index');

@@ -60,5 +60,5 @@ Route::prefix('topik-etnosains')->name('topik-etnosains.')->group(function () {
 Route::get('/profil-guru/{guru}', [GuruProfilController::class, 'show'])->name('guru.profil');
 
 Route::post('/e-modul/{eModul:alamat_tautan}/ulasan', [UlasanController::class, 'store'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('e-modul.ulasan.simpan');

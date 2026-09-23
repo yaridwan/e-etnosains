@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\DaftarGuruRequest;
 use App\Models\InstansiPendidikan;
 use App\Services\RegistrasiService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,11 +20,9 @@ class DaftarGuruController extends Controller
 
     public function store(DaftarGuruRequest $request, RegistrasiService $registrasi): RedirectResponse
     {
-        $guru = $registrasi->daftarGuru($request->validated());
-
-        event(new Registered($guru));
+        $registrasi->daftarGuru($request->validated());
 
         return redirect()->route('masuk')
-            ->with('status', 'Pendaftaran berhasil! Silakan verifikasi email Anda, akun akan aktif setelah disetujui Administrator.');
+            ->with('status', 'Pendaftaran berhasil! Akun Anda akan aktif setelah disetujui Administrator.');
     }
 }

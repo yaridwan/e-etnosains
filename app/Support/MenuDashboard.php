@@ -12,6 +12,7 @@ class MenuDashboard
             ],
             'Verifikasi' => [
                 self::item('Verifikasi Guru', route('admin.verifikasi-guru.index'), request()->routeIs('admin.verifikasi-guru.*'), 'perisai'),
+                self::item('Verifikasi Siswa', route('admin.verifikasi-siswa.index'), request()->routeIs('admin.verifikasi-siswa.*'), 'lingkaran-pengguna'),
                 self::item('Tinjau E-Modul', route('admin.tinjau-e-modul.index'), request()->routeIs('admin.tinjau-e-modul.*'), 'cari'),
             ],
             'Master Data' => [

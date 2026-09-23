@@ -12,10 +12,10 @@ class VerifikasiEmailRedirectTest extends TestCase
 
     public function test_pengguna_belum_terverifikasi_diarahkan_ke_halaman_verifikasi_bukan_error(): void
     {
-        $guru = $this->buatGuru(['email_terverifikasi_pada' => null]);
+        $admin = $this->buatAdmin(['email_terverifikasi_pada' => null]);
 
-        $this->actingAs($guru)
-            ->get(route('guru.dashboard'))
+        $this->actingAs($admin)
+            ->get(route('admin.dashboard'))
             ->assertRedirect(route('verifikasi-email.notice'));
     }
 }

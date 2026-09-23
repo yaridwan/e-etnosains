@@ -128,9 +128,13 @@ dan membagikannya sebagai sumber belajar yang dapat diakses publik.
 
 ### Administrator
 
-- Dashboard statistik dan antrean pekerjaan (guru menunggu verifikasi, E-Modul menunggu
-  review).
+- Dashboard statistik dan antrean pekerjaan (guru menunggu verifikasi, siswa menunggu
+  persetujuan, E-Modul menunggu review).
 - Verifikasi guru: setujui, tolak, atau minta perbaikan data disertai catatan.
+- **Verifikasi siswa**: bila pengaturan `registrasi_siswa_perlu_persetujuan` aktif (default),
+  siswa baru menunggu di menu **Verifikasi Siswa** sampai Administrator menyetujui atau
+  menolak (disertai catatan) — tidak ada verifikasi email untuk guru maupun siswa, hanya
+  persetujuan Administrator yang mengontrol akses.
 - Peninjauan E-Modul: setujui & publikasikan, minta perbaikan, atau tolak — dengan riwayat
   status yang tidak pernah ditimpa.
 - **Jadwal publikasi**: saat menyetujui, Administrator dapat memilih tanggal & jam terbit
@@ -253,8 +257,11 @@ Indonesia sehingga nilai tersimpan tetap konsisten sementara antarmuka tetap Ind
 `PembuatPdfDemo`, `PembuatPosterDemo`, `JudulDemo` (generator berkas dan teks demo untuk
 seeder), `PembuatQrCode`, serta `CaptchaPenjumlahan` (soal dan verifikasi captcha login).
 
-**Middleware kustom** (`app/Http/Middleware/`): `PastikanPeran` (alias `peran`) dan
-`PastikanGuruTerverifikasi` (alias `guru.terverifikasi`).
+**Middleware kustom** (`app/Http/Middleware/`): `PastikanPeran` (alias `peran`),
+`PastikanGuruTerverifikasi` (alias `guru.terverifikasi`), dan `PastikanSiswaAktif` (alias
+`siswa.terverifikasi`) — keduanya menggantikan `verified` bawaan Laravel untuk dashboard
+guru dan siswa karena aplikasi tidak mewajibkan verifikasi email, hanya persetujuan
+Administrator berbasis `status_akun`.
 
 **Komponen Blade dapat dipakai ulang** (`resources/views/components/`): `tombol`, `input`,
 `select`, `textarea`, `modal`, `kartu`, `badge`, `alert`, `empty-state`,
@@ -278,8 +285,14 @@ seeder), `PembuatQrCode`, serta `CaptchaPenjumlahan` (soal dan verifikasi captch
 | Peran           | Cara memperoleh                                     | Status awal            |
 | --------------- | --------------------------------------------------- | ---------------------- |
 | `administrator` | Dibuat melalui seeder atau oleh Administrator lain   | Aktif                  |
-| `guru`          | Registrasi mandiri di `/daftar/guru`                 | `menunggu_verifikasi`  |
-| `siswa`         | Registrasi mandiri di `/daftar/siswa`                | Aktif setelah verifikasi email |
+| `guru`          | Registrasi mandiri di `/daftar/guru`                 | `menunggu_verifikasi` (diaktifkan setelah disetujui Administrator) |
+| `siswa`         | Registrasi mandiri di `/daftar/siswa`                | `menunggu_verifikasi` jika pengaturan `registrasi_siswa_perlu_persetujuan` aktif (default), atau langsung `aktif` jika dimatikan |
+
+**Tidak ada verifikasi email.** Baik guru maupun siswa dapat langsung masuk setelah
+mendaftar; yang membatasi akses adalah `status_akun`, bukan `email_terverifikasi_pada`.
+Guru selalu menunggu persetujuan Administrator (lewat menu **Verifikasi Guru**), sedangkan
+siswa menunggu persetujuan lewat menu **Verifikasi Siswa** hanya bila pengaturan
+`registrasi_siswa_perlu_persetujuan` di **Pengaturan Aplikasi** diaktifkan (default: aktif).
 
 RBAC dibangun di atas empat tabel (`peran`, `izin`, `peran_izin`, `pengguna_peran`)
 sehingga peran baru dapat ditambahkan tanpa mengubah kode. Pengecekan akses dilakukan
@@ -345,11 +358,10 @@ flowchart TD
     J --> K[Guru]
     J --> L[Siswa]
 
-    K --> M[Verifikasi Email]
-    M --> N[Verifikasi Administrator]
+    K --> N[Verifikasi Administrator]
     N --> O[Dashboard Guru]
 
-    L --> Q[Verifikasi Email]
+    L --> Q[Verifikasi Administrator jika diwajibkan]
     Q --> R[Dashboard Siswa]
 ```
 
@@ -376,8 +388,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Registrasi] --> B[Verifikasi Email]
-    B --> C[Menunggu Verifikasi Admin]
+    A[Registrasi] --> C[Menunggu Verifikasi Admin]
     C --> D[Dashboard Guru]
     D --> E[Buat E-Modul - Draf]
     E --> F[Lengkapi Metadata Etnosains]
@@ -540,11 +551,12 @@ erDiagram
 | `uuid`                    | uuid unique   | Diisi otomatis saat pembuatan     |
 | `nama_lengkap`            | string        |                                   |
 | `email`                   | string unique |                                   |
-| `email_terverifikasi_pada`| timestamp     | Null jika belum verifikasi        |
+| `email_terverifikasi_pada`| timestamp     | Kolom bawaan Laravel, tidak dipakai untuk gate akses (lihat catatan di bawah) |
 | `nomor_telepon`           | string(20)    |                                   |
 | `kata_sandi`              | string        | Di-*hash* (cast `hashed`)         |
 | `foto`                    | string        | Path relatif di disk `public`     |
 | `status_akun`             | string        | Enum `StatusAkun`, ter-index      |
+| `catatan_verifikasi`      | text nullable | Alasan penolakan/persetujuan siswa oleh Administrator |
 | `ingat_saya`              | string(100)   | Token "remember me"               |
 | `terakhir_masuk_pada`     | timestamp     |                                   |
 | `alamat_ip_terakhir`      | string(45)    |                                   |
@@ -624,7 +636,7 @@ app/
 
 database/
 ├── factories/        # 12 factory
-├── migrations/       # 57 berkas migrasi
+├── migrations/       # 58 berkas migrasi
 └── seeders/          # 34 seeder + DatabaseSeeder
 
 lang/
@@ -909,7 +921,7 @@ php artisan event:cache
 
 ## Testing
 
-Suite berisi **107 test** (312 asertion) yang berjalan terhadap database MySQL terpisah:
+Suite berisi **116 test** (331 asertion) yang berjalan terhadap database MySQL terpisah:
 
 ```bash
 php artisan test
@@ -927,9 +939,11 @@ Cakupan pengujian:
 | --------------------------------------- | ------------------------------------------------------------- |
 | `Auth/MasukTest`                        | Login berhasil/gagal, pengalihan sesuai peran, logout, captcha (salah, kosong, tidak dapat dipakai ulang) |
 | `Auth/RegistrasiGuruTest`               | Registrasi guru, status menunggu verifikasi, email duplikat    |
-| `Auth/RegistrasiSiswaTest`              | Registrasi siswa aktif langsung beserta profil                 |
-| `Auth/VerifikasiEmailRedirectTest`      | Pengguna belum verifikasi email diarahkan ke halaman verifikasi, bukan error 500 |
+| `Auth/RegistrasiSiswaTest`              | Registrasi siswa aktif langsung (bila persetujuan tidak diwajibkan) atau menunggu persetujuan admin (default) |
+| `Auth/VerifikasiEmailRedirectTest`      | Rute yang masih memakai middleware `verified` (admin) tetap mengarahkan ke halaman verifikasi, bukan error 500 |
 | `Admin/VerifikasiGuruTest`              | Setujui/tolak guru, larangan akses non-admin                   |
+| `Admin/VerifikasiSiswaTest`             | Setujui/tolak siswa dengan catatan, filter status, larangan akses non-admin |
+| `Siswa/MenungguVerifikasiTest`          | Siswa menunggu/ditolak diarahkan ke halaman menunggu; siswa aktif dapat mengakses dashboard |
 | `Admin/EModulReviewTest`                | Setujui, minta perbaikan, riwayat status, draf tidak publik, jadwalkan/batalkan jadwal terbit, versi terbekukan saat terbit, perintah `e-modul:terbitkan-terjadwal`, filter status default vs "Tampil Semua" |
 | `Admin/MasterDataTest`                  | CRUD master data, pencarian & filter, larangan akses siswa     |
 | `Admin/WebsiteKontenTest`               | CRUD konten website (banner, FAQ, testimoni, dll.) beserta filter |
@@ -975,29 +989,30 @@ Penyeragaman gaya kode:
 ### Sebagai Guru
 
 1. Klik **Daftar** → **Daftar sebagai Guru**, lengkapi data, kirim.
-2. Verifikasi email (pada mode `MAIL_MAILER=log`, tautan tercatat di
-   `storage/logs/laravel.log`).
-3. Login. Selama belum diverifikasi Administrator, Anda diarahkan ke halaman
-   **Menunggu Verifikasi** yang juga menampilkan catatan bila diminta perbaikan.
-4. Setelah disetujui, buka **Dashboard Guru**.
-5. Lengkapi **Profil Saya**.
-6. Masuk ke **E-Modul Saya** → **Buat E-Modul**, isi tahap 1–5, simpan sebagai draf.
-7. Pada form ubah, gunakan kartu **Konten Terkait** untuk menambahkan LKPD, observasi,
+2. Login langsung tanpa verifikasi email. Selama belum diverifikasi Administrator, Anda
+   diarahkan ke halaman **Menunggu Verifikasi** yang juga menampilkan catatan bila diminta
+   perbaikan.
+3. Setelah disetujui, buka **Dashboard Guru**.
+4. Lengkapi **Profil Saya**.
+5. Masuk ke **E-Modul Saya** → **Buat E-Modul**, isi tahap 1–5, simpan sebagai draf.
+6. Pada form ubah, gunakan kartu **Konten Terkait** untuk menambahkan LKPD, observasi,
    video, dan poster — E-Modul terkait terpilih otomatis pada form yang dibuka.
-8. Rancang instrumen observasi lewat tombol **Tambah Butir** (pilih tipe pertanyaan,
+7. Rancang instrumen observasi lewat tombol **Tambah Butir** (pilih tipe pertanyaan,
    tandai wajib, isi opsi jawaban bila diperlukan).
-9. Klik **Pratinjau** untuk melihat tampilan mendekati halaman publik.
-10. Klik **Ajukan untuk Ditinjau Administrator**.
-11. Pantau lonceng notifikasi untuk hasil review; bila diminta perbaikan, catatan reviewer
+8. Klik **Pratinjau** untuk melihat tampilan mendekati halaman publik.
+9. Klik **Ajukan untuk Ditinjau Administrator**.
+10. Pantau lonceng notifikasi untuk hasil review; bila diminta perbaikan, catatan reviewer
     muncul di bagian atas form.
-12. Setelah dipublikasikan, pantau jumlah dilihat/diunduh di dashboard.
-13. Buat **Kelas Belajar**, bagikan kode kelas kepada siswa, tambahkan konten dan tugas.
-14. Nilai pengumpulan tugas dan observasi siswa.
+11. Setelah dipublikasikan, pantau jumlah dilihat/diunduh di dashboard.
+12. Buat **Kelas Belajar**, bagikan kode kelas kepada siswa, tambahkan konten dan tugas.
+13. Nilai pengumpulan tugas dan observasi siswa.
 
 ### Sebagai Siswa
 
 1. Klik **Daftar** → **Daftar sebagai Siswa**, lengkapi data, kirim.
-2. Verifikasi email lalu login.
+2. Login langsung tanpa verifikasi email. Jika pengaturan
+   `registrasi_siswa_perlu_persetujuan` aktif (default), Anda diarahkan ke halaman
+   **Menunggu Verifikasi** sampai Administrator menyetujui lewat menu **Verifikasi Siswa**.
 3. Di **Kelas Saya**, klik **Gabung Kelas** dan masukkan kode dari guru
    (format `ETNO-XXXXXX`).
 4. Buka materi kelas: E-Modul, LKPD, atau observasi.
@@ -1297,7 +1312,9 @@ php artisan up
 - [ ] `APP_DEBUG=false`
 - [ ] `APP_URL` sesuai domain sebenarnya (termasuk `https://`)
 - [ ] Kredensial database production benar dan kata sandinya kuat
-- [ ] SMTP dikonfigurasi (bukan `MAIL_MAILER=log`) agar verifikasi email berfungsi
+- [ ] SMTP dikonfigurasi (bukan `MAIL_MAILER=log`) agar email reset kata sandi terkirim
+      (aplikasi tidak lagi mewajibkan verifikasi email untuk guru/siswa, tapi fitur "Lupa
+      Kata Sandi" tetap mengirim email)
 - [ ] `php artisan storage:link` sudah dijalankan
 - [ ] Migrasi selesai tanpa galat
 - [ ] Aset frontend sudah dibangun (`npm run build`) dan `public/hot` tidak ada

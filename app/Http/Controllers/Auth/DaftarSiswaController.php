@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\StatusAkun;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\DaftarSiswaRequest;
 use App\Models\InstansiPendidikan;
 use App\Services\RegistrasiService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -23,9 +23,10 @@ class DaftarSiswaController extends Controller
     {
         $siswa = $registrasi->daftarSiswa($request->validated());
 
-        event(new Registered($siswa));
+        $pesan = $siswa->status_akun === StatusAkun::Aktif
+            ? 'Pendaftaran berhasil! Anda dapat langsung masuk.'
+            : 'Pendaftaran berhasil! Akun Anda akan aktif setelah disetujui Administrator.';
 
-        return redirect()->route('masuk')
-            ->with('status', 'Pendaftaran berhasil! Silakan verifikasi email Anda sebelum masuk.');
+        return redirect()->route('masuk')->with('status', $pesan);
     }
 }

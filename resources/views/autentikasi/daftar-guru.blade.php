@@ -1,7 +1,7 @@
 <x-layout-auth judul-seo="Daftar sebagai Guru" lebar="max-w-2xl">
     <x-lencana-ikon nama="topi" class="mb-4" />
     <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">Daftar sebagai Guru</h1>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Terbuka untuk guru, dosen, maupun mahasiswa. Akun akan aktif setelah verifikasi email dan persetujuan Administrator.</p>
+    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Terbuka untuk guru, dosen, maupun mahasiswa. Akun akan aktif setelah disetujui Administrator.</p>
 
     <form method="POST" action="{{ route('daftar.guru.proses') }}" class="mt-6 space-y-6">
         @csrf

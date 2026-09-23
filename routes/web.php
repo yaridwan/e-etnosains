@@ -13,7 +13,7 @@ Route::get('/halaman/{halaman:alamat_tautan}', HalamanStatisController::class)->
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', fn () => response()->view('publik.robots')->header('Content-Type', 'text/plain'))->name('robots');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
     Route::post('/notifikasi/{notifikasi}/dibaca', [NotifikasiController::class, 'tandaiDibaca'])->name('notifikasi.tandai-dibaca');
     Route::post('/notifikasi/tandai-semua-dibaca', [NotifikasiController::class, 'tandaiSemuaDibaca'])->name('notifikasi.tandai-semua-dibaca');
